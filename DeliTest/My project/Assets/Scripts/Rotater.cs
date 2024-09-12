@@ -6,13 +6,7 @@ public class Rotater : MonoBehaviour
 {
     [SerializeField]
     float rotateSpeed = 1.0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
         HandleMouseInput();
