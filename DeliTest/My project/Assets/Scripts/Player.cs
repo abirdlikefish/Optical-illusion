@@ -19,14 +19,12 @@ public class Player : Singleton<Player>
     {
         return state == STATE.MOVING;
     }
-    // Start is called before the first frame update
     void Start()
     {
         state = STATE.IDLE;
         Init();
     }
 
-    // Update is called once per frame
     void Update()
     {
         MoveToDes();
@@ -55,7 +53,6 @@ public class Player : Singleton<Player>
         {
             state = STATE.MOVING;
             transform.parent = curCenter.nextPointInPath.transform;
-            //匀速移动到下一站
             transform.localPosition = Vector3.MoveTowards
                 (
                 transform.localPosition, CenterToLocalPos(tarCenter),

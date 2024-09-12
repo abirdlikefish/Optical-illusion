@@ -17,13 +17,8 @@ public class Cube : MonoBehaviour
     //被点击时寻找最近的可视的中心点
     public void OnMouseDown()
     {
-        //PathFinder.Instance.lastClickedCube?.HideAllCenterPoints();
-        //PathFinder.Instance.lastClickedCube = this;
         CenterPoint nearest = GetNearestVisibleCenterPoint(Input.mousePosition);
         PathFinder.Instance.SetDestination(nearest);
-
-        //nearest.GetComponent<MeshRenderer>().enabled = true;
-        //PathFinder.Instance.SetStart(nearest);
     }
     void HideAllCenterPoints()
     {

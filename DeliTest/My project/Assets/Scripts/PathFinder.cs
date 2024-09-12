@@ -8,8 +8,6 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint sta;
     [SerializeField]
     CenterPoint des;
-    //public Cube lastClickedCube;
-    //public CenterPoint lastClickedCenter;
 
     private void Update()
     {
@@ -60,7 +58,6 @@ public class PathFinder : Singleton<PathFinder>
     }
     void DrawPath()
     {
-        //在path沿途画线
         CenterPoint currentInPath = des;
         while (currentInPath != sta)
         {
