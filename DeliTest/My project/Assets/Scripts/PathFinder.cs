@@ -53,7 +53,7 @@ public class PathFinder : Singleton<PathFinder>
                 next.visited = true;
             }
         }
-        
+        des = null;
 
     }
     void DrawPath()
