@@ -14,7 +14,8 @@ public class Rotater : MonoBehaviour
     void HandleMouseInput()
     {
         //rotate the object based on the mouse input
-
+        if (Player.Instance.IsBusy())
+            return;
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
         if(Input.GetMouseButton(0))

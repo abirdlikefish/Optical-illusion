@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,40 +11,65 @@ public class CenterPoint : MonoBehaviour
     [HideInInspector]
     public string info;
     [SerializeField]
-    List<NearPoint> nearPoints = new();
+    List<CenterPoint> overlapPoints = new();
+    public List<CenterPoint> nextPoints = new();
+    public bool visited;
+    public CenterPoint lastPointInPath;
+    public CenterPoint nextPointInPath;
+    public bool isVisible => cube.GetVisibleCenterPoint().Contains(this);
     private void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
         info = cube.name + "::" + name;
     }
-    public void AddNearPointTimer(CenterPoint thatPoint)
+    private void Update()
     {
-        NearPoint nearPoint = nearPoints.Find(x => x.nearPoint == thatPoint);
-        if (nearPoint == null)
+        foreach(var np in nextPoints)
         {
-            nearPoint = new NearPoint(thatPoint);
-            nearPoints.Add(nearPoint);
+            if(Input.GetKey(KeyCode.Alpha3))
+                Debug.DrawLine(transform.position, np.transform.position, Color.red);
         }
-        nearPoint.nearTimer += Time.deltaTime;
-        if(nearPoint.nearTimer >= CubeCombiner.nearTime)
-            Debug.Log(info + " is near to " + thatPoint.info);
     }
-    public void ClearNearPointTimer(CenterPoint thatPoint)
+    public void AddOverlapPoint(CenterPoint thatPoint)
     {
-        NearPoint nearPoint = nearPoints.Find(x => x.nearPoint == thatPoint);
-        if (nearPoint == null)
+        if (!overlapPoints.Contains(thatPoint))
+        {
+            overlapPoints.Add(thatPoint);
+            thatPoint.AddOverlapPoint(this);
+        }
+        //Debug.Log(info + " is near to " + thatPoint.info);
+        foreach(var centerPoint in cube.centerPoints)
+        {
+            if (Vector3.Dot(delta, centerPoint.delta) != 0)
+                continue;
+            centerPoint.AddNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
+        }
+    }
+    public void ClearOverlapPoint(CenterPoint thatPoint)
+    {
+        if (!overlapPoints.Contains(thatPoint))
             return;
-        nearPoints.Find(x => x.nearPoint == thatPoint).nearTimer = 0f;
+        overlapPoints.Remove(thatPoint);
+        foreach (var centerPoint in cube.centerPoints)
+        {
+            if (Vector3.Dot(delta, centerPoint.delta) != 0)
+                continue;
+            centerPoint.ClearNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
+        }
     }
-}
-class NearPoint
-{
-    public CenterPoint nearPoint;
-    public float nearTimer;
-
-    public NearPoint(CenterPoint nearPoint)
+    public void AddNextPoint(CenterPoint thatPoint)
     {
-        this.nearPoint = nearPoint;
-        this.nearTimer = 0f;
+        if (!nextPoints.Contains(thatPoint))
+        {
+            nextPoints.Add(thatPoint);
+            thatPoint.AddNextPoint(this);
+        }
+    }
+    public void ClearNextPoint(CenterPoint thatPoint)
+    {
+        if (!nextPoints.Contains(thatPoint))
+            return;
+        nextPoints.Remove(thatPoint);
+        thatPoint.ClearNextPoint(this);
     }
 }
