@@ -994,7 +994,7 @@ PrefabInstance:
     - target: {fileID: 1320075951984747186, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3bd1c8741455c7e4794105c8db22b93e, type: 2}
+      objectReference: {fileID: 2100000, guid: 84ce06497e5a5c548aee9f3cdfc4490d, type: 2}
     - target: {fileID: 5640281351019957298, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_Name
       value: Cube_Blue
