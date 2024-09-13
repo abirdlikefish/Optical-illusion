@@ -20,7 +20,8 @@ public class CenterPoint : MonoBehaviour
     private void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
-        info = cube.name + "::" + name;
+        name = cube.name + "::" + name;
+        info = name;
     }
     private void Update()
     {

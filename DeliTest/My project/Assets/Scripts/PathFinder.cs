@@ -12,18 +12,19 @@ public class PathFinder : Singleton<PathFinder>
     {
         SearchPath();
     }
-    public void SetStart(CenterPoint cp)
-    {
-        sta = cp;
-    }
+    //public void SetStart(CenterPoint cp)
+    //{
+    //    sta = cp;
+    //}
     public void SetDestination(CenterPoint cp)
     {
-        if(Player.Instance.tarCenter != null && Player.Instance.tarCenter != cp)
-            Player.Instance.SetCenter(Player.Instance.tarCenter);
         des = cp;
     }
     void SearchPath()
     {
+        sta = Player.Instance.lastCenter;
+        if (des == null)
+            return;
         foreach (var cp in CubeCombiner.Instance.centerPoints)
         {
             cp.visited = false;

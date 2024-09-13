@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Player : Singleton<Player>
 {
-    public CenterPoint tarCenter;
+    //public CenterPoint tarCenter;
+    //public CenterPoint nextTarCenter;
     public CenterPoint curCenter;
+    public CenterPoint lastCenter;
     public CenterPoint initCenter;
     public float moveSpeed = 0.1f;
     public float rotateSpeed = 1f;
@@ -23,6 +25,7 @@ public class Player : Singleton<Player>
     {
         state = STATE.IDLE;
         Init();
+        
     }
 
     void Update()
@@ -31,16 +34,22 @@ public class Player : Singleton<Player>
     }
     void Init()
     {
-        transform.parent = initCenter.transform;
-        transform.localPosition = CenterToLocalPos(initCenter);
         SetCenter(initCenter);
+        transform.localPosition = CenterToLocalPos(initCenter);
     }
     public void SetCenter(CenterPoint center)
     {
+        if (center == null)
+        {
+            state = STATE.IDLE;
+            lastCenter = curCenter;
+            return;
+        }
+        lastCenter = curCenter;
         curCenter = center;
-        tarCenter = curCenter.nextPointInPath;
+        transform.parent = curCenter.transform;
         
-        PathFinder.Instance.SetStart(curCenter);
+
     }
     Vector3 CenterToLocalPos(CenterPoint center)
     {
@@ -48,31 +57,23 @@ public class Player : Singleton<Player>
     }
     void MoveToDes()
     {
-        tarCenter = curCenter.nextPointInPath;
-        if (tarCenter != null)
+        if (IsNearCurCenter())
         {
-            state = STATE.MOVING;
-            transform.parent = curCenter.nextPointInPath.transform;
-            transform.localPosition = Vector3.MoveTowards
-                (
-                transform.localPosition, CenterToLocalPos(tarCenter),
-                Vector3.Magnitude(tarCenter.transform.position - curCenter.transform.position) * moveSpeed
-                );
-            transform.Rotate(Vector3.Cross(transform.localPosition, CenterToLocalPos(tarCenter)) * rotateSpeed);
-
-
-
-            if (IsNearNextCenter())
-                SetCenter(tarCenter);
+            SetCenter(curCenter.nextPointInPath);
+            return;
         }
-        else
-        {
-            state = STATE.IDLE;
-        }
-
+        state = STATE.MOVING;
+        transform.localPosition = Vector3.MoveTowards
+            (
+            transform.localPosition, CenterToLocalPos(curCenter),
+            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * moveSpeed
+            );
+        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToLocalPos(curCenter)) * rotateSpeed);
+        
     }
-    bool IsNearNextCenter()
+
+    bool IsNearCurCenter()
     {
-        return Vector3.Distance(transform.localPosition, CenterToLocalPos(tarCenter)) < 0.001f;
+        return Vector3.Distance(transform.localPosition, CenterToLocalPos(curCenter)) < 0.001f;
     }
 }

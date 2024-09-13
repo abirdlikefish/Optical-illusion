@@ -911,8 +911,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   global: 0
-  tarCenter: {fileID: 0}
   curCenter: {fileID: 0}
+  lastCenter: {fileID: 0}
   initCenter: {fileID: 1575650508}
   moveSpeed: 0.08
   rotateSpeed: 4
