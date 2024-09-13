@@ -64,7 +64,7 @@ public class Rotater : Singleton<Rotater>
         foreach(var pair in CubeCombiner.Instance.centerPointPairs)
         {
             float curDis = DisSquare(Camera.main.WorldToScreenPoint(pair.first.transform.position), Camera.main.WorldToScreenPoint(pair.second.transform.position));
-            if (curDis < nearestDis)
+            if (curDis < nearestDis && !CubeCombiner.Instance.IsCubeNear(pair.first,pair.second))
             {
                 nearestDis = curDis;
                 nearestPairs.Clear();

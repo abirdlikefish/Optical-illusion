@@ -55,10 +55,10 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 CenterPoint p1 = centerPoints[i];
                 CenterPoint p2 = centerPoints[j];
                 if (IsCenterSameAxis(p1, p2) &&
-                    centerPoints[i].transform.position.z < centerPoints[j].transform.position.z &&
-                    !centerPoints[i].IsVisible &&
+                    centerPoints[i].IsNotVisible &&
                     centerPoints[j].IsVisible &&
-                    //!IsCenterInSamePlane(p1,p2) &&
+                    centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.1f &&
+                    //IsCenterInSamePlane(p1, p2) &&
                     IsNearInCamera(p1.gameObject, p2.gameObject)
                     )
                 {
@@ -66,7 +66,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                         centerPointPairs.Add(new(p1, p2));
                     p1.AddOverlapPoint(p2);
                 }
-                else if (IsCubeNear(p1, p2))
+                else if (IsCubeNear(p1, p2) && IsNearInCamera(p1.gameObject, p2.gameObject))
                 {
                     p1.AddOverlapPoint(p2);
                 }
@@ -78,6 +78,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
             }
         }
     }
+
     bool IsNearInCamera(GameObject obj1, GameObject obj2)
     {
         Vector3 screenPos1 = Camera.main.WorldToScreenPoint(obj1.transform.position);
@@ -85,7 +86,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
         float distance = Vector3.Distance(screenPos1, screenPos2);
         return distance <= nearDistance;
     }
-    bool IsCubeNear(CenterPoint p1, CenterPoint p2)
+    public bool IsCubeNear(CenterPoint p1, CenterPoint p2)
     {
         return Vector3.Magnitude(p1.cube.transform.localPosition - p2.cube.transform.localPosition) == 1;
     }

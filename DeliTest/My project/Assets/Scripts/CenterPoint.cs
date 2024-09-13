@@ -16,7 +16,9 @@ public class CenterPoint : MonoBehaviour
     public bool visited;
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
-    public bool IsVisible => cube.GetVisibleCenterPoint().Contains(this);
+    //public bool IsVisible => cube.GetVisibleCenterPoint().Contains(this);
+    public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
+    public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
     private void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
@@ -60,6 +62,8 @@ public class CenterPoint : MonoBehaviour
     }
     public void AddNextPoint(CenterPoint thatPoint)
     {
+        if (Obstacled(this) || Obstacled(thatPoint))
+            return;
         if (!nextPoints.Contains(thatPoint))
         {
             nextPoints.Add(thatPoint);
@@ -72,5 +76,17 @@ public class CenterPoint : MonoBehaviour
             return;
         nextPoints.Remove(thatPoint);
         thatPoint.ClearNextPoint(this);
+    }
+    bool Obstacled(CenterPoint centerPoint)
+    {
+        Collider[] colliders = Physics.OverlapSphere(centerPoint.transform.position, 0.4f);
+        foreach (var collider in colliders)
+        {
+            if (collider.tag.CompareTo("Obstacle") == 0 && collider.GetComponent<Cube>() != cube && collider.GetComponent<Cube>() != centerPoint.cube)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

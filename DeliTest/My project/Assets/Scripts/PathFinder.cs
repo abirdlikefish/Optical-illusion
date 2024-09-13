@@ -8,23 +8,28 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint sta;
     [SerializeField]
     CenterPoint des;
-    private void Update()
-    {
-        SearchPath();
-    }
+    //private void Update()
+    //{
+    //    SearchPath();
+    //}
     //public void SetStart(CenterPoint cp)
     //{
     //    sta = cp;
     //}
-    public void SetDestination(CenterPoint cp)
+    public void SetDestinations(CenterPoint[] cps)
     {
-        des = cp;
+        foreach (var cp in cps)
+        {
+            des = cp;
+            if (SearchPath())
+                return;
+        }
     }
-    void SearchPath()
+    bool SearchPath()
     {
         sta = Player.Instance.lastCenter;
         if (des == null)
-            return;
+            return false;
         foreach (var cp in CubeCombiner.Instance.centerPoints)
         {
             cp.visited = false;
@@ -42,17 +47,19 @@ public class PathFinder : Singleton<PathFinder>
             if (current == des)
             {
                 DrawPath();
-                return;
+                return true;
             }
             foreach (var next in current.nextPoints)
             {
                 if (next.visited)
                     continue;
+                
                 next.lastPointInPath = current;
                 visiting.Add(next);
                 next.visited = true;
             }
         }
+        return false;
     }
     void DrawPath()
     {
