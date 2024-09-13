@@ -79,7 +79,7 @@ public class CenterPoint : MonoBehaviour
     }
     bool Obstacled(CenterPoint centerPoint)
     {
-        Collider[] colliders = Physics.OverlapSphere(centerPoint.transform.position, 0.4f);
+        Collider[] colliders = Physics.OverlapSphere(centerPoint.transform.position, 0.25f);
         foreach (var collider in colliders)
         {
             if (collider.tag.CompareTo("Obstacle") == 0 && collider.GetComponent<Cube>() != cube && collider.GetComponent<Cube>() != centerPoint.cube)

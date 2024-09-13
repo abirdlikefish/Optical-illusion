@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   global: 0
-  nearDistance: 15
+  nearDistance: 20
   cubeP: {fileID: 232234020}
   cubes: []
   centerPoints: []
@@ -269,7 +269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5640281351019957298, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6443202027641712064, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_LocalPosition.x
@@ -485,9 +485,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &804623409 stripped
+--- !u!114 &853114261 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6407988337784991078, guid: 55a9414e847576b45b6949436535f199, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8089279705729871182, guid: 55a9414e847576b45b6949436535f199, type: 3}
   m_PrefabInstance: {fileID: 1725967747}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -514,7 +514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5640281351019957298, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6443202027641712064, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_LocalPosition.x
@@ -584,7 +584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5640281351019957298, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6443202027641712064, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_LocalPosition.x
@@ -928,7 +928,7 @@ MonoBehaviour:
   global: 0
   curCenter: {fileID: 0}
   lastCenter: {fileID: 0}
-  initCenter: {fileID: 804623409}
+  initCenter: {fileID: 853114261}
   moveSpeed: 0.08
   rotateSpeed: 4
 --- !u!1 &1633925176
@@ -1071,7 +1071,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5640281351019957298, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6443202027641712064, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: m_LocalPosition.x
