@@ -8,7 +8,6 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint sta;
     [SerializeField]
     CenterPoint des;
-
     private void Update()
     {
         SearchPath();
@@ -53,8 +52,6 @@ public class PathFinder : Singleton<PathFinder>
                 next.visited = true;
             }
         }
-        des = null;
-
     }
     void DrawPath()
     {

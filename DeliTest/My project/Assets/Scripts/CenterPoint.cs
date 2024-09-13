@@ -16,7 +16,7 @@ public class CenterPoint : MonoBehaviour
     public bool visited;
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
-    public bool isVisible => cube.GetVisibleCenterPoint().Contains(this);
+    public bool IsVisible => cube.GetVisibleCenterPoint().Contains(this);
     private void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();

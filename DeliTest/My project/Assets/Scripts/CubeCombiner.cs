@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
     List<Cube> cubes = new();
 
     public List<CenterPoint> centerPoints = new();
+    public List<CenterPointPair> centerPointPairs = new();
     private void Awake()
     {
         CollectCubeAndCenter();
@@ -29,7 +31,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
         cubes.Clear();
         for (int i = 0; i < cubeP.childCount; i++)
         {
-            if(cubeP.GetChild(i).gameObject.activeSelf)
+            if (cubeP.GetChild(i).gameObject.activeSelf)
                 cubes.Add(cubeP.GetChild(i).GetComponent<Cube>());
         }
         centerPoints.Clear();
@@ -54,16 +56,23 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 CenterPoint p2 = centerPoints[j];
                 if (IsCenterSameAxis(p1, p2) &&
                     centerPoints[i].transform.position.z < centerPoints[j].transform.position.z &&
-                    !centerPoints[i].isVisible &&
-                    centerPoints[j].isVisible &&
-                    IsNearInCamera(p1.gameObject, p2.gameObject) ||
-                    IsCubeNear(p1, p2)
+                    !centerPoints[i].IsVisible &&
+                    centerPoints[j].IsVisible &&
+                    //!IsCenterInSamePlane(p1,p2) &&
+                    IsNearInCamera(p1.gameObject, p2.gameObject)
                     )
+                {
+                    if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
+                        centerPointPairs.Add(new(p1, p2));
+                    p1.AddOverlapPoint(p2);
+                }
+                else if (IsCubeNear(p1, p2))
                 {
                     p1.AddOverlapPoint(p2);
                 }
                 else
                 {
+                    centerPointPairs.RemoveAll(x => x.first == p1 && x.second == p2);
                     p1.ClearOverlapPoint(p2);
                 }
             }
@@ -84,5 +93,24 @@ public class CubeCombiner : Singleton<CubeCombiner>
     bool IsCenterSameAxis(CenterPoint p1, CenterPoint p2)
     {
         return Vector3.Dot(p1.delta, p2.delta) != 0;
+    }
+    bool IsCenterInSamePlane(CenterPoint p1, CenterPoint p2)
+    {
+        return Vector3.Dot(Rotater.Instance.GetInitDelta(p1, p2), p1.delta - p2.delta) == 0;
+    }
+
+    
+
+}
+[Serializable]
+public class CenterPointPair
+{
+    public CenterPoint first;
+    public CenterPoint second;
+
+    public CenterPointPair(CenterPoint first, CenterPoint second)
+    {
+        this.first = first;
+        this.second = second;
     }
 }
