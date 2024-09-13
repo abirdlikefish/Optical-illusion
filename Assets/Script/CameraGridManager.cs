@@ -28,11 +28,14 @@ public class CameraGridManager
         public Vector2Int prevPos;
         public void reset()
         {
+            cube_L = null;
+            cube_R = null;
             isPassable_L = false;
             isPassable_R = false;
             isVisited = false;
             depth_L = -9999999;
             depth_R = -9999999;
+            prevPos = Vector2Int.zero;
         }
     }
     CameraGrid[,] cameraGrid = new CameraGrid[maxCameraGridX, maxCameraGridY];
@@ -42,7 +45,7 @@ public class CameraGridManager
         CleanCameraGrid();
     }
 
-    public void ResetCameraGrid()
+    public void CleanCameraGrid()
     {
         for (int i = 0; i < maxCameraGridX; i++)
         {
@@ -52,18 +55,18 @@ public class CameraGridManager
             }
         }
     }
-    public void CleanCameraGrid()
+    public void SetCameraGrid_visited(bool isVisited)
     {
         for (int i = 0; i < maxCameraGridX; i++)
         {
             for (int j = 0; j < maxCameraGridY; j++)
             {
-                cameraGrid[i, j].isVisited = false;
+                cameraGrid[i, j].isVisited = isVisited;
             }
         }
     }
 
-    public void DrawGrid_L(Cube cube, Vector2Int pos, int depth, bool flag)
+    void DrawGrid_L(Cube cube, Vector2Int pos, int depth, bool flag)
     {
         if (cameraGrid[pos.x, pos.y].depth_L < depth)
         {
@@ -72,7 +75,7 @@ public class CameraGridManager
             cameraGrid[pos.x, pos.y].isPassable_L = flag;
         }
     }
-    public void DrawGrid_R(Cube cube, Vector2Int pos, int depth, bool flag)
+    void DrawGrid_R(Cube cube, Vector2Int pos, int depth, bool flag)
     {
         if (cameraGrid[pos.x, pos.y].depth_R < depth)
         {
@@ -81,15 +84,27 @@ public class CameraGridManager
             cameraGrid[pos.x, pos.y].isPassable_R = flag;
         }
     }
+    public void DrawGridFromCube(Cube cube, Vector2Int pos, int depth)
+    {
+        DrawGrid_L(cube, pos, depth, true);
+        DrawGrid_R(cube, pos, depth, true);
+
+        DrawGrid_L(cube, pos + new Vector2Int(1, 1), depth, false);
+        DrawGrid_R(cube, pos + new Vector2Int(1, 1), depth, false);
+
+        DrawGrid_L(cube, pos + new Vector2Int(0, 1), depth, false);
+        DrawGrid_R(cube, pos + new Vector2Int(1, 0), depth, false);
+    }
 
     Queue<Vector2Int> bfsQueue = new Queue<Vector2Int>();
     Vector2Int[] midOffset = new Vector2Int[4] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
     public void FindPath(Vector2Int begPos)
     {
-        CleanCameraGrid();
+        SetCameraGrid_visited(false);
         bfsQueue.Clear();
         bfsQueue.Enqueue(begPos);
         cameraGrid[begPos.x, begPos.y].isVisited = true;
+        cameraGrid[begPos.x, begPos.y].prevPos = new Vector2Int(begPos.x, begPos.y);
         while (bfsQueue.Count > 0)
         {
             Vector2Int midPos = bfsQueue.Dequeue();
@@ -109,28 +124,25 @@ public class CameraGridManager
     {
         Vector2Int begPos = CubePos2CameraGridPos(playerPos);
         FindPath(begPos);
-        //bfsQueue.Clear();
-        //bfsQueue.Enqueue(begPos);
-        //cameraGrid[begPos.x, begPos.y].isVisited = true;
-        //while (bfsQueue.Count > 0)
-        //{
-        //    Vector2Int midPos = bfsQueue.Dequeue();
-        //    for (int i = 0; i < 4; i++)
-        //    {
-        //        Vector2Int pos = midPos + midOffset[i];
-        //        if (IsPassable(pos) && cameraGrid[pos.x, pos.y].isVisited == false)
-        //        {
-        //            cameraGrid[pos.x, pos.y].isVisited = true;
-        //            cameraGrid[pos.x, pos.y].prevPos = midPos;
-        //            bfsQueue.Enqueue(pos);
-        //        }
-        //    }
-        //}
     }
 
     public bool IsPassable(Vector2Int pos)
     {
         return cameraGrid[pos.x, pos.y].isPassable_L && cameraGrid[pos.x, pos.y].isPassable_R;
+    }
+    public bool IsVisited(Vector2Int pos)
+    {
+        return cameraGrid[pos.x, pos.y].isVisited;
+    }
+    public bool IsPassable(Vector3Int pos)
+    {
+        Vector2Int midPos = CameraGridManager.CubePos2CameraGridPos(pos);
+        return IsPassable(midPos);
+    }
+    public bool IsVisited(Vector3Int pos)
+    {
+        Vector2Int midPos = CameraGridManager.CubePos2CameraGridPos(pos);
+        return IsVisited(midPos);
     }
     public Vector3Int CameraGridPos2CubePos(Vector2Int midPos)
     {
@@ -145,23 +157,25 @@ public class CameraGridManager
     }
 
 
-    public bool SetTarget(Vector2Int target , Vector2Int begPos , Player player)
+    public bool SetTargetsToPlayer(Vector2Int target)
     {
-        if (cameraGrid[target.x , target.y].isVisited == false)
+        while (true)
         {
-            return false;
-        }
-        player.CleanTarget();
-        while (target != begPos)
-        {
-            Debug.Log("target : " + target);
-
-            player.AddTarget(CameraGridPos2CubePos(target));
-            //player.AddTarget(target);
+            Command_normal.AddTargetToPlayer(CameraGridPos2CubePos(target));
+            // player.AddTarget(CameraGridPos2CubePos(target));
+            if(target == cameraGrid[target.x, target.y].prevPos)
+            {
+                break;
+            }
             target = cameraGrid[target.x, target.y].prevPos;
         }
-        //player.AddTarget(target);
-        player.AddTarget(CameraGridPos2CubePos(target));
+        // player.AddTarget(CameraGridPos2CubePos(target));
+        // Command_normal.AddTargetToPlayer(CameraGridPos2CubePos(target));
         return true;
+    }
+    public bool SetTargetsToPlayer(Vector3Int target)
+    {
+        Vector2Int midPos = CubePos2CameraGridPos(target);
+        return SetTargetsToPlayer(midPos);
     }
 }

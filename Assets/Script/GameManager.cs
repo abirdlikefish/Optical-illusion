@@ -6,64 +6,83 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject begCube_inspector;
-    public GameObject endCube_inspector;
     public GameObject prefab_cube;
     public GameObject prefab_player;
 
     CameraGridManager cameraGridManager;
     CubeManager cubeManager;
     SaveManager saveManager;
-    Player player;
+    PlayerManager playerManager;
+    CommandManager commandManager;
+    UIManager uiManager;
+    // Player player;
 
-    #region Cube
-    #endregion
-
-    #region cameraGrid
-    #endregion
+    Mode currentMode;
+    Mode playMode;
+    Mode editMode;
 
     void Awake()
+    {
+
+        CreateManagers();
+        InitManagers();
+    }
+    void CreateManagers()
     {
         cameraGridManager = new CameraGridManager();        
         cubeManager = new CubeManager();
         saveManager = new SaveManager();
+        commandManager = new CommandManager();
+        uiManager = new UIManager();
+        playerManager = new PlayerManager();
+
+        playMode = new PlayMode();
+        editMode = new EditMode();
+
+    }
+    void InitManagers()
+    {
         cameraGridManager.Init();
-        cubeManager.Init(cameraGridManager , prefab_cube , prefab_player);
-        saveManager.Init(cubeManager);
+        cubeManager.Init(prefab_cube);
+        saveManager.Init();
+        commandManager.Init(this , cameraGridManager, cubeManager, saveManager , playerManager , uiManager);
+        uiManager.Init();
+        playerManager.Init(prefab_player);
+
+        playMode.Init();
+        editMode.Init();
+
     }
 
     void Start()
     {
-        if(saveManager.LoadData())
-        {
-            player = saveManager.InitCube();
-        }
-        else
-        {
-        }
-        //cubeManager.SetBegCube(begCube_inspector);
-        cubeManager.DrawCameraGrid();
-        cameraGridManager.FindPath(player.pos);
+        currentMode = playMode;
+        currentMode.EnterMode();
     }
 
     void Update()
     {
-        //…Ë÷’µ„
-        if(Input.GetMouseButtonDown(0) && player.isMoving == false)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("Cube")))
-            {
-                //Debug.Log("Hit Object: " + hit.collider.gameObject.layer);
-                cubeManager.SetEndCube(hit.collider.GetComponent<Cube>() , player);
-            }
-        }
+        currentMode.Update();
     }
 
-    //public void AddCube(GameObject gameObject)
-    //{
-    //    cubeManager.AddCube(gameObject);
-    //}
+    public void ChangeMode(Mode.ModeName modeName)
+    {
+        currentMode.ExitMode();
+        if(modeName == Mode.ModeName.PlayMode)
+        {
+            currentMode = playMode;
+        }
+        else
+        {
+            currentMode = editMode;
+
+        }
+        currentMode.EnterMode();
+    }
+
+    public void SetLock(bool isLock)
+    {
+        currentMode.SetLock(isLock);
+    }
+
 }

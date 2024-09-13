@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5e1c2c79572534ab8142a34c2ecf1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitTime: 0.3
+  waitTime: 0.1
   lastMoveTime: 0
+  isMoving: 0
   pos: {x: 0, y: 0, z: 0}
