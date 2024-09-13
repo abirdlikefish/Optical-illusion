@@ -10,15 +10,15 @@ public class Command
     protected static CubeManager cubeManager;
     protected static SaveManager saveManager;
     protected static PlayerManager playerManager;
-    protected static UIManager uIManager;
-    public static void Init(GameManager gameManager , CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager , PlayerManager playerManager , UIManager uIManager)
+    protected static UIManager uiManager;
+    public static void Init(GameManager gameManager , CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager , PlayerManager playerManager , UIManager uiManager)
     {
         Command.gameManager = gameManager;
         Command.cameraGridManager = cameraGridManager;
         Command.cubeManager = cubeManager;
         Command.saveManager = saveManager;
         Command.playerManager = playerManager;
-        Command.uIManager = uIManager;
+        Command.uiManager = uiManager;
     }
 }
 
@@ -32,6 +32,10 @@ public class Command_normal : Command
     {
         return saveManager.SaveData_All();
     }
+    public static bool SaveCurrentLevelData()
+    {
+        return SaveDataByIndex(gameManager.levelIndex);
+    }
     public static int LoadData_All()
     {
         return saveManager.LoadData_All();
@@ -41,9 +45,27 @@ public class Command_normal : Command
         bool flag = saveManager.LoadDataByIndex(index);
         if(flag)
         {
-            uIManager.AddLevel(index);
+            uiManager.AddLevel(index);
         }
         return flag;
+    }
+    public static bool WriteCubeListToLevelData(int index)
+    {
+        saveManager.CleanLevelData(index);
+        return cubeManager.WriteCubeListToLevelData(index);
+    }
+    public static bool WriteCubeToLevelData(int index , int x , int y , int z)
+    {
+        return saveManager.WriteCubeToLevelData(index, x, y, z);
+    }
+    public static bool WriteBegPosToLevelData(int index , int x , int y , int z)
+    {
+        return saveManager.WriteBegPosToLevelData(index, x, y, z);
+    }
+
+    public static int CreateNewLevel()
+    {
+        return saveManager.CreateLevelData();
     }
 
     public static bool UseLevelData(int index)
@@ -56,6 +78,7 @@ public class Command_normal : Command
         cubeManager.CleanCube_All();
         playerManager.CleanPlayer();
         gameManager.SetLock(false);
+        gameManager.levelIndex = index;
         saveManager.InitMap(index);
         cubeManager.DrawCameraGrid();
         saveManager.SetBeginPosition(index);
@@ -64,7 +87,6 @@ public class Command_normal : Command
     }
     public static bool FindPath()
     {
-        // cameraGridManager.SetCameraGrid_visited(false);
         cameraGridManager.FindPath(playerManager.pos);
         return true;
     }
@@ -75,6 +97,7 @@ public class Command_normal : Command
         playerManager.CleanPlayer();
         
         gameManager.ChangeMode(modeName);
+        uiManager.UseUI(modeName);
     }
     public static bool SetBeginPosition(Vector3Int pos)
     {
@@ -95,6 +118,11 @@ public class Command_normal : Command
             return false;
         }
         return true;
+    }
+    public static bool AddCube()
+    {
+        Vector3Int pos = uiManager.InputPos();
+        return AddCube(pos);
     }
     public static void DrawCube2CameraGrid(Cube cube , Vector2Int pos , int depth)
     {

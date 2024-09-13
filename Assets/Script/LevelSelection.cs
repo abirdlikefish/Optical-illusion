@@ -31,7 +31,6 @@ public class LevelSelection : MonoBehaviour
         dropdown.onValueChanged.AddListener(Select);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

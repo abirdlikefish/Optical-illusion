@@ -162,15 +162,12 @@ public class CameraGridManager
         while (true)
         {
             Command_normal.AddTargetToPlayer(CameraGridPos2CubePos(target));
-            // player.AddTarget(CameraGridPos2CubePos(target));
             if(target == cameraGrid[target.x, target.y].prevPos)
             {
                 break;
             }
             target = cameraGrid[target.x, target.y].prevPos;
         }
-        // player.AddTarget(CameraGridPos2CubePos(target));
-        // Command_normal.AddTargetToPlayer(CameraGridPos2CubePos(target));
         return true;
     }
     public bool SetTargetsToPlayer(Vector3Int target)

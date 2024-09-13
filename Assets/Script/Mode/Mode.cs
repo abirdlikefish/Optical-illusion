@@ -9,28 +9,22 @@ public class Mode
     {
         isLocked = flag;
     }
+    public int levelIndex;
     public enum ModeName
     {
         PlayMode,
         EditMode
     };
-    // public CameraGridManager cameraGridManager;
-    // public CubeManager cubeManager;
-    // public SaveManager saveManager;
-    // public Player player;
     public ModeName modeName;
-    // public virtual void Init(CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager)
     public virtual void Init()
     {
-        // this.cameraGridManager = cameraGridManager;
-        // this.cubeManager = cubeManager;
-        // this.saveManager = saveManager;
     }
 
 
     public virtual void EnterMode()
     {
         SetLock(false);
+        levelIndex = -1;
     }
 
     public virtual void Update()

@@ -7,9 +7,7 @@ public class CubeManager
     List<Cube> cubes = new List<Cube>();
     Cube[,,] cube_matrix = new Cube[100, 100, 100];
 
-    // CameraGridManager cameraGridManager;
     GameObject prefab_cube;
-    // GameObject prefab_player;
 
     Cube endCube;
     Cube begCube;
@@ -23,12 +21,9 @@ public class CubeManager
         pos += new Vector3Int(50, 50, 50);
         cube_matrix[pos.x, pos.y, pos.z] = midCube;
     }
-    // public void Init(CameraGridManager cameraGridManager , GameObject prefab_cube , GameObject prefab_player)
     public void Init(GameObject prefab_cube)
     {
-        // this.cameraGridManager = cameraGridManager;
         this.prefab_cube = prefab_cube;
-        // this.prefab_player = prefab_player;
     }
 
     public Cube AddCube(Vector3Int pos)
@@ -46,19 +41,9 @@ public class CubeManager
     }
     public void DrawCameraGrid()
     {
-        // cameraGridManager.ResetCameraGrid();
         for (int i = 0; i < cubes.Count; i++)
         {
             Command_normal.DrawCube2CameraGrid(cubes[i], cubes[i].cameraGridPos, cubes[i].depth);
-
-            // cameraGridManager.DrawGrid_L(cubes[i], cubes[i].cameraGridPos, cubes[i].depth, true);
-            // cameraGridManager.DrawGrid_R(cubes[i], cubes[i].cameraGridPos, cubes[i].depth, true);
-
-            // cameraGridManager.DrawGrid_L(cubes[i], cubes[i].cameraGridPos + new Vector2Int(1, 1), cubes[i].depth, false);
-            // cameraGridManager.DrawGrid_R(cubes[i], cubes[i].cameraGridPos + new Vector2Int(1, 1), cubes[i].depth, false);
-
-            // cameraGridManager.DrawGrid_L(cubes[i], cubes[i].cameraGridPos + new Vector2Int(0, 1), cubes[i].depth, false);
-            // cameraGridManager.DrawGrid_R(cubes[i], cubes[i].cameraGridPos + new Vector2Int(1, 0), cubes[i].depth, false);
         }
     }
 
@@ -71,16 +56,6 @@ public class CubeManager
     }
     public Vector3Int SetEndCube(Cube endCube)
     {
-        // if(cameraGridManager.IsPassable(endCube.cameraGridPos) == false)
-        // {
-        //     Debug.Log("failed to set endCube");
-        //     return false;
-        // }
-        // else
-        // {
-        //     bool isPassable = cameraGridManager.SetTarget(endCube.cameraGridPos, CameraGridManager.CubePos2CameraGridPos(player.pos), player);
-        //     if (isPassable == false)
-        //         return false;
             if (this.endCube != null)
             {
                 this.endCube.Reset();
@@ -88,7 +63,6 @@ public class CubeManager
             this.endCube = endCube;
             endCube.SetEnd();
             return endCube.pos;
-        // }
     }
 
     public void CleanCube(Vector3Int pos)
@@ -110,5 +84,15 @@ public class CubeManager
             GameObject.Destroy(cubes[i].gameObject);
         }
         cubes.Clear();
+    }
+
+    public bool WriteCubeListToLevelData(int index)
+    {
+        for(int i = 0 ; i < cubes.Count ; i++)
+        {
+            Command_normal.WriteCubeToLevelData(index , cubes[i].pos.x , cubes[i].pos.y , cubes[i].pos.z );
+        }
+        Command_normal.WriteBegPosToLevelData(index , begCube.pos.x , begCube.pos.y , begCube.pos.z);
+        return true;
     }
 }

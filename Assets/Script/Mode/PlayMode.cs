@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class PlayMode : Mode
 {
-    // public override void Init(CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager)
     public override void Init()
     {
-        // base.Init(cameraGridManager, cubeManager, saveManager);
         base.Init();
         modeName = ModeName.PlayMode;
     }
@@ -15,11 +13,6 @@ public class PlayMode : Mode
     {
         base.EnterMode();
         
-        int num = Command_normal.LoadData_All();
-        Debug.Log("load " + num +" levels ");
-
-        // cubeManager.DrawCameraGrid();
-        // cameraGridManager.FindPath(player.pos);
     }
     public override void Update()
     {
@@ -28,13 +21,15 @@ public class PlayMode : Mode
         {
             Command_normal.MouseClicked();
         }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Command_normal.ChangeMode(ModeName.EditMode);
+        }
     }
 
     public override void ExitMode()
     {
         
         base.ExitMode();
-        // cameraGridManager.CleanCameraGrid();
-        // cubeManager.CleanCube_All();
     }
 }

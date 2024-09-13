@@ -17,17 +17,8 @@ public class Player : MonoBehaviour
     }
     public void AddTarget(Vector3Int pos)
     {
-        //target.Enqueue(pos);
         target.Push(pos);
     }
-    // public void AddTarget(Vector2Int pos)
-    // {
-    //     target.Push(new Vector3Int(pos.x, 0, pos.y) - CameraGridManager.offset);
-    // }
-    // public void CleanTarget()
-    // {
-    //     target.Clear();
-    // }
     void SetPosition(Vector3Int pos)
     {
         transform.position = pos + Vector3Int.up;
@@ -51,10 +42,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            // if(target.Count > 0)
-            // {
-            //     isMoving = true;
-            // }
         }
     }
 }

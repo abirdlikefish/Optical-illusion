@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     PlayerManager playerManager;
     CommandManager commandManager;
     UIManager uiManager;
-    // Player player;
 
     Mode currentMode;
     Mode playMode;
@@ -56,8 +55,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        currentMode = playMode;
-        currentMode.EnterMode();
+        int num = Command_normal.LoadData_All();
+        Debug.Log("load " + num +" levels ");
+        
+        Command_normal.ChangeMode(Mode.ModeName.PlayMode);
     }
 
     void Update()
@@ -67,7 +68,10 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMode(Mode.ModeName modeName)
     {
-        currentMode.ExitMode();
+        if(currentMode != null)
+        {
+            currentMode.ExitMode();
+        }
         if(modeName == Mode.ModeName.PlayMode)
         {
             currentMode = playMode;
@@ -79,6 +83,8 @@ public class GameManager : MonoBehaviour
         }
         currentMode.EnterMode();
     }
+    public int levelIndex{get{return currentMode.levelIndex;}set{currentMode.levelIndex = value;}}
+
 
     public void SetLock(bool isLock)
     {

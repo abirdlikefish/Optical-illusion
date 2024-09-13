@@ -8,7 +8,6 @@ public class PlayerManager
     GameObject prefab_player;
 
     Player player;
-    // public Vector2Int pos_2;
     public Vector3Int pos{get {return player.pos;}}
 
     public void Init(GameObject prefab_player)
