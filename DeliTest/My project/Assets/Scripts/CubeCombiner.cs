@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 public class CubeCombiner : Singleton<CubeCombiner>
 {
-    [SerializeField]
-    float nearDistance = 2f;
-    public static float nearTime = 0.2f;
+    
     [SerializeField]
     Transform cubeP;
-    [SerializeField]
-    List<Cube> cubes = new();
+    public List<Cube> cubes = new();
 
     public List<CenterPoint> centerPoints = new();
     public List<CenterPointPair> centerPointPairs = new();
@@ -93,14 +90,14 @@ public class CubeCombiner : Singleton<CubeCombiner>
     }
     bool IsCubeSameColor(CenterPoint p1,CenterPoint p2)
     {
-        return p1.cube.color == p2.cube.color;
+        return p1.cube.color == p2.cube.color && p1.cube.color != Cube.COLOR.BLACK;
     }
     bool IsNearInCamera(GameObject obj1, GameObject obj2)
     {
         Vector3 screenPos1 = Camera.main.WorldToScreenPoint(obj1.transform.position);
         Vector3 screenPos2 = Camera.main.WorldToScreenPoint(obj2.transform.position);
         float distance = Vector3.Distance(screenPos1, screenPos2);
-        return distance <= nearDistance;
+        return distance <= Config.Instance.nearDistance;
     }
     public bool IsCubeNear(CenterPoint p1, CenterPoint p2)
     {

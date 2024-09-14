@@ -9,8 +9,7 @@ public class Player : Singleton<Player>
     public CenterPoint curCenter;
     public CenterPoint lastCenter;
     public CenterPoint initCenter;
-    public float moveSpeed = 0.1f;
-    public float rotateSpeed = 1f;
+    
     enum STATE
     {
         IDLE,
@@ -67,9 +66,9 @@ public class Player : Singleton<Player>
         transform.localPosition = Vector3.MoveTowards
             (
             transform.localPosition, CenterToLocalPos(curCenter),
-            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * moveSpeed
+            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToLocalPos(curCenter)) * rotateSpeed);
+        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToLocalPos(curCenter)) * Config.Instance.rotateSpeed);
         
     }
 

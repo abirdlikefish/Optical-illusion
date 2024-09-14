@@ -38,7 +38,7 @@ public class Cube : MonoBehaviour
         PathFinder.Instance.SetDestinations(centerPoints); 
     }
 
-    private void OnValidate()
+    public void MyOnValidate()
     {
         instanceMaterials.Clear();
         foreach (var sharedMaterial in sharedMaterials)

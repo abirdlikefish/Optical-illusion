@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4467485714898529768}
   - component: {fileID: 3107357423197970208}
   m_Layer: 0
-  m_Name: BLACK0
+  m_Name: Cube
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
