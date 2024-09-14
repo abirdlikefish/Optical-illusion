@@ -69,6 +69,8 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 }
                 else if (IsCubeNear(p1, p2) && IsNearInCamera(p1.gameObject, p2.gameObject))
                 {
+                    p1.cube.ChangeColor(p2.cube);
+                    p2.cube.ChangeColor(p1.cube);
                     p1.AddOverlapPoint(p2);
                 }
                 else

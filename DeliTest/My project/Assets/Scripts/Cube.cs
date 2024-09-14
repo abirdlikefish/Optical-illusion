@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    public List<Material> sharedMaterials = new(); // 指向共享的材质
+    List<Material> instanceMaterials = new(); // 实例材质
     public enum COLOR
     {
         BLACK,
@@ -23,17 +25,34 @@ public class Cube : MonoBehaviour
         }
         return null;
     }
+    
+
+    public void ChangeColor(Cube nearCube)
+    {
+        Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
+        GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
+        GetComponent<MeshRenderer>().materials[0].SetColor(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Value, CubeColor.Instance.color_mar[nearCube.color].GetColor("_Color"));
+    }
     public void OnMouseDown()
     {
         //CenterPoint nearest = GetNearestVisibleCenterPoint(Input.mousePosition);
 
-        PathFinder.Instance.SetDestinations(centerPoints);
+        PathFinder.Instance.SetDestinations(centerPoints); 
     }
 
     private void OnValidate()
     {
-        GetComponent<MeshRenderer>().material = CubeColor.Instance.color_mar[color];
+        instanceMaterials.Clear();
+        foreach (var sharedMaterial in sharedMaterials)
+        {
+            instanceMaterials.Add(new Material(sharedMaterial));
+        }
+        GetComponent<MeshRenderer>().materials = instanceMaterials.ToArray();
+        instanceMaterials[0].SetColor("_ColorBase" , CubeColor.Instance.color_mar[color].GetColor("_Color")); 
+        name = color.ToString();
     }
+
+
     //void HideAllCenterPoints()
     //{
     //    foreach (var centerPoint in centerPoints)

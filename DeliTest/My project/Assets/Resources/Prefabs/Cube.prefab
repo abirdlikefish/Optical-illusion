@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4467485714898529768}
   - component: {fileID: 3107357423197970208}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: BLACK
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 613f42873024ea247983cfebd101a2a3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -124,6 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2613ff2732badf84a84af66fe3a234f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sharedMaterials:
+  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
+  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
   color: 0
   centerPoints:
   - {fileID: 8089279705729871182}
