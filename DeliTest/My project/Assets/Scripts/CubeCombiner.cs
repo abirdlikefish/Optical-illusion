@@ -59,7 +59,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     centerPoints[i].IsNotVisible &&
                     centerPoints[j].IsVisible &&
                     centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.2f &&
-                    //IsCenterInSamePlane(p1, p2) &&
+                    !IsNearInCamera(p1.cube.gameObject,p2.cube.gameObject) &&
                     IsNearInCamera(p1.gameObject, p2.gameObject)
                     )
                 {
