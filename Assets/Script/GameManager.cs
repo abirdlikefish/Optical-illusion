@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject prefab_cube;
     public GameObject prefab_cubeRotatable;
+    public GameObject prefab_cubeMovable;
     public GameObject prefab_player;
     public Material material_black;
     public Material material_white;
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour
     void InitManagers()
     {
         cameraGridManager.Init();
-        cubeManager.Init(prefab_cube , prefab_cubeRotatable);
+        cubeManager.Init(prefab_cube , prefab_cubeRotatable , prefab_cubeMovable);
         saveManager.Init();
         commandManager.Init(this , cameraGridManager, cubeManager, saveManager , playerManager , uiManager);
         uiManager.Init();

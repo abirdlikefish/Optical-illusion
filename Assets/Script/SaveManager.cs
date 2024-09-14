@@ -32,7 +32,6 @@ public class SaveManager
             sr.Close();
 
             LevelData midLevelData = JsonUtility.FromJson<LevelData>(jsonString);
-        // Debug.Log(index);
             levelDataList[index] = midLevelData;
             Debug.Log("load data \" " + midPath + " \" succeed");
             return true;
@@ -78,7 +77,21 @@ public class SaveManager
         levelDataList[index].cubeRotatablesTowards_1.Add(towards[1]);
         levelDataList[index].cubeRotatablesTowards_2.Add(towards[2]);
         levelDataList[index].cubeRotatablesTowards_3.Add(towards[3]);
-
+        return true;
+    }
+    public bool WriteCubeMovableToLevelData(int index , Vector3Int pos , int[] len , int moveDir , int maxMoveDistance )
+    {
+        levelDataList[index].cubeMovablesPos_x.Add(pos.x);
+        levelDataList[index].cubeMovablesPos_y.Add(pos.y);
+        levelDataList[index].cubeMovablesPos_z.Add(pos.z);
+        levelDataList[index].cubeMovablesLen_0.Add(len[0]);
+        levelDataList[index].cubeMovablesLen_1.Add(len[1]);
+        levelDataList[index].cubeMovablesLen_2.Add(len[2]);
+        levelDataList[index].cubeMovablesLen_3.Add(len[3]);
+        levelDataList[index].cubeMovablesLen_4.Add(len[4]);
+        levelDataList[index].cubeMovablesLen_5.Add(len[5]);
+        levelDataList[index].cubeMovablesMoveDir.Add(moveDir);
+        levelDataList[index].cubeMovablesMaxMoveDistance.Add(maxMoveDistance);
         return true;
     }
 
@@ -127,10 +140,14 @@ public class SaveManager
                                     levelDataList[index].cubeRotatablesLen_3[i] , levelDataList[index].cubeRotatablesLen_4[i] , levelDataList[index].cubeRotatablesLen_5[i]};
             int[] midTowards = new int[4]{levelDataList[index].cubeRotatablesTowards_0[i] , levelDataList[index].cubeRotatablesTowards_1[i] , levelDataList[index].cubeRotatablesTowards_2[i] , levelDataList[index].cubeRotatablesTowards_3[i]};
 
-            // midTowards[0] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_0_x[i] , levelDataList[index].cubeRotatablesTowards_0_y[i] , levelDataList[index].cubeRotatablesTowards_0_z[i]);
-            // midTowards[1] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_1_x[i] , levelDataList[index].cubeRotatablesTowards_1_y[i] , levelDataList[index].cubeRotatablesTowards_1_z[i]);
-            // midTowards[2] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_2_x[i] , levelDataList[index].cubeRotatablesTowards_2_y[i] , levelDataList[index].cubeRotatablesTowards_2_z[i]);
             Command_normal.AddCube_Rotatable(midPos , len , midTowards);
+        }
+        for(int i = 0 ; i < levelDataList[index].cubeMovablesPos_x.Count ; i ++)
+        {
+            Vector3Int midPos = new Vector3Int(levelDataList[index].cubeMovablesPos_x[i] , levelDataList[index].cubeMovablesPos_y[i] , levelDataList[index].cubeMovablesPos_z[i]);
+            int[] len = new int[6]{ levelDataList[index].cubeMovablesLen_0[i] , levelDataList[index].cubeMovablesLen_1[i] , levelDataList[index].cubeMovablesLen_2[i] , 
+                                    levelDataList[index].cubeMovablesLen_3[i] , levelDataList[index].cubeMovablesLen_4[i] , levelDataList[index].cubeMovablesLen_5[i]};
+            Command_normal.AddCube_Movable(midPos , len , levelDataList[index].cubeMovablesMoveDir[i] , levelDataList[index].cubeMovablesMaxMoveDistance[i]);
         }
         return true;
     }

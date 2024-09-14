@@ -6,10 +6,12 @@ public class CubeManager
 {
     List<Cube> cubes = new List<Cube>();
     List<Cube_Rotatable> cube_Rotatables = new List<Cube_Rotatable>();
+    List<Cube_Movable> cube_Movables = new List<Cube_Movable>();
     BaseCube[,,] cube_matrix = new BaseCube[100, 100, 100];
 
     GameObject prefab_cube;
     GameObject prefab_cubeRotatable;
+    GameObject prefab_cubeMovable;
 
     Cube endCube;
     Cube begCube;
@@ -23,10 +25,11 @@ public class CubeManager
         pos += new Vector3Int(50, 50, 50);
         cube_matrix[pos.x, pos.y, pos.z] = midCube;
     }
-    public void Init(GameObject prefab_cube , GameObject prefab_cubeRotatable)
+    public void Init(GameObject prefab_cube , GameObject prefab_cubeRotatable , GameObject prefab_cubeMovable)
     {
         this.prefab_cube = prefab_cube;
         this.prefab_cubeRotatable = prefab_cubeRotatable;
+        this.prefab_cubeMovable = prefab_cubeMovable;
     }
 
     public bool AddCube(Vector3Int pos)
@@ -58,6 +61,21 @@ public class CubeManager
             return false;
         }
     }
+    public bool AddCube_Movable(Vector3Int pos , int[] len , int moveDir , int  maxMoveDistance)
+    {
+        if (Cube_Movable.IsPlacable(this , pos , len , moveDir , maxMoveDistance))
+        {
+            Cube_Movable midCube= GameObject.Instantiate(prefab_cubeMovable).GetComponent<Cube_Movable>();
+            midCube.Init(this , pos , len , moveDir , maxMoveDistance);
+            this.cube_Movables.Add(midCube);
+            return true;
+        }
+        else
+        {
+            Debug.Log("Can not placy cubeMovable");
+            return false;
+        }
+    }
     public void DrawCameraGrid()
     {
         for (int i = 0; i < cubes.Count; i++)
@@ -67,6 +85,10 @@ public class CubeManager
         for (int i = 0 ; i < cube_Rotatables.Count ; i ++)
         {
             cube_Rotatables[i].DrawCameraGrid();
+        }
+        for (int i = 0 ; i < cube_Movables.Count ; i ++)
+        {
+            cube_Movables[i].DrawCameraGrid();
         }
     }
 
@@ -79,6 +101,11 @@ public class CubeManager
         if(SearchCubeMatrix(pos) is Cube_Rotatable)
         {
             Debug.Log("Cube_Rotatable cannot be begCube");
+            return ;
+        }
+        if(SearchCubeMatrix(pos) is Cube_Movable)
+        {
+            Debug.Log("Cube_Movable cannot be begCube");
             return ;
         }
         this.begCube = SearchCubeMatrix(pos) as Cube;
@@ -118,6 +145,12 @@ public class CubeManager
 
             (midCube as Cube_Rotatable).Remove();
         }
+        else if(midCube is Cube_Movable)
+        {
+            cube_Movables.Remove(midCube as Cube_Movable);
+
+            (midCube as Cube_Movable).Remove();
+        }
         else if(midCube is Cube)
         {
             cubes.Remove(midCube as Cube);
@@ -141,6 +174,11 @@ public class CubeManager
             cube_Rotatables[i].Remove();
         }
         cube_Rotatables.Clear();
+        for(int i = 0 ; i < cube_Movables.Count; i  ++)
+        {
+            cube_Movables[i].Remove();
+        }
+        cube_Movables.Clear();
     }
 
     public bool WriteCubeListToLevelData(int index)
@@ -152,6 +190,10 @@ public class CubeManager
         for(int i = 0 ; i < cube_Rotatables.Count ; i++)
         {
             Command_normal.WriteCubeRotatableToLevelData(index , cube_Rotatables[i].pos , cube_Rotatables[i].len , cube_Rotatables[i].towards);
+        }
+        for(int i = 0 ; i < cube_Movables.Count ; i++)
+        {
+            Command_normal.WriteCubeMovableToLevelData(index , cube_Movables[i].pos , cube_Movables[i].len , cube_Movables[i].moveDir , cube_Movables[i].maxMoveDistance);
         }
         Command_normal.WriteBegPosToLevelData(index , begCube.pos.x , begCube.pos.y , begCube.pos.z);
         return true;

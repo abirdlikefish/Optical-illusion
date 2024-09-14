@@ -29,8 +29,6 @@ public class Command_normal : Command
 {
     public static bool SaveDataByIndex(int index)
     {
-        
-        // saveManager.CleanLevelData(index);
         saveManager.CreateLevelDataByIndex(index);
         cubeManager.WriteCubeListToLevelData(index);
         return saveManager.SaveDataByIndex(index);
@@ -67,6 +65,10 @@ public class Command_normal : Command
     {
         return saveManager.WriteCubeRotatableToLevelData(index , pos , len , towards);
     }
+    public static bool WriteCubeMovableToLevelData(int index , Vector3Int pos , int[] len , int moveDir , int maxMoveDistance)
+    {
+        return saveManager.WriteCubeMovableToLevelData(index , pos , len , moveDir , maxMoveDistance);
+    }
     public static bool WriteBegPosToLevelData(int index , int x , int y , int z)
     {
         return saveManager.WriteBegPosToLevelData(index, x, y, z);
@@ -92,18 +94,13 @@ public class Command_normal : Command
         }
         cameraGridManager.CleanCameraGrid();
         cubeManager.CleanCube_All();
-        // playerManager.CleanPlayer();
         gameManager.SetLock(false);
         gameManager.levelIndex = index;
-        // Debug.Log("initMap beg");
         saveManager.InitMap(index);
-        // Debug.Log("initMap end");
 
         saveManager.SetBeginPosition(index);
 
         RefreshCameraGrid();
-        // cubeManager.DrawCameraGrid();
-        // FindPath();
         return true;
     }
     public static bool FindPath()
@@ -124,11 +121,6 @@ public class Command_normal : Command
     }
     public static bool SetBeginPosition(Vector3Int pos)
     {
-        // if(cameraGridManager.IsPassable(pos) == false)
-        // {
-        //     Debug.Log("set begCube failed , pos = " + pos);
-        //     return false;
-        // }
         cubeManager.SetBegCube(pos);
         playerManager.InitPlayer(pos);
         return true;
@@ -140,12 +132,6 @@ public class Command_normal : Command
     public static bool AddCube(Vector3Int pos)
     {
         return cubeManager.AddCube(pos);
-        // Cube midCube = cubeManager.AddCube(pos);
-        // if(midCube == null)
-        // {
-        //     return false;
-        // }
-        // return true;
     }
     public static bool AddCube()
     {
@@ -164,6 +150,17 @@ public class Command_normal : Command
         return AddCube_Rotatable(uiManager.GetInputPos() , len , midTowards);
     }
 
+    public static bool AddCube_Movable(Vector3Int pos , int[] len , int moveDir , int maxMoveDistance)
+    {
+        return cubeManager.AddCube_Movable(pos, len, moveDir , maxMoveDistance);
+    }
+    public static bool AddCube_Movable()
+    {
+        int[] len = new int[6]{ uiManager.GetParament(0), uiManager.GetParament(1) , uiManager.GetParament(2) , 
+                                uiManager.GetParament(3) , uiManager.GetParament(4) , uiManager.GetParament(5)};
+        return AddCube_Movable(uiManager.GetInputPos() , len , uiManager.GetParament(6) , uiManager.GetParament(7));
+    }
+
     public static bool DeleteCube(Vector3Int pos)
     {
         return cubeManager.DeleteCube(pos);
@@ -174,11 +171,6 @@ public class Command_normal : Command
         return DeleteCube(pos);
     }
 
-
-    // public static void DrawCube2CameraGrid(Vector3Int cubePos , Vector2Int pos , int depth)
-    // {
-    //     cameraGridManager.DrawGridFromCube(cubePos, pos, depth);
-    // }
     public static void DrawCube2CameraGrid(BaseCube cube , Vector3Int pos , int depth)
     {
         cameraGridManager.DrawGridFromCube(cube, pos, depth);
@@ -218,8 +210,12 @@ public class Command_normal : Command
                 {
                     (baseCube as Cube_Rotatable).Rotate();
                     RefreshCameraGrid();
-                    // cubeManager.DrawCameraGrid();
-                    // FindPath();
+                }
+                else if(baseCube is Cube_Movable)
+                {
+                    Debug.Log("begin move");
+                    (baseCube as Cube_Movable).Move();
+                    RefreshCameraGrid();
                 }
             }
             else
@@ -235,7 +231,6 @@ public class Command_normal : Command
 
     public static void RefreshCameraGrid()
     {
-        // Debug.Log("Refreshing camera grid");
         cameraGridManager.CleanCameraGrid();
         cubeManager.DrawCameraGrid();
         FindPath();

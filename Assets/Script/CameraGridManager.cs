@@ -102,10 +102,6 @@ public class CameraGridManager
         DrawGrid_L(cube, midPos, pos + new Vector2Int(0, 1), depth, false);
         DrawGrid_R(cube, midPos, pos + new Vector2Int(1, 0), depth, false);
     }
-    // public void DrawGridFromCube(BaseCube cube, Vector3Int pos, int depth)
-    // {
-    //     DrawGridFromCube(cube, CubePos2CameraGridPos(pos), depth);
-    // }
 
     Queue<Vector2Int> bfsQueue = new Queue<Vector2Int>();
     Vector2Int[] midOffset = new Vector2Int[4] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
