@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4467485714898529768}
   - component: {fileID: 3107357423197970208}
   m_Layer: 0
-  m_Name: BLACK
+  m_Name: BLACK0
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,7 +111,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2, y: 1.2, z: 1.2}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3107357423197970208
 MonoBehaviour:

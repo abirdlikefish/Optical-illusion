@@ -16,9 +16,11 @@ public class CenterPoint : MonoBehaviour
     public bool visited;
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
-    //public bool IsVisible => cube.GetVisibleCenterPoint().Contains(this);
+    public List<Vector3> obstacledPoints = new();
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
+    public bool IsObstacled => obstacledPoints.Count != 0;
+    public bool NoNext => nextPoints.Count == 0;
     private void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
@@ -41,11 +43,8 @@ public class CenterPoint : MonoBehaviour
             overlapPoints.Add(thatPoint);
             thatPoint.AddOverlapPoint(this);
         }
-        
-        //Debug.Log(info + " is near to " + thatPoint.info);
         foreach(var centerPoint in cube.centerPoints)
         {
-            
             if (Vector3.Dot(delta, centerPoint.delta) != 0)
                 continue;
             centerPoint.AddNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
@@ -65,13 +64,12 @@ public class CenterPoint : MonoBehaviour
     }
     public void AddNextPoint(CenterPoint thatPoint)
     {
-
-        //if (cube.name == "GREEN1" && delta == new Vector3Int(0, 0, -1) && thatPoint.delta == new Vector3Int(0, 0, -1))
-        //{
-        //    int c = 1;
-        //}
-        if (Obstacled(this) || Obstacled(thatPoint))
-            return;
+        obstacledPoints.Clear();
+        if (IsNotVisible)
+        {
+            obstacledPoints.Add(this.transform.position);
+        }
+        Obstacled(this);
         if (!nextPoints.Contains(thatPoint))
         {
             nextPoints.Add(thatPoint);
@@ -85,16 +83,82 @@ public class CenterPoint : MonoBehaviour
         nextPoints.Remove(thatPoint);
         thatPoint.ClearNextPoint(this);
     }
+
     bool Obstacled(CenterPoint centerPoint)
     {
-        Collider[] colliders = Physics.OverlapSphere(centerPoint.transform.position, 0.25f);
-        foreach (var collider in colliders)
+        //已知正方体的中心坐标和某个面的中心点坐标，求这个面的四个顶点坐标
+        //正方体的局部坐标转换为世界坐标
+        Vector3[] vertices = GetFaceVertices(centerPoint.cube.transform.localPosition,1,centerPoint.transform.localPosition);
+        Vector3[] init_vertices = new Vector3[4];
+        for (int i=0;i< 4; i++)
         {
-            if (collider.tag.CompareTo("Obstacle") == 0 && collider.GetComponent<Cube>() != cube && collider.GetComponent<Cube>() != centerPoint.cube)
+            vertices[i] -= centerPoint.cube.transform.localPosition;
+            init_vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
+            vertices[i] = Vector3.Lerp(centerPoint.transform.localPosition, vertices[i], Config.Instance.CenterObstacleMultiplier);
+            vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            RaycastHit[] raycastHits = Physics.RaycastAll(vertices[i] + new Vector3(0,0,0.05f), -Vector3.forward);
+            foreach (var raycastHit in raycastHits)
             {
-                return true;
+                if (raycastHit.collider.transform == centerPoint.cube.transform)
+                    continue;
+                obstacledPoints.Add(init_vertices[i]);
             }
         }
-        return false;
+        return obstacledPoints.Count != 0;
+    }
+    Vector3[] GetFaceVertices(Vector3 cubeCenter, float size, Vector3 faceCenter)
+    {
+        faceCenter = faceCenter + cubeCenter;
+        Vector3[] vertices = new Vector3[4];
+        float halfSize = size / 2;
+
+        // 根据面中心点确定面
+        if (Mathf.Abs(faceCenter.y - (cubeCenter.y + halfSize)) < 0.01f) // 上面
+        {
+            vertices[0] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+            vertices[1] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+            vertices[2] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+            vertices[3] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+        }
+        else if (Mathf.Abs(faceCenter.y - (cubeCenter.y - halfSize)) < 0.01f) // 下面
+        {
+            vertices[0] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[1] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[2] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+            vertices[3] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+        }
+        else if (Mathf.Abs(faceCenter.x - (cubeCenter.x + halfSize)) < 0.01f) // 右面
+        {
+            vertices[0] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[1] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+            vertices[2] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+            vertices[3] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+        }
+        else if (Mathf.Abs(faceCenter.x - (cubeCenter.x - halfSize)) < 0.01f) // 左面
+        {
+            vertices[0] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[1] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+            vertices[2] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+            vertices[3] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+        }
+        else if (Mathf.Abs(faceCenter.z - (cubeCenter.z + halfSize)) < 0.01f) // 前面
+        {
+            vertices[0] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+            vertices[1] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z + halfSize);
+            vertices[2] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+            vertices[3] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z + halfSize);
+        }
+        else if (Mathf.Abs(faceCenter.z - (cubeCenter.z - halfSize)) < 0.01f) // 后面
+        {
+            vertices[0] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[1] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y - halfSize, cubeCenter.z - halfSize);
+            vertices[2] = new Vector3(cubeCenter.x + halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+            vertices[3] = new Vector3(cubeCenter.x - halfSize, cubeCenter.y + halfSize, cubeCenter.z - halfSize);
+        }
+
+        return vertices;
     }
 }

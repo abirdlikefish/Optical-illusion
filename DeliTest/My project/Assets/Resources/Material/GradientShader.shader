@@ -29,15 +29,16 @@
     }
     SubShader
     {
+        LOD 300
         Tags { "RenderType"="Opaque" }
-        LOD 200
+       
 
         Pass
-        {
+        {  
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
+            
             #include "UnityCG.cginc"
 
             struct appdata_t

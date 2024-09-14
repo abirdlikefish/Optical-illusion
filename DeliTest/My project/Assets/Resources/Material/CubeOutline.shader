@@ -21,7 +21,7 @@
         Blend SrcAlpha OneMinusSrcAlpha
         LOD 200
         Cull Front
-        zWrite off
+        ZWrite OFF
         Pass
         {
 

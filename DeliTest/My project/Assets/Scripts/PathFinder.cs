@@ -8,14 +8,7 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint sta;
     [SerializeField]
     CenterPoint des;
-    //private void Update()
-    //{
-    //    SearchPath();
-    //}
-    //public void SetStart(CenterPoint cp)
-    //{
-    //    sta = cp;
-    //}
+    public GameObject obstacledInfo;
     public void SetDestinations(CenterPoint[] cps)
     {
         foreach (var cp in cps)
@@ -24,11 +17,14 @@ public class PathFinder : Singleton<PathFinder>
             if (SearchPath())
                 return;
         }
+        //ShowObInfo();
     }
     bool SearchPath()
     {
         sta = Player.Instance.lastCenter;
         if (des == null)
+            return false;
+        if (sta.IsNotVisible || sta.IsObstacled)
             return false;
         foreach (var cp in CubeCombiner.Instance.centerPoints)
         {
@@ -40,9 +36,10 @@ public class PathFinder : Singleton<PathFinder>
         visiting.Add(sta);
         sta.visited = true;
         sta.lastPointInPath = null;
+        CenterPoint current = null;
         while (visiting.Count > 0)
         {
-            CenterPoint current = visiting[0];
+            current = visiting[0];
             visiting.RemoveAt(0);
             if (current == des)
             {
@@ -51,9 +48,8 @@ public class PathFinder : Singleton<PathFinder>
             }
             foreach (var next in current.nextPoints)
             {
-                if (next.visited)
+                if (next.visited || next.IsObstacled)
                     continue;
-                
                 next.lastPointInPath = current;
                 visiting.Add(next);
                 next.visited = true;
@@ -61,6 +57,18 @@ public class PathFinder : Singleton<PathFinder>
         }
         return false;
     }
+    //void ShowObInfo()
+    //{
+    //    foreach (var ob in temp_obstaclePoints)
+    //    {
+    //        GameObject g = Instantiate(obstacledInfo);
+    //        g.transform.parent = lastInQueue.transform.parent;
+    //        g.transform.position = ob;
+    //        g.transform.localScale = new Vector3(1, 1, 1) * Config.Instance.CenterObstacleScale;
+    //        g.SetActive(true);
+    //    }
+    //    Debug.Log("NPF from " + lastInQueue.name);
+    //}
     void DrawPath()
     {
         CenterPoint currentInPath = des;

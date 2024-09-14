@@ -35,8 +35,6 @@ public class Cube : MonoBehaviour
     }
     public void OnMouseDown()
     {
-        //CenterPoint nearest = GetNearestVisibleCenterPoint(Input.mousePosition);
-
         PathFinder.Instance.SetDestinations(centerPoints); 
     }
 
@@ -49,7 +47,7 @@ public class Cube : MonoBehaviour
         }
         GetComponent<MeshRenderer>().materials = instanceMaterials.ToArray();
         instanceMaterials[0].SetColor("_ColorBase" , CubeColor.Instance.color_mar[color].GetColor("_Color")); 
-        name = color.ToString();
+        name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
 
 
