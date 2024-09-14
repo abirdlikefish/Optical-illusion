@@ -60,9 +60,13 @@ public class UIManager
 
     }
 
-    public Vector3Int GetParament_Vector3(int index)
+    // public Vector3Int GetParament_Vector3(int index)
+    // {
+    //     return new Vector3Int(ui_Paraments[index * 3 + 0 ].Num , ui_Paraments[index * 3 + 1 ].Num , ui_Paraments[index * 3 + 2 ].Num );
+    // }
+    public int GetParament(int index)
     {
-        return new Vector3Int(ui_Paraments[index * 3 + 0 ].Num , ui_Paraments[index * 3 + 1 ].Num , ui_Paraments[index * 3 + 2 ].Num );
+        return ui_Paraments[index].Num;
     }
 
     public void UseUI(Mode.ModeName modeName)

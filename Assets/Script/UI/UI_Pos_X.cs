@@ -10,13 +10,6 @@ public class UI_Pos_X : MonoBehaviour
     void Awake()
     {
         inputField = transform.GetComponent<InputField>();
-        if(inputField == null)
-        {
-            Debug.Log("Input field is null");
-        }
-    }
-    void Start()
-    {
-
+        Pos_x = 0;
     }
 }

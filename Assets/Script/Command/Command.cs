@@ -35,10 +35,6 @@ public class Command_normal : Command
         cubeManager.WriteCubeListToLevelData(index);
         return saveManager.SaveDataByIndex(index);
     }
-    // public static bool SaveData_All()
-    // {
-    //     return saveManager.SaveData_All();
-    // }
     public static bool SaveCurrentLevelData()
     {
         return SaveDataByIndex(gameManager.levelIndex);
@@ -67,7 +63,7 @@ public class Command_normal : Command
     {
         return saveManager.WriteCubeToLevelData(index, x, y, z);
     }
-    public static bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int len , Vector3Int[] towards)
+    public static bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int[] len , int[] towards)
     {
         return saveManager.WriteCubeRotatableToLevelData(index , pos , len , towards);
     }
@@ -156,18 +152,15 @@ public class Command_normal : Command
         Vector3Int pos = uiManager.GetInputPos();
         return AddCube(pos);
     }
-    public static bool AddCube_Rotatable(Vector3Int pos , int len , Vector3Int[] towards)
+    public static bool AddCube_Rotatable(Vector3Int pos , int[] len , int[] towards)
     {
         return cubeManager.AddCube_Rotatable(pos, len, towards);
     }
     public static bool AddCube_Rotatable()
     {
-        int len = Mathf.RoundToInt(uiManager.GetParament_Vector3(0).magnitude);
-        Vector3Int[] midTowards = new Vector3Int[3];
-        for(int i = 0 ; i < 3 ; i++)
-        {
-            midTowards[i] = uiManager.GetParament_Vector3(i) / len;
-        }
+        int[] len = new int[6]{ uiManager.GetParament(0), uiManager.GetParament(1) , uiManager.GetParament(2) , 
+                                uiManager.GetParament(3) , uiManager.GetParament(4) , uiManager.GetParament(5)};
+        int[] midTowards = new int[4]{4 , uiManager.GetParament(6) , uiManager.GetParament(7) , uiManager.GetParament(8)};
         return AddCube_Rotatable(uiManager.GetInputPos() , len , midTowards);
     }
 
@@ -242,7 +235,7 @@ public class Command_normal : Command
 
     public static void RefreshCameraGrid()
     {
-        Debug.Log("Refreshing camera grid");
+        // Debug.Log("Refreshing camera grid");
         cameraGridManager.CleanCameraGrid();
         cubeManager.DrawCameraGrid();
         FindPath();

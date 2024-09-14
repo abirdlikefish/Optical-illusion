@@ -16,21 +16,21 @@ public class LevelData
     public List<int> cubeRotatablesPos_x = new List<int>();
     public List<int> cubeRotatablesPos_y = new List<int>();
     public List<int> cubeRotatablesPos_z = new List<int>();
-    public List<int> cubeRotatablesLen = new List<int>();
-    public List<int> cubeRotatablesTowards_0_x = new List<int>();
-    public List<int> cubeRotatablesTowards_0_y = new List<int>();
-    public List<int> cubeRotatablesTowards_0_z = new List<int>();
-    public List<int> cubeRotatablesTowards_1_x = new List<int>();
-    public List<int> cubeRotatablesTowards_1_y = new List<int>();
-    public List<int> cubeRotatablesTowards_1_z = new List<int>();
-    public List<int> cubeRotatablesTowards_2_x = new List<int>();
-    public List<int> cubeRotatablesTowards_2_y = new List<int>();
-    public List<int> cubeRotatablesTowards_2_z = new List<int>();
+    public List<int> cubeRotatablesLen_0 = new List<int>();
+    public List<int> cubeRotatablesLen_1 = new List<int>();
+    public List<int> cubeRotatablesLen_2 = new List<int>();
+    public List<int> cubeRotatablesLen_3 = new List<int>();
+    public List<int> cubeRotatablesLen_4 = new List<int>();
+    public List<int> cubeRotatablesLen_5 = new List<int>();
+    public List<int> cubeRotatablesTowards_0 = new List<int>();
+    public List<int> cubeRotatablesTowards_1 = new List<int>();
+    public List<int> cubeRotatablesTowards_2 = new List<int>();
+    public List<int> cubeRotatablesTowards_3 = new List<int>();
     public LevelData()
     {
-        // cubesPos_x = new List<int>();
-        // cubesPos_y = new List<int>();
-        // cubesPos_z = new List<int>();
+        begPos_x = 0;
+        begPos_y = 0;
+        begPos_z = 0;
         cubesPos_x.Add(0);
         cubesPos_y.Add(0);
         cubesPos_z.Add(0);
@@ -43,16 +43,16 @@ public class LevelData
         cubeRotatablesPos_x.Clear();
         cubeRotatablesPos_y.Clear();
         cubeRotatablesPos_z.Clear();
-        cubeRotatablesLen.Clear();
-        cubeRotatablesTowards_0_x.Clear();
-        cubeRotatablesTowards_0_y.Clear();
-        cubeRotatablesTowards_0_z.Clear();
-        cubeRotatablesTowards_1_x.Clear();
-        cubeRotatablesTowards_1_y.Clear();
-        cubeRotatablesTowards_1_z.Clear();
-        cubeRotatablesTowards_2_x.Clear();
-        cubeRotatablesTowards_2_y.Clear();
-        cubeRotatablesTowards_2_z.Clear();
+        cubeRotatablesLen_0.Clear();
+        cubeRotatablesLen_1.Clear();
+        cubeRotatablesLen_2.Clear();
+        cubeRotatablesLen_3.Clear();
+        cubeRotatablesLen_4.Clear();
+        cubeRotatablesLen_5.Clear();
+        cubeRotatablesTowards_0.Clear();
+        cubeRotatablesTowards_1.Clear();
+        cubeRotatablesTowards_2.Clear();
+        cubeRotatablesTowards_3.Clear();
 
     }
 }

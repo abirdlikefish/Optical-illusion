@@ -10,5 +10,6 @@ public class UI_Pos_Z : MonoBehaviour
     void Awake()
     {
         inputField = transform.GetComponent<InputField>();
+        Pos_z = 0;
     }
 }

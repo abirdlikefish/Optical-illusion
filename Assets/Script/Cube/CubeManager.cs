@@ -43,21 +43,20 @@ public class CubeManager
         // return midCube;
         return true;
     }
-    public bool AddCube_Rotatable(Vector3Int pos , int len , Vector3Int[] towards)
+    public bool AddCube_Rotatable(Vector3Int pos , int[] len , int[] towards)
     {
-        for(int i = 0 ; i < len ; i ++)
+        if (Cube_Rotatable.IsPlacable(this , pos , len , towards))
         {
-            if( SearchCubeMatrix(pos + i * towards[0]) != null)
-            {
-                Debug.Log("error : cannot add cube_rotatable in " + (pos + i * towards[0]));
-                Debug.Log( "object name is " + SearchCubeMatrix(pos + i * towards[0]).gameObject.name);
-                return false;
-            }
+            Cube_Rotatable midCube= GameObject.Instantiate(prefab_cubeRotatable).GetComponent<Cube_Rotatable>();
+            midCube.Init(this , pos , len , towards);
+            this.cube_Rotatables.Add(midCube);
+            return true;
         }
-        Cube_Rotatable midCube= GameObject.Instantiate(prefab_cubeRotatable).GetComponent<Cube_Rotatable>();
-        midCube.Init(this , pos , len , towards);
-        this.cube_Rotatables.Add(midCube);
-        return true;
+        else
+        {
+            Debug.Log("Can not placy cubeRotatable");
+            return false;
+        }
     }
     public void DrawCameraGrid()
     {
