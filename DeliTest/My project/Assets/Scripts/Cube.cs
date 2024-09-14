@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    public enum COLOR
+    {
+        BLACK,
+        BLUE,
+        GREEN,
+        RED
+    };
+    public COLOR color;
+
     public CenterPoint[] centerPoints = new CenterPoint[6];
     public CenterPoint GetSameDeltaCenterPoint(CenterPoint thatPoint)
     {
@@ -19,6 +28,11 @@ public class Cube : MonoBehaviour
         //CenterPoint nearest = GetNearestVisibleCenterPoint(Input.mousePosition);
 
         PathFinder.Instance.SetDestinations(centerPoints);
+    }
+
+    private void OnValidate()
+    {
+        GetComponent<MeshRenderer>().material = CubeColor.Instance.color_mar[color];
     }
     //void HideAllCenterPoints()
     //{

@@ -54,7 +54,8 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     continue;
                 CenterPoint p1 = centerPoints[i];
                 CenterPoint p2 = centerPoints[j];
-                if (IsCenterSameAxis(p1, p2) &&
+                if (IsCubeSameColor(p1, p2) &&
+                    IsCenterSameAxis(p1, p2) &&
                     centerPoints[i].IsNotVisible &&
                     centerPoints[j].IsVisible &&
                     centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.2f &&
@@ -78,7 +79,10 @@ public class CubeCombiner : Singleton<CubeCombiner>
             }
         }
     }
-
+    bool IsCubeSameColor(CenterPoint p1,CenterPoint p2)
+    {
+        return p1.cube.color == p2.cube.color;
+    }
     bool IsNearInCamera(GameObject obj1, GameObject obj2)
     {
         Vector3 screenPos1 = Camera.main.WorldToScreenPoint(obj1.transform.position);
