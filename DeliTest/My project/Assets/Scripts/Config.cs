@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Config : Singleton<Config>
 {
-    [Header("Cube")]
-    public bool RefreshCube = false;
+    
 
     [Header("Near Judge")]
     //面中心点靠近时的屏幕坐标距离
@@ -22,13 +21,9 @@ public class Config : Singleton<Config>
     public float moveSpeed = 0.08f;
     public float rotateSpeed = 4f;
 
-    
 
-    private void OnValidate()
+    public void OnValidate()
     {
-        if (!RefreshCube)
-            return;
-        RefreshCube = false;
         for(int i=0;i<CubeCombiner.Instance.transform.childCount; i++)
         {
             CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();

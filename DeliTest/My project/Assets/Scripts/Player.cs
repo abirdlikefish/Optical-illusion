@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Singleton<Player>
+public class Player : Singleton<Player> , IAttached
 {
     //public CenterPoint tarCenter;
     //public CenterPoint nextTarCenter;
@@ -31,10 +31,14 @@ public class Player : Singleton<Player>
     {
         MoveToDes();
     }
+    public CenterPoint GetCurCenter()
+    {
+        return curCenter;
+    }
     void Init()
     {
         SetCenter(initCenter);
-        transform.localPosition = CenterToLocalPos(initCenter);
+        transform.position = CenterToWorldPos(initCenter);
     }
     public void SetCenter(CenterPoint center)
     {
@@ -42,18 +46,18 @@ public class Player : Singleton<Player>
         {
             state = STATE.IDLE;
             lastCenter = curCenter;
+            GetComponent<MeshRenderer>().material.renderQueue = 3000;
             return;
         }
         lastCenter = curCenter;
         curCenter = center;
         transform.parent = curCenter.transform;
-        
+        transform.parent = curCenter.cube.transform.Find("Attached");
 
     }
-    Vector3 CenterToLocalPos(CenterPoint center)
+    Vector3 CenterToWorldPos(CenterPoint center)
     {
-        //return Vector3.Normalize(center.delta) * transform.localScale.x / 2;
-        return center.transform.localPosition * transform.localScale.x;
+        return center.transform.position + (center.transform.position - center.cube.transform.position) * transform.lossyScale.x;
     }
     void MoveToDes()
     {
@@ -63,17 +67,19 @@ public class Player : Singleton<Player>
             return;
         }
         state = STATE.MOVING;
-        transform.localPosition = Vector3.MoveTowards
+        transform.position = Vector3.MoveTowards
             (
-            transform.localPosition, CenterToLocalPos(curCenter),
+            transform.position, CenterToWorldPos(curCenter),
             Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToLocalPos(curCenter)) * Config.Instance.rotateSpeed);
-        
+        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToWorldPos(curCenter)) * Config.Instance.rotateSpeed);
+        //移动时修改渲染顺序,render queue
+        GetComponent<MeshRenderer>().material.renderQueue = 3100;
+
     }
 
     bool IsNearCurCenter()
     {
-        return Vector3.Distance(transform.localPosition, CenterToLocalPos(curCenter)) < 0.001f;
+        return Vector3.Distance(transform.position, CenterToWorldPos(curCenter)) < 0.001f;
     }
 }

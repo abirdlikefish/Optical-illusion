@@ -16,6 +16,8 @@ public class CenterPoint : MonoBehaviour
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
     public List<Vector3> obstacledPoints = new();
+
+
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
     public bool IsObstacled => obstacledPoints.Count != 0;

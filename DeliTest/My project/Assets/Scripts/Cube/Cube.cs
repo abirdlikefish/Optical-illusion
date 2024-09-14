@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    public bool RefreshCube = false;
+
     public List<Material> sharedMaterials = new(); // 指向共享的材质
     List<Material> instanceMaterials = new(); // 实例材质
     public enum COLOR
@@ -14,7 +16,10 @@ public class Cube : MonoBehaviour
         RED
     };
     public COLOR color;
-
+    [SerializeField]
+    GameObject trueMesh;
+    [SerializeField]
+    GameObject editMesh;
     public CenterPoint[] centerPoints = new CenterPoint[6];
     public CenterPoint GetSameDeltaCenterPoint(CenterPoint thatPoint)
     {
@@ -30,22 +35,29 @@ public class Cube : MonoBehaviour
     public void ChangeColor(Cube nearCube)
     {
         Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
-        GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
-        GetComponent<MeshRenderer>().materials[0].SetColor(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Value, CubeColor.Instance.color_mar[nearCube.color].GetColor("_Color"));
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetColor(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Value, CubeColor.Instance.color_mar[nearCube.color].GetColor("_Color"));
     }
     public void OnMouseDown()
     {
         PathFinder.Instance.SetDestinations(centerPoints); 
     }
-
+    private void OnValidate()
+    {
+        if (!RefreshCube)
+            return;
+        RefreshCube = false;
+        Config.Instance.OnValidate();
+    }
     public void MyOnValidate()
     {
+        
         instanceMaterials.Clear();
         foreach (var sharedMaterial in sharedMaterials)
         {
             instanceMaterials.Add(new Material(sharedMaterial));
         }
-        GetComponent<MeshRenderer>().materials = instanceMaterials.ToArray();
+        trueMesh.GetComponent<MeshRenderer>().materials = instanceMaterials.ToArray();
         instanceMaterials[0].SetColor("_ColorBase" , CubeColor.Instance.color_mar[color].GetColor("_Color")); 
         name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
