@@ -29,6 +29,10 @@ public class PlayMode : Mode
         {
             Command_normal.ChangeMode(ModeName.EditMode);
         }
+        else if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Command_normal.ChangeView();
+        }
     }
 
     public override void ExitMode()

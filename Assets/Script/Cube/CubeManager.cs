@@ -46,12 +46,12 @@ public class CubeManager
         // return midCube;
         return true;
     }
-    public bool AddCube_Rotatable(Vector3Int pos , int[] len , int[] towards)
+    public bool AddCube_Rotatable(Vector3Int pos , int[] len , int axisIndex , int possibleAngle)
     {
-        if (Cube_Rotatable.IsPlacable(this , pos , len , towards))
+        if (Cube_Rotatable.IsPlacable(this , pos , len , axisIndex , possibleAngle))
         {
             Cube_Rotatable midCube= GameObject.Instantiate(prefab_cubeRotatable).GetComponent<Cube_Rotatable>();
-            midCube.Init(this , pos , len , towards);
+            midCube.Init(this , pos , len , axisIndex , possibleAngle);
             this.cube_Rotatables.Add(midCube);
             return true;
         }
@@ -72,7 +72,7 @@ public class CubeManager
         }
         else
         {
-            Debug.Log("Can not placy cubeMovable");
+            Debug.Log("Can not place cubeMovable");
             return false;
         }
     }
@@ -189,7 +189,7 @@ public class CubeManager
         }
         for(int i = 0 ; i < cube_Rotatables.Count ; i++)
         {
-            Command_normal.WriteCubeRotatableToLevelData(index , cube_Rotatables[i].pos , cube_Rotatables[i].len , cube_Rotatables[i].towards);
+            Command_normal.WriteCubeRotatableToLevelData(index , cube_Rotatables[i].pos , cube_Rotatables[i].len , cube_Rotatables[i].axisIndex , cube_Rotatables[i].possibleAngle);
         }
         for(int i = 0 ; i < cube_Movables.Count ; i++)
         {

@@ -22,7 +22,11 @@ public class EditMode : Mode
         }
         else if (Input.GetMouseButtonDown(0))
         {
-            Command_normal.MouseSelected();
+            Command_normal.MouseSelected(false);
+        }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            Command_normal.MouseSelected(true);
         }
         else if(Input.GetKeyDown(KeyCode.Delete))
         {
@@ -31,6 +35,10 @@ public class EditMode : Mode
         else if(Input.GetKeyDown(KeyCode.Space))
         {
             Command_normal.AddCube();
+        }
+        else if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Command_normal.ChangeView();
         }
     }
 

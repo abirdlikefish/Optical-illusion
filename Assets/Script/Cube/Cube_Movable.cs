@@ -7,15 +7,11 @@ public class Cube_Movable : BaseCube
     public GameObject prefab_subCube;
     List<GameObject>subCubes = new List<GameObject>();
     public static Vector3Int[] staDir = new Vector3Int[6] {Vector3Int.up , Vector3Int.down , Vector3Int.left , Vector3Int.right , Vector3Int.forward , Vector3Int.back}; 
-    // public static int[,] dir = new int[6,6]{{5,4,2,3,0,1} , {4,5,2,3,1,0} , {0,1,5,4,2,3} , {0,1,4,5,3,2} , {0,1,2,3,4,5} , {0,1,3,2,5,4}};
     public int[] len = new int[6];
 
     public int moveDir ;
     public int maxMoveDistance;
     public int moveDistance;
-    // public int[] towards;
-    // public int towardsNum;
-    // public int towardIndex;
     public void Init(CubeManager cubeManager , Vector3Int pos , int[] len , int moveDir , int maxMoveDistance)
     {
         this.cubeManager = cubeManager;
@@ -77,9 +73,7 @@ public class Cube_Movable : BaseCube
 
     private void SetPosition()
     {
-        // Debug.Log("moveDir = " + moveDir);
         transform.position = pos + staDir[moveDir] * moveDistance;
-        // transform.LookAt(transform.position + staDir[towards[towardIndex]]);
 
         CleanSubCube();
         for(int i = 0 ; i < 6 ; i ++)

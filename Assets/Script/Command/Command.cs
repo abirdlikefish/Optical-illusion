@@ -14,7 +14,8 @@ public class Command
     protected static SaveManager saveManager;
     protected static PlayerManager playerManager;
     protected static UIManager uiManager;
-    public static void Init(GameManager gameManager , CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager , PlayerManager playerManager , UIManager uiManager)
+    protected static CameraManager cameraManager;
+    public static void Init(GameManager gameManager , CameraGridManager cameraGridManager, CubeManager cubeManager, SaveManager saveManager , PlayerManager playerManager , UIManager uiManager , CameraManager cameraManager)
     {
         Command.gameManager = gameManager;
         Command.cameraGridManager = cameraGridManager;
@@ -22,6 +23,7 @@ public class Command
         Command.saveManager = saveManager;
         Command.playerManager = playerManager;
         Command.uiManager = uiManager;
+        Command.cameraManager = cameraManager;
     }
 }
 
@@ -61,9 +63,9 @@ public class Command_normal : Command
     {
         return saveManager.WriteCubeToLevelData(index, x, y, z);
     }
-    public static bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int[] len , int[] towards)
+    public static bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int[] len , int axisIndex , int possibleAngle)
     {
-        return saveManager.WriteCubeRotatableToLevelData(index , pos , len , towards);
+        return saveManager.WriteCubeRotatableToLevelData(index , pos , len , axisIndex , possibleAngle);
     }
     public static bool WriteCubeMovableToLevelData(int index , Vector3Int pos , int[] len , int moveDir , int maxMoveDistance)
     {
@@ -138,16 +140,15 @@ public class Command_normal : Command
         Vector3Int pos = uiManager.GetInputPos();
         return AddCube(pos);
     }
-    public static bool AddCube_Rotatable(Vector3Int pos , int[] len , int[] towards)
+    public static bool AddCube_Rotatable(Vector3Int pos , int[] len , int axisIndex , int possibleAngle)
     {
-        return cubeManager.AddCube_Rotatable(pos, len, towards);
+        return cubeManager.AddCube_Rotatable(pos, len, axisIndex , possibleAngle);
     }
     public static bool AddCube_Rotatable()
     {
         int[] len = new int[6]{ uiManager.GetParament(0), uiManager.GetParament(1) , uiManager.GetParament(2) , 
                                 uiManager.GetParament(3) , uiManager.GetParament(4) , uiManager.GetParament(5)};
-        int[] midTowards = new int[4]{4 , uiManager.GetParament(6) , uiManager.GetParament(7) , uiManager.GetParament(8)};
-        return AddCube_Rotatable(uiManager.GetInputPos() , len , midTowards);
+        return AddCube_Rotatable(uiManager.GetInputPos() , len , uiManager.GetParament(6) , uiManager.GetParament(7));
     }
 
     public static bool AddCube_Movable(Vector3Int pos , int[] len , int moveDir , int maxMoveDistance)
@@ -194,6 +195,13 @@ public class Command_normal : Command
         }
     }
 
+    public static void ChangeView()
+    {
+        int viewIndex = cameraGridManager.ChangeView();
+        cameraManager.SetView(viewIndex);
+        RefreshCameraGrid();
+    }
+
     //used in play mode
     public static bool MouseClicked(bool isRig)
     {
@@ -231,13 +239,15 @@ public class Command_normal : Command
 
     public static void RefreshCameraGrid()
     {
+        Debug.Log("Refreshing camera grid beg");
         cameraGridManager.CleanCameraGrid();
         cubeManager.DrawCameraGrid();
         FindPath();
+        Debug.Log("Refreshing camera grid end");
     }
 
     // used in edit mode
-    public static bool MouseSelected()
+    public static bool MouseSelected(bool isRig)
     {
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -245,11 +255,33 @@ public class Command_normal : Command
 
         if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("BaseCube")))
         {
+            BaseCube baseCube = hit.collider.GetComponent<BaseCube>();
+            if(isRig)
+            {
+                if(baseCube is Cube_Rotatable)
+                {
+                    (baseCube as Cube_Rotatable).Rotate();
+                    // RefreshCameraGrid();
+                }
+                else if(baseCube is Cube_Movable)
+                {
+                    Debug.Log("begin move");
+                    (baseCube as Cube_Movable).Move();
+                    // RefreshCameraGrid();
+                }
+            }
+            else
+            {
                 Vector3Int pos ;
                 pos = hit.collider.GetComponent<BaseCube>().pos;
                 uiManager.SetInputPos(pos);
                 return true;
+            }
         }
+
+        
+
+
         return false;
 
     }

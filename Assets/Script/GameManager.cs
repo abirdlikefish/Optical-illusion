@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     PlayerManager playerManager;
     CommandManager commandManager;
     UIManager uiManager;
+    CameraManager cameraManager;
 
     Mode currentMode;
     Mode playMode;
@@ -44,13 +45,15 @@ public class GameManager : MonoBehaviour
         playMode = new PlayMode();
         editMode = new EditMode();
 
+        cameraManager = Camera.main.transform.GetComponent<CameraManager>();
+
     }
     void InitManagers()
     {
         cameraGridManager.Init();
         cubeManager.Init(prefab_cube , prefab_cubeRotatable , prefab_cubeMovable);
         saveManager.Init();
-        commandManager.Init(this , cameraGridManager, cubeManager, saveManager , playerManager , uiManager);
+        commandManager.Init(this , cameraGridManager, cubeManager, saveManager , playerManager , uiManager , cameraManager);
         uiManager.Init();
         playerManager.Init(prefab_player);
         BaseCube.InitMaterials(material_black , material_white , material_red);
@@ -58,7 +61,7 @@ public class GameManager : MonoBehaviour
         playMode.Init();
         editMode.Init();
 
-
+        cameraManager.Init(0);
     }
 
     void Start()

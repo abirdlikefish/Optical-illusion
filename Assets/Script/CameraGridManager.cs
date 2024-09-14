@@ -5,16 +5,18 @@ using UnityEngine;
 public class CameraGridManager
 {
 
+    public static int viewIndex ;
     public static Vector3Int offset = new Vector3Int(50, 0, 50);
-    static Vector3Int normal = new Vector3Int(1, 1, 1);
+    static Vector3Int[] normal = new Vector3Int[2]{new Vector3Int(1, 1, 1) , new Vector3Int(-1, 1, 1)};
     static int maxCameraGridX = 100;
     static int maxCameraGridY = 100;
     public static Vector2Int CubePos2CameraGridPos(Vector3Int c)
     {
-        c -= c.y * normal;
+        c -= c.y * normal[viewIndex];
         c += offset;
         return new Vector2Int(c.x, c.z);
     }
+
 
     struct CameraGrid
     {
@@ -45,6 +47,7 @@ public class CameraGridManager
     public void Init()
     {
         CleanCameraGrid();
+        viewIndex = 0;
     }
 
     public void CleanCameraGrid()
@@ -181,5 +184,11 @@ public class CameraGridManager
     {
         Vector2Int midPos = CubePos2CameraGridPos(target);
         return SetTargetsToPlayer(midPos);
+    }
+
+    public int ChangeView()
+    {
+        viewIndex ^= 1; 
+        return viewIndex;
     }
 }

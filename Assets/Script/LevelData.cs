@@ -22,10 +22,12 @@ public class LevelData
     public List<int> cubeRotatablesLen_3 = new List<int>();
     public List<int> cubeRotatablesLen_4 = new List<int>();
     public List<int> cubeRotatablesLen_5 = new List<int>();
-    public List<int> cubeRotatablesTowards_0 = new List<int>();
-    public List<int> cubeRotatablesTowards_1 = new List<int>();
-    public List<int> cubeRotatablesTowards_2 = new List<int>();
-    public List<int> cubeRotatablesTowards_3 = new List<int>();
+    public List<int> cubeRotatablesAxisIndex = new List<int>();
+    public List<int> cubeRotatablesPossibleAngle = new List<int>();
+    // public List<int> cubeRotatablesTowards_0 = new List<int>();
+    // public List<int> cubeRotatablesTowards_1 = new List<int>();
+    // public List<int> cubeRotatablesTowards_2 = new List<int>();
+    // public List<int> cubeRotatablesTowards_3 = new List<int>();
 
     
     public List<int> cubeMovablesPos_x = new List<int>();
@@ -63,10 +65,12 @@ public class LevelData
         cubeRotatablesLen_3.Clear();
         cubeRotatablesLen_4.Clear();
         cubeRotatablesLen_5.Clear();
-        cubeRotatablesTowards_0.Clear();
-        cubeRotatablesTowards_1.Clear();
-        cubeRotatablesTowards_2.Clear();
-        cubeRotatablesTowards_3.Clear();
+        cubeRotatablesAxisIndex.Clear();
+        cubeRotatablesPossibleAngle.Clear();
+        // cubeRotatablesTowards_0.Clear();
+        // cubeRotatablesTowards_1.Clear();
+        // cubeRotatablesTowards_2.Clear();
+        // cubeRotatablesTowards_3.Clear();
         
         cubeMovablesPos_x.Clear();
         cubeMovablesPos_y.Clear();
