@@ -82,7 +82,7 @@ public class Rotater : Singleton<Rotater>
             Quaternion currentRotation = transform.rotation;
             Quaternion addedRotation = Quaternion.FromToRotation(delta, Vector3.forward);
             newRotation = addedRotation * currentRotation;
-            if (Quaternion.Angle(transform.rotation, newRotation) <= 0.01)
+            if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
                 return;
             magneting = true;
         }

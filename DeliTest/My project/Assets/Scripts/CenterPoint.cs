@@ -33,6 +33,7 @@ public class CenterPoint : MonoBehaviour
                 Debug.DrawLine(transform.position, np.transform.position, Color.red);
         }
     }
+    
     public void AddOverlapPoint(CenterPoint thatPoint)
     {
         if (!overlapPoints.Contains(thatPoint))
@@ -65,10 +66,10 @@ public class CenterPoint : MonoBehaviour
     public void AddNextPoint(CenterPoint thatPoint)
     {
 
-        if (cube.name == "GREEN1" && delta == new Vector3Int(0, 0, -1) && thatPoint.delta == new Vector3Int(0, 0, -1))
-        {
-            int c = 1;
-        }
+        //if (cube.name == "GREEN1" && delta == new Vector3Int(0, 0, -1) && thatPoint.delta == new Vector3Int(0, 0, -1))
+        //{
+        //    int c = 1;
+        //}
         if (Obstacled(this) || Obstacled(thatPoint))
             return;
         if (!nextPoints.Contains(thatPoint))

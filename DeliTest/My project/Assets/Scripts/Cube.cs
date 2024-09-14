@@ -42,7 +42,6 @@ public class Cube : MonoBehaviour
 
     private void OnValidate()
     {
-        return;
         instanceMaterials.Clear();
         foreach (var sharedMaterial in sharedMaterials)
         {
