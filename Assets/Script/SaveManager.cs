@@ -43,15 +43,15 @@ public class SaveManager
             return false;
         }
     }
-    public bool SaveData_All()
-    {
-        for(int i = 0 ; i < 100 ; i++)
-        {
-            if(IsIndexExist(i))
-                Command_normal.SaveDataByIndex(i);
-        }
-        return true;
-    }
+    // public bool SaveData_All()
+    // {
+    //     for(int i = 0 ; i < 100 ; i++)
+    //     {
+    //         if(IsIndexExist(i))
+    //             Command_normal.SaveDataByIndex(i);
+    //     }
+    //     return true;
+    // }
     public bool SaveDataByIndex(int index)
     {
         // if(levelDataList[index] == null)
@@ -69,9 +69,14 @@ public class SaveManager
     }
     public void CleanLevelData(int index)
     {
-        levelDataList[index].cubesPos_x.Clear();
-        levelDataList[index].cubesPos_y.Clear();
-        levelDataList[index].cubesPos_z.Clear();
+        levelDataList[index].Clean();
+        // levelDataList[index].cubesPos_x.Clear();
+        // levelDataList[index].cubesPos_y.Clear();
+        // levelDataList[index].cubesPos_z.Clear();
+        // levelDataList[index].cubeRotatablesLen.Clear();
+        // levelDataList[index].cubeRotatablesPos_x.Clear();
+        // levelDataList[index].cubeRotatablesPos_y.Clear();
+        // levelDataList[index].cubeRotatablesPos_z.Clear();
     }
     public bool WriteCubeToLevelData(int index , int x , int y , int z )
     {
@@ -80,6 +85,25 @@ public class SaveManager
         levelDataList[index].cubesPos_z.Add(z);
         return true;
     }
+    public bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int len , Vector3Int[] towards )
+    {
+        levelDataList[index].cubeRotatablesPos_x.Add(pos.x);
+        levelDataList[index].cubeRotatablesPos_y.Add(pos.y);
+        levelDataList[index].cubeRotatablesPos_z.Add(pos.z);
+        levelDataList[index].cubeRotatablesLen.Add(len);
+        levelDataList[index].cubeRotatablesTowards_0_x.Add(towards[0].x);
+        levelDataList[index].cubeRotatablesTowards_0_y.Add(towards[0].y);
+        levelDataList[index].cubeRotatablesTowards_0_z.Add(towards[0].z);
+        levelDataList[index].cubeRotatablesTowards_1_x.Add(towards[1].x);
+        levelDataList[index].cubeRotatablesTowards_1_y.Add(towards[1].y);
+        levelDataList[index].cubeRotatablesTowards_1_z.Add(towards[1].z);
+        levelDataList[index].cubeRotatablesTowards_2_x.Add(towards[2].x);
+        levelDataList[index].cubeRotatablesTowards_2_y.Add(towards[2].y);
+        levelDataList[index].cubeRotatablesTowards_2_z.Add(towards[2].z);
+
+        return true;
+    }
+
     public bool WriteBegPosToLevelData(int index , int x , int y , int z)
     {
         levelDataList[index].begPos_x = x;
@@ -118,6 +142,16 @@ public class SaveManager
         {
             Vector3Int midPos = new Vector3Int(levelDataList[index].cubesPos_x[i], levelDataList[index].cubesPos_y[i], levelDataList[index].cubesPos_z[i]);
             Command_normal.AddCube(midPos);
+        }
+        for(int i = 0 ; i < levelDataList[index].cubeRotatablesPos_x.Count ; i ++)
+        {
+            Vector3Int midPos = new Vector3Int(levelDataList[index].cubeRotatablesPos_x[i] , levelDataList[index].cubeRotatablesPos_y[i] , levelDataList[index].cubeRotatablesPos_z[i]);
+            int len = levelDataList[index].cubeRotatablesLen[i];
+            Vector3Int[] midTowards = new Vector3Int[3]; 
+            midTowards[0] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_0_x[i] , levelDataList[index].cubeRotatablesTowards_0_y[i] , levelDataList[index].cubeRotatablesTowards_0_z[i]);
+            midTowards[1] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_1_x[i] , levelDataList[index].cubeRotatablesTowards_1_y[i] , levelDataList[index].cubeRotatablesTowards_1_z[i]);
+            midTowards[2] = new Vector3Int(levelDataList[index].cubeRotatablesTowards_2_x[i] , levelDataList[index].cubeRotatablesTowards_2_y[i] , levelDataList[index].cubeRotatablesTowards_2_z[i]);
+            Command_normal.AddCube_Rotatable(midPos , len , midTowards);
         }
         return true;
     }

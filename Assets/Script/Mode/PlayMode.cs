@@ -21,6 +21,10 @@ public class PlayMode : Mode
         {
             Command_normal.MouseClicked(false);
         }
+        else if(Input.GetMouseButtonDown(1) && !isLocked)
+        {
+            Command_normal.MouseClicked(true);
+        }
         else if (Input.GetKeyDown(KeyCode.Tab))
         {
             Command_normal.ChangeMode(ModeName.EditMode);

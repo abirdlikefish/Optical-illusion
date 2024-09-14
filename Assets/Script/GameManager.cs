@@ -7,7 +7,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject prefab_cube;
+    public GameObject prefab_cubeRotatable;
     public GameObject prefab_player;
+    public Material material_black;
+    public Material material_white;
+    public Material material_red;
+
 
     CameraGridManager cameraGridManager;
     CubeManager cubeManager;
@@ -42,14 +47,16 @@ public class GameManager : MonoBehaviour
     void InitManagers()
     {
         cameraGridManager.Init();
-        cubeManager.Init(prefab_cube);
+        cubeManager.Init(prefab_cube , prefab_cubeRotatable);
         saveManager.Init();
         commandManager.Init(this , cameraGridManager, cubeManager, saveManager , playerManager , uiManager);
         uiManager.Init();
         playerManager.Init(prefab_player);
+        BaseCube.InitMaterials(material_black , material_white , material_red);
 
         playMode.Init();
         editMode.Init();
+
 
     }
 

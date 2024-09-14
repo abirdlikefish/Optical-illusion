@@ -14,6 +14,8 @@ public class UIManager
     UI_Pos_Y ui_Pos_Y;
     UI_Pos_Z ui_Pos_Z;
 
+    UI_Parament[] ui_Paraments ;
+
     public void Init()
     {
         levelSelection = GameObject.Find("LevelSelection").GetComponent<LevelSelection>();
@@ -25,6 +27,13 @@ public class UIManager
         ui_Pos_X = GameObject.Find("Position_X").GetComponent<UI_Pos_X>();
         ui_Pos_Y = GameObject.Find("Position_Y").GetComponent<UI_Pos_Y>();
         ui_Pos_Z = GameObject.Find("Position_Z").GetComponent<UI_Pos_Z>();
+
+        ui_Paraments = new UI_Parament[9];
+        for(int i = 0 ; i < 9 ; i ++)
+        {
+            // Debug.Log("parament index: " + i);
+            ui_Paraments[i] = GameObject.Find("Parament_" + i.ToString()).GetComponent<UI_Parament>();
+        }
         
 
         panel_allMode.SetActive(true);
@@ -49,6 +58,11 @@ public class UIManager
         ui_Pos_Y.Pos_y = pox.y;
         ui_Pos_Z.Pos_z = pox.z;
 
+    }
+
+    public Vector3Int GetParament_Vector3(int index)
+    {
+        return new Vector3Int(ui_Paraments[index * 3 + 0 ].Num , ui_Paraments[index * 3 + 1 ].Num , ui_Paraments[index * 3 + 2 ].Num );
     }
 
     public void UseUI(Mode.ModeName modeName)

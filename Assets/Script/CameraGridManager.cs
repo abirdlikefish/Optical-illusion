@@ -18,8 +18,10 @@ public class CameraGridManager
 
     struct CameraGrid
     {
-        public Cube cube_L;
-        public Cube cube_R;
+        public BaseCube cube_L;
+        public BaseCube cube_R;
+        public Vector3Int cubePos_L;
+        public Vector3Int cubePos_R;
         public bool isPassable_L;
         public bool isPassable_R;
         public bool isVisited;
@@ -28,8 +30,8 @@ public class CameraGridManager
         public Vector2Int prevPos;
         public void reset()
         {
-            cube_L = null;
-            cube_R = null;
+            // cube_L = null;
+            // cube_R = null;
             isPassable_L = false;
             isPassable_R = false;
             isVisited = false;
@@ -66,35 +68,44 @@ public class CameraGridManager
         }
     }
 
-    void DrawGrid_L(Cube cube, Vector2Int pos, int depth, bool flag)
+    // void DrawGrid_L(Cube cube, Vector2Int pos, int depth, bool flag)
+    void DrawGrid_L(BaseCube cube,Vector3Int cubePos, Vector2Int pos, int depth, bool flag)
     {
         if (cameraGrid[pos.x, pos.y].depth_L < depth)
         {
             cameraGrid[pos.x, pos.y].cube_L = cube;
+            cameraGrid[pos.x, pos.y].cubePos_L = cubePos;
             cameraGrid[pos.x, pos.y].depth_L = depth;
             cameraGrid[pos.x, pos.y].isPassable_L = flag;
         }
     }
-    void DrawGrid_R(Cube cube, Vector2Int pos, int depth, bool flag)
+    // void DrawGrid_R(Cube cube, Vector2Int pos, int depth, bool flag)
+    void DrawGrid_R(BaseCube cube,Vector3Int cubePos, Vector2Int pos, int depth, bool flag)
     {
         if (cameraGrid[pos.x, pos.y].depth_R < depth)
         {
             cameraGrid[pos.x, pos.y].cube_R = cube;
+            cameraGrid[pos.x, pos.y].cubePos_R = cubePos;
             cameraGrid[pos.x, pos.y].depth_R = depth;
             cameraGrid[pos.x, pos.y].isPassable_R = flag;
         }
     }
-    public void DrawGridFromCube(Cube cube, Vector2Int pos, int depth)
+    public void DrawGridFromCube(BaseCube cube, Vector3Int midPos, int depth)
     {
-        DrawGrid_L(cube, pos, depth, true);
-        DrawGrid_R(cube, pos, depth, true);
+        Vector2Int pos = CubePos2CameraGridPos(midPos);
+        DrawGrid_L(cube, midPos, pos, depth, true);
+        DrawGrid_R(cube, midPos, pos, depth, true);
 
-        DrawGrid_L(cube, pos + new Vector2Int(1, 1), depth, false);
-        DrawGrid_R(cube, pos + new Vector2Int(1, 1), depth, false);
+        DrawGrid_L(cube, midPos, pos + new Vector2Int(1, 1), depth, false);
+        DrawGrid_R(cube, midPos, pos + new Vector2Int(1, 1), depth, false);
 
-        DrawGrid_L(cube, pos + new Vector2Int(0, 1), depth, false);
-        DrawGrid_R(cube, pos + new Vector2Int(1, 0), depth, false);
+        DrawGrid_L(cube, midPos, pos + new Vector2Int(0, 1), depth, false);
+        DrawGrid_R(cube, midPos, pos + new Vector2Int(1, 0), depth, false);
     }
+    // public void DrawGridFromCube(BaseCube cube, Vector3Int pos, int depth)
+    // {
+    //     DrawGridFromCube(cube, CubePos2CameraGridPos(pos), depth);
+    // }
 
     Queue<Vector2Int> bfsQueue = new Queue<Vector2Int>();
     Vector2Int[] midOffset = new Vector2Int[4] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
@@ -148,11 +159,11 @@ public class CameraGridManager
     {
         if (cameraGrid[midPos.x, midPos.y].depth_L > cameraGrid[midPos.x, midPos.y].depth_R)
         {
-            return cameraGrid[midPos.x, midPos.y].cube_L.pos;
+            return cameraGrid[midPos.x, midPos.y].cubePos_L;
         }
         else
         {
-            return cameraGrid[midPos.x, midPos.y].cube_R.pos;
+            return cameraGrid[midPos.x, midPos.y].cubePos_R;
         }
     }
 

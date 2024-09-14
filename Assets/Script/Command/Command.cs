@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
+
 
 public class Command
 {
@@ -32,10 +35,10 @@ public class Command_normal : Command
         cubeManager.WriteCubeListToLevelData(index);
         return saveManager.SaveDataByIndex(index);
     }
-    public static bool SaveData_All()
-    {
-        return saveManager.SaveData_All();
-    }
+    // public static bool SaveData_All()
+    // {
+    //     return saveManager.SaveData_All();
+    // }
     public static bool SaveCurrentLevelData()
     {
         return SaveDataByIndex(gameManager.levelIndex);
@@ -63,6 +66,10 @@ public class Command_normal : Command
     public static bool WriteCubeToLevelData(int index , int x , int y , int z)
     {
         return saveManager.WriteCubeToLevelData(index, x, y, z);
+    }
+    public static bool WriteCubeRotatableToLevelData(int index , Vector3Int pos , int len , Vector3Int[] towards)
+    {
+        return saveManager.WriteCubeRotatableToLevelData(index , pos , len , towards);
     }
     public static bool WriteBegPosToLevelData(int index , int x , int y , int z)
     {
@@ -92,10 +99,15 @@ public class Command_normal : Command
         // playerManager.CleanPlayer();
         gameManager.SetLock(false);
         gameManager.levelIndex = index;
+        // Debug.Log("initMap beg");
         saveManager.InitMap(index);
-        cubeManager.DrawCameraGrid();
+        // Debug.Log("initMap end");
+
         saveManager.SetBeginPosition(index);
-        FindPath();
+
+        RefreshCameraGrid();
+        // cubeManager.DrawCameraGrid();
+        // FindPath();
         return true;
     }
     public static bool FindPath()
@@ -131,17 +143,32 @@ public class Command_normal : Command
     }
     public static bool AddCube(Vector3Int pos)
     {
-        Cube midCube = cubeManager.AddCube(pos);
-        if(midCube == null)
-        {
-            return false;
-        }
-        return true;
+        return cubeManager.AddCube(pos);
+        // Cube midCube = cubeManager.AddCube(pos);
+        // if(midCube == null)
+        // {
+        //     return false;
+        // }
+        // return true;
     }
     public static bool AddCube()
     {
         Vector3Int pos = uiManager.GetInputPos();
         return AddCube(pos);
+    }
+    public static bool AddCube_Rotatable(Vector3Int pos , int len , Vector3Int[] towards)
+    {
+        return cubeManager.AddCube_Rotatable(pos, len, towards);
+    }
+    public static bool AddCube_Rotatable()
+    {
+        int len = Mathf.RoundToInt(uiManager.GetParament_Vector3(0).magnitude);
+        Vector3Int[] midTowards = new Vector3Int[3];
+        for(int i = 0 ; i < 3 ; i++)
+        {
+            midTowards[i] = uiManager.GetParament_Vector3(i) / len;
+        }
+        return AddCube_Rotatable(uiManager.GetInputPos() , len , midTowards);
     }
 
     public static bool DeleteCube(Vector3Int pos)
@@ -155,7 +182,11 @@ public class Command_normal : Command
     }
 
 
-    public static void DrawCube2CameraGrid(Cube cube , Vector2Int pos , int depth)
+    // public static void DrawCube2CameraGrid(Vector3Int cubePos , Vector2Int pos , int depth)
+    // {
+    //     cameraGridManager.DrawGridFromCube(cubePos, pos, depth);
+    // }
+    public static void DrawCube2CameraGrid(BaseCube cube , Vector3Int pos , int depth)
     {
         cameraGridManager.DrawGridFromCube(cube, pos, depth);
     }
@@ -185,20 +216,36 @@ public class Command_normal : Command
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("Cube")))
+        if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("BaseCube")))
         {
+            BaseCube baseCube = hit.collider.GetComponent<BaseCube>();
             if(isRig)
             {
-
+                if(baseCube is Cube_Rotatable)
+                {
+                    (baseCube as Cube_Rotatable).Rotate();
+                    RefreshCameraGrid();
+                    // cubeManager.DrawCameraGrid();
+                    // FindPath();
+                }
             }
             else
             {
-                Vector3Int pos ;
-                pos = cubeManager.SetEndCube(hit.collider.GetComponent<Cube>());
-                return PlayerMove2Target(pos);
+                if(cubeManager.SetEndCube(baseCube))
+                {
+                    return PlayerMove2Target((baseCube as Cube).pos);
+                }
             }
         }
         return false;
+    }
+
+    public static void RefreshCameraGrid()
+    {
+        Debug.Log("Refreshing camera grid");
+        cameraGridManager.CleanCameraGrid();
+        cubeManager.DrawCameraGrid();
+        FindPath();
     }
 
     // used in edit mode
@@ -208,10 +255,10 @@ public class Command_normal : Command
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("Cube")))
+        if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("BaseCube")))
         {
                 Vector3Int pos ;
-                pos = hit.collider.GetComponent<Cube>().pos;
+                pos = hit.collider.GetComponent<BaseCube>().pos;
                 uiManager.SetInputPos(pos);
                 return true;
         }
