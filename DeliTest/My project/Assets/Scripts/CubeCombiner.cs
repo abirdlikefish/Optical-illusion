@@ -71,7 +71,8 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     centerPoints[i].IsNotVisible &&
                     centerPoints[j].IsVisible &&
                     centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.2f &&
-                    IsNearInCamera(p1.gameObject, p2.gameObject)
+                    IsNearInCamera(p1.gameObject, p2.gameObject) &&
+                    !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject)
                     )
                 {
                     if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
