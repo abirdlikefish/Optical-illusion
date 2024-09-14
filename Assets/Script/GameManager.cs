@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
 
     public void SetLock(bool isLock)
     {
+        
         currentMode.SetLock(isLock);
     }
 

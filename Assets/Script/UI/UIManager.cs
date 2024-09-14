@@ -39,14 +39,20 @@ public class UIManager
         levelSelection.RemoveOption(index);
     }
 
-    public Vector3Int InputPos()
+    public Vector3Int GetInputPos()
     {
-        return new Vector3Int(ui_Pos_X.Pos_x() , ui_Pos_Y.Pos_y() , ui_Pos_Z.Pos_z());
+        return new Vector3Int(ui_Pos_X.Pos_x , ui_Pos_Y.Pos_y , ui_Pos_Z.Pos_z);
+    }
+    public void SetInputPos(Vector3Int pox)
+    {
+        ui_Pos_X.Pos_x = pox.x;
+        ui_Pos_Y.Pos_y = pox.y;
+        ui_Pos_Z.Pos_z = pox.z;
+
     }
 
     public void UseUI(Mode.ModeName modeName)
     {
-        // Debug.Log("use UI");
         if(modeName == Mode.ModeName.PlayMode)
         {
             panel_playMode.SetActive(true);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_SaveAll : MonoBehaviour
+public class UI_Delete : MonoBehaviour
 {
     Button button;
     private void Awake()
@@ -14,6 +14,6 @@ public class UI_SaveAll : MonoBehaviour
 
     public void Clicked()
     {
-        Command_normal.SaveData_All();
+        Command_normal.DeleteCube();
     }
 }

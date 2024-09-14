@@ -47,18 +47,18 @@ public class SaveManager
     {
         for(int i = 0 ; i < 100 ; i++)
         {
-            // SaveDataByIndex(i);
-            Command_normal.SaveDataByIndex(i);
+            if(IsIndexExist(i))
+                Command_normal.SaveDataByIndex(i);
         }
         return true;
     }
     public bool SaveDataByIndex(int index)
     {
-        if(levelDataList[index] == null)
-        {
-            return false;
-        }
-        Command_normal.WriteCubeListToLevelData(index);
+        // if(levelDataList[index] == null)
+        // {
+        //     return false;
+        // }
+        // Command_normal.WriteCubeListToLevelData(index);
         string jsonString = JsonUtility.ToJson(levelDataList[index]);
         string midPath = filePath + index;
         StreamWriter sw = new StreamWriter(midPath);
@@ -90,10 +90,16 @@ public class SaveManager
 
     public int CreateLevelDataByIndex(int index)
     {
-        levelDataList[index] = new LevelData();
-        // SaveDataByIndex(index);
-        Debug.Log("create data " + index + " succeed");
-        Command_normal.UseLevelData(index);
+        if(levelDataList[index] == null)
+        {
+            levelDataList[index] = new LevelData();
+        }
+        else
+        {
+            CleanLevelData(index);
+        }
+        Debug.Log("create " + index + " data succeed");
+        // Command_normal.UseLevelData(index);
         return index;
     }
     public int CreateLevelData()

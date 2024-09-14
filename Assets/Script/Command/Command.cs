@@ -26,6 +26,10 @@ public class Command_normal : Command
 {
     public static bool SaveDataByIndex(int index)
     {
+        
+        // saveManager.CleanLevelData(index);
+        saveManager.CreateLevelDataByIndex(index);
+        cubeManager.WriteCubeListToLevelData(index);
         return saveManager.SaveDataByIndex(index);
     }
     public static bool SaveData_All()
@@ -36,24 +40,26 @@ public class Command_normal : Command
     {
         return SaveDataByIndex(gameManager.levelIndex);
     }
+
     public static int LoadData_All()
     {
         return saveManager.LoadData_All();
     }
     public static bool LoadDataByIndex(int index)
     {
-        bool flag = saveManager.LoadDataByIndex(index);
-        if(flag)
+        if(saveManager.LoadDataByIndex(index))
         {
             uiManager.AddLevel(index);
+            return true;
         }
-        return flag;
+        return false;
     }
-    public static bool WriteCubeListToLevelData(int index)
-    {
-        saveManager.CleanLevelData(index);
-        return cubeManager.WriteCubeListToLevelData(index);
-    }
+    
+    // public static bool WriteCubeListToLevelData(int index)
+    // {
+    //     saveManager.CleanLevelData(index);
+    //     return cubeManager.WriteCubeListToLevelData(index);
+    // }
     public static bool WriteCubeToLevelData(int index , int x , int y , int z)
     {
         return saveManager.WriteCubeToLevelData(index, x, y, z);
@@ -63,9 +69,16 @@ public class Command_normal : Command
         return saveManager.WriteBegPosToLevelData(index, x, y, z);
     }
 
+
     public static int CreateNewLevel()
     {
-        return saveManager.CreateLevelData();
+        int index = saveManager.CreateLevelData();
+        if(index != -1)
+            UseLevelData(index);
+        else
+            Debug.LogWarning("Could not create level");
+        uiManager.AddLevel(index);
+        return index;
     }
 
     public static bool UseLevelData(int index)
@@ -76,7 +89,7 @@ public class Command_normal : Command
         }
         cameraGridManager.CleanCameraGrid();
         cubeManager.CleanCube_All();
-        playerManager.CleanPlayer();
+        // playerManager.CleanPlayer();
         gameManager.SetLock(false);
         gameManager.levelIndex = index;
         saveManager.InitMap(index);
@@ -87,6 +100,8 @@ public class Command_normal : Command
     }
     public static bool FindPath()
     {
+        if(playerManager.pos == null)
+            Debug.LogError("no player position");
         cameraGridManager.FindPath(playerManager.pos);
         return true;
     }
@@ -101,14 +116,18 @@ public class Command_normal : Command
     }
     public static bool SetBeginPosition(Vector3Int pos)
     {
-        if(cameraGridManager.IsPassable(pos) == false)
-        {
-            Debug.Log("set begCube failed , pos = " + pos);
-            return false;
-        }
+        // if(cameraGridManager.IsPassable(pos) == false)
+        // {
+        //     Debug.Log("set begCube failed , pos = " + pos);
+        //     return false;
+        // }
         cubeManager.SetBegCube(pos);
         playerManager.InitPlayer(pos);
         return true;
+    }
+    public static bool SetBeginPosition()
+    {
+        return SetBeginPosition(uiManager.GetInputPos());
     }
     public static bool AddCube(Vector3Int pos)
     {
@@ -121,9 +140,21 @@ public class Command_normal : Command
     }
     public static bool AddCube()
     {
-        Vector3Int pos = uiManager.InputPos();
+        Vector3Int pos = uiManager.GetInputPos();
         return AddCube(pos);
     }
+
+    public static bool DeleteCube(Vector3Int pos)
+    {
+        return cubeManager.DeleteCube(pos);
+    }
+    public static bool DeleteCube()
+    {
+        Vector3Int pos = uiManager.GetInputPos();
+        return DeleteCube(pos);
+    }
+
+
     public static void DrawCube2CameraGrid(Cube cube , Vector2Int pos , int depth)
     {
         cameraGridManager.DrawGridFromCube(cube, pos, depth);
@@ -146,7 +177,9 @@ public class Command_normal : Command
             return false;
         }
     }
-    public static bool MouseClicked()
+
+    //used in play mode
+    public static bool MouseClicked(bool isRig)
     {
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -154,11 +187,36 @@ public class Command_normal : Command
 
         if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("Cube")))
         {
-            Vector3Int pos ;
-            pos = cubeManager.SetEndCube(hit.collider.GetComponent<Cube>());
-            return PlayerMove2Target(pos);
+            if(isRig)
+            {
+
+            }
+            else
+            {
+                Vector3Int pos ;
+                pos = cubeManager.SetEndCube(hit.collider.GetComponent<Cube>());
+                return PlayerMove2Target(pos);
+            }
         }
         return false;
+    }
+
+    // used in edit mode
+    public static bool MouseSelected()
+    {
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 10000, LayerMask.GetMask("Cube")))
+        {
+                Vector3Int pos ;
+                pos = hit.collider.GetComponent<Cube>().pos;
+                uiManager.SetInputPos(pos);
+                return true;
+        }
+        return false;
+
     }
     public static void Arrive()
     {

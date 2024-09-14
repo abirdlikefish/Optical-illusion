@@ -20,6 +20,18 @@ public class EditMode : Mode
         {
             Command_normal.ChangeMode(ModeName.PlayMode);
         }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            Command_normal.MouseSelected();
+        }
+        else if(Input.GetKeyDown(KeyCode.Delete))
+        {
+            Command_normal.DeleteCube();
+        }
+        else if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Command_normal.AddCube();
+        }
     }
 
     public override void ExitMode()

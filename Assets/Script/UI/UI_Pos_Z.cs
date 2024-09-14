@@ -6,10 +6,7 @@ using UnityEngine.UI;
 public class UI_Pos_Z : MonoBehaviour
 {
     InputField inputField;
-    public int Pos_z()
-    {
-        return int.Parse(inputField.text);
-    }
+    public int Pos_z{get {return int.Parse(inputField.text);} set {inputField.text = value.ToString();} }
     void Awake()
     {
         inputField = transform.GetComponent<InputField>();

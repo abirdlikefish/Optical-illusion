@@ -15,12 +15,27 @@ public class LevelSelection : MonoBehaviour
 
     public void AddOption(int index)
     {
-        dropdown.options.Add(new Dropdown.OptionData(index.ToString()));
+        dropdown.AddOptions(new List<string>{index.ToString()});
+        SetOption(index);
     }
     public void RemoveOption(int index)
     {
         dropdown.options.Remove(new Dropdown.OptionData(index.ToString()));
     }
+
+    public bool SetOption(int index)
+    {
+        for(int i = 0 ; i < dropdown.options.Count ; i++)
+        {
+            if(int.Parse(dropdown.options[i].text) == index)
+            {
+                dropdown.SetValueWithoutNotify(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void Select(int index)
     {
         int selectedOption = int.Parse(dropdown.options[index].text);
@@ -29,10 +44,5 @@ public class LevelSelection : MonoBehaviour
     public void Init()
     {
         dropdown.onValueChanged.AddListener(Select);
-    }
-
-    void Update()
-    {
-        
     }
 }

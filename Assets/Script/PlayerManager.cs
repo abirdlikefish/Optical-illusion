@@ -23,6 +23,7 @@ public class PlayerManager
     }
     public void InitPlayer(Vector3Int pos)
     {
+        CleanPlayer();
         player = GameObject.Instantiate(prefab_player, pos , Quaternion.identity).GetComponent<Player>();
         player.Init(pos);
     }

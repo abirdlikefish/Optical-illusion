@@ -12,4 +12,13 @@ public class LevelData
     public List<int> cubesPos_x;
     public List<int> cubesPos_y;
     public List<int> cubesPos_z;
+    public LevelData()
+    {
+        cubesPos_x = new List<int>();
+        cubesPos_y = new List<int>();
+        cubesPos_z = new List<int>();
+        cubesPos_x.Add(0);
+        cubesPos_y.Add(0);
+        cubesPos_z.Add(0);
+    }
 }

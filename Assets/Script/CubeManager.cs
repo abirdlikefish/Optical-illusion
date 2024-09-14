@@ -49,7 +49,10 @@ public class CubeManager
 
     public void SetBegCube(Vector3Int pos)
     {
-        Vector2Int midPos = CameraGridManager.CubePos2CameraGridPos(pos);
+        if (this.begCube != null)
+        {
+            this.begCube.Reset();
+        }
         this.begCube = SearchCubeMatrix(pos);
         begCube.SetBeg();
 
@@ -65,14 +68,23 @@ public class CubeManager
             return endCube.pos;
     }
 
-    public void CleanCube(Vector3Int pos)
+    public bool DeleteCube(Vector3Int pos)
     {
-        if (SearchCubeMatrix(pos) == null) return;
+        if (SearchCubeMatrix(pos) == null)
+        {
+            Debug.Log("No Cube found");
+            return false;
+        }
+        if (begCube.pos == pos)
+        {
+            Debug.Log("Can't delete begCube");
+            return false;
+        }
         Cube midCube = SearchCubeMatrix(pos);
         cubes.Remove(midCube);
         SetCubeMatrix(pos, null);
-        
         GameObject.Destroy(midCube.gameObject);
+        return true;
 
     }
     

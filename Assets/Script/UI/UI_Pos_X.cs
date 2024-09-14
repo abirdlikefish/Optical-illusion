@@ -6,12 +6,7 @@ using UnityEngine.UI;
 public class UI_Pos_X : MonoBehaviour
 {
     InputField inputField;
-    public int Pos_x()
-    {
-        Debug.Log("hello world!");
-        Debug.Log(inputField.text);
-        return int.Parse(inputField.text);
-    }
+    public int Pos_x{get {return int.Parse(inputField.text);} set {inputField.text = value.ToString();} }
     void Awake()
     {
         inputField = transform.GetComponent<InputField>();
