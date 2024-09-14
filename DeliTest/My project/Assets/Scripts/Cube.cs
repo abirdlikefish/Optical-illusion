@@ -20,7 +20,7 @@ public class Cube : MonoBehaviour
     {
         foreach(var centerPoint in centerPoints)
         {
-            if(centerPoint.delta == thatPoint.delta)
+            if(centerPoint.transform.localPosition == thatPoint.transform.localPosition)
                 return centerPoint;
         }
         return null;

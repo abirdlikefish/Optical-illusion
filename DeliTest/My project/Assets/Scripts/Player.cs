@@ -53,7 +53,8 @@ public class Player : Singleton<Player>
     }
     Vector3 CenterToLocalPos(CenterPoint center)
     {
-        return Vector3.Normalize(center.delta) * transform.localScale.x / 2;
+        //return Vector3.Normalize(center.delta) * transform.localScale.x / 2;
+        return center.transform.localPosition * transform.localScale.x;
     }
     void MoveToDes()
     {

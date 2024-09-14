@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CenterPoint : MonoBehaviour
 {
-    public Vector3Int delta;
     [HideInInspector]
     public Cube cube;
     [HideInInspector]
@@ -45,7 +44,7 @@ public class CenterPoint : MonoBehaviour
         }
         foreach(var centerPoint in cube.centerPoints)
         {
-            if (Vector3.Dot(delta, centerPoint.delta) != 0)
+            if(CubeCombiner.Instance.IsCenterSameAxis(this,centerPoint))
                 continue;
             centerPoint.AddNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
         }
@@ -57,7 +56,7 @@ public class CenterPoint : MonoBehaviour
         overlapPoints.Remove(thatPoint);
         foreach (var centerPoint in cube.centerPoints)
         {
-            if (Vector3.Dot(delta, centerPoint.delta) != 0)
+            if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
                 continue;
             centerPoint.ClearNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
         }

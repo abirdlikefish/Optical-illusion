@@ -118,13 +118,10 @@ public class CubeCombiner : Singleton<CubeCombiner>
         }
         return zeroCount == 2;
     }
-    bool IsCenterSameAxis(CenterPoint p1, CenterPoint p2)
+
+    public bool IsCenterSameAxis(CenterPoint p1, CenterPoint p2)
     {
-        return Vector3.Dot(p1.delta, p2.delta) != 0;
-    }
-    bool IsCenterInSamePlane(CenterPoint p1, CenterPoint p2)
-    {
-        return Vector3.Dot(Rotater.Instance.GetInitDelta(p1, p2), p1.delta - p2.delta) == 0;
+        return Vector3.Dot(p1.transform.localPosition, p2.transform.localPosition) != 0;
     }
 
     
