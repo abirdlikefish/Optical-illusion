@@ -23,7 +23,5 @@ public class CubeMover : MonoBehaviour
     private void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
-        //为什么几乎不移动
-
     }
 }

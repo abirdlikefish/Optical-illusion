@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Rotater : Singleton<Rotater>
 {
-    [SerializeField]
-    float rotateSpeed = 1.0f;
-    [SerializeField]
-    float magnetRotateSpeed = 1.0f;
+    
     //public CenterPoint c1;
     //public CenterPoint c2;
     [SerializeField]
@@ -29,8 +25,8 @@ public class Rotater : Singleton<Rotater>
         if(Input.GetMouseButton(1))
         {
             magneting = false;
-            transform.Rotate(Vector3.up, -mouseX * rotateSpeed, Space.World);
-            transform.Rotate(Vector3.right, mouseY * rotateSpeed, Space.World);
+            transform.Rotate(Vector3.up, -mouseX * Config.Instance.mouseRotateSpeed, Space.World);
+            transform.Rotate(Vector3.right, mouseY * Config.Instance.mouseRotateSpeed, Space.World);
         }
     }
     public Vector3 GetInitDelta(CenterPoint c1, CenterPoint c2)
@@ -50,7 +46,7 @@ public class Rotater : Singleton<Rotater>
         if (magneting)
         {
             newRotationEuler = newRotation.eulerAngles;
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, magnetRotateSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, Config.Instance.magnetRotateSpeed);
             if(Quaternion.Angle(transform.rotation,newRotation) <= 0.01)
             {
                 Debug.Log("MagnetEnd" + " transform.rotation = " + transform.rotation + " newRotation = " + newRotation);
@@ -84,7 +80,7 @@ public class Rotater : Singleton<Rotater>
             newRotation = addedRotation * currentRotation;
             if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
                 return;
-            magneting = true;
+            magneting = !MyTriggerCollector.Instance.IsBusy();
         }
     }
 

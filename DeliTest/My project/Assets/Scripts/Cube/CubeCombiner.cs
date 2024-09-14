@@ -51,7 +51,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     continue;
                 CenterPoint p1 = centerPoints[i];
                 CenterPoint p2 = centerPoints[j];
-                if(IsCubeNear(p1, p2))
+                if(!IsCubeSame(p1, p2) && IsCubeNear(p1, p2))
                 {
                     p1.cube.ChangeColor(p2.cube);
                     p2.cube.ChangeColor(p1.cube);
@@ -62,7 +62,16 @@ public class CubeCombiner : Singleton<CubeCombiner>
                         p1.AddOverlapPoint(p2);
                     }
                 }
-                else if(IsCubeSameColor(p1, p2) &&
+                else
+                {
+                    if(!IsCubeSame(p1,p2))
+                    {
+                        p1.cube.RevertColor(p2.cube);
+                        p2.cube.RevertColor(p1.cube);
+                        //p1.ClearOverlapPoint(p2);
+                    }
+                    
+                    if (IsCubeSameColor(p1, p2) &&
                     IsCenterSameAxis(p1, p2) &&
                     !IsCubeSameAxis(p1.cube, p2.cube) &&
                     centerPoints[i].IsNotVisible &&
@@ -71,18 +80,24 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     IsNearInCamera(p1.gameObject, p2.gameObject) &&
                     !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject)
                     )
-                {
-                    if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
-                        centerPointPairs.Add(new(p1, p2));
-                    p1.AddOverlapPoint(p2);
+                    {
+                        if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
+                            centerPointPairs.Add(new(p1, p2));
+                        p1.AddOverlapPoint(p2);
+                    }
+                    else
+                    {
+                        centerPointPairs.RemoveAll(x => x.first == p1 && x.second == p2);
+                        p1.ClearOverlapPoint(p2);
+                    }
                 }
-                else
-                {
-                    centerPointPairs.RemoveAll(x => x.first == p1 && x.second == p2);
-                    p1.ClearOverlapPoint(p2);
-                }
+                
             }
         }
+    }
+    bool IsCubeSame(CenterPoint p1,CenterPoint p2)
+    {
+        return p1.cube == p2.cube;
     }
     bool CenterIsAtTwoCubeNaka(CenterPoint p1,CenterPoint p2)
     {
@@ -97,11 +112,12 @@ public class CubeCombiner : Singleton<CubeCombiner>
         Vector3 screenPos1 = Camera.main.WorldToScreenPoint(obj1.transform.position);
         Vector3 screenPos2 = Camera.main.WorldToScreenPoint(obj2.transform.position);
         float distance = Vector3.Distance(screenPos1, screenPos2);
-        return distance <= Config.Instance.nearDistance;
+        return distance <= Config.Instance.centerNearDistance;
     }
     public bool IsCubeNear(CenterPoint p1, CenterPoint p2)
     {
-        return Vector3.Magnitude(p1.cube.transform.localPosition - p2.cube.transform.localPosition) == 1;
+        return MathF.Abs(Vector3.Distance(p1.cube.transform.localPosition,p2.cube.transform.localPosition) - 1) <= Config.Instance.cubeNearDistance;
+        //return Vector3.Magnitude(p1.cube.transform.localPosition - p2.cube.transform.localPosition) == 1;
     }
 
     bool IsCubeSameAxis(Cube c1, Cube c2)
@@ -120,8 +136,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
     {
         return Vector3.Dot(p1.transform.localPosition, p2.transform.localPosition) != 0;
     }
-
-    
 
 }
 [Serializable]

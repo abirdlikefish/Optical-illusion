@@ -53,7 +53,7 @@ public class Player : Singleton<Player> , IAttached
         curCenter = center;
         transform.parent = curCenter.transform;
         transform.parent = curCenter.cube.transform.Find("Attached");
-
+        center.OnPlayerEnter();
     }
     Vector3 CenterToWorldPos(CenterPoint center)
     {
@@ -72,7 +72,7 @@ public class Player : Singleton<Player> , IAttached
             transform.position, CenterToWorldPos(curCenter),
             Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToWorldPos(curCenter)) * Config.Instance.rotateSpeed);
+        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToWorldPos(curCenter)) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue
         GetComponent<MeshRenderer>().material.renderQueue = 3100;
 

@@ -17,7 +17,14 @@ public class CenterPoint : MonoBehaviour
     public CenterPoint nextPointInPath;
     public List<Vector3> obstacledPoints = new();
 
-
+    public List<MyTrigger> myTriggers = new();
+    public void OnPlayerEnter()
+    {
+        foreach (var myTrigger in myTriggers)
+        {
+            myTrigger.DoTrigger();
+        }
+    }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
     public bool IsObstacled => obstacledPoints.Count != 0;
@@ -27,6 +34,8 @@ public class CenterPoint : MonoBehaviour
         cube = transform.parent.GetComponent<Cube>();
         name = cube.name + "::" + name;
         info = name;
+        if (myTriggers.Count != 0)
+            GetComponent<MeshRenderer>().enabled = true;
     }
     private void Update()
     {
@@ -81,6 +90,7 @@ public class CenterPoint : MonoBehaviour
     {
         if (!nextPoints.Contains(thatPoint))
             return;
+        obstacledPoints.Clear();
         nextPoints.Remove(thatPoint);
         thatPoint.ClearNextPoint(this);
     }

@@ -35,8 +35,23 @@ public class Cube : MonoBehaviour
     public void ChangeColor(Cube nearCube)
     {
         Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
+        deltaCube = new Vector3(Mathf.Round(deltaCube.x), Mathf.Round(deltaCube.y), Mathf.Round(deltaCube.z));
+        if(!CubeColor.Instance.deltavector_to_CanChange.ContainsKey(deltaCube))
+        {
+            return;
+        }
         trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
         trueMesh.GetComponent<MeshRenderer>().materials[0].SetColor(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Value, CubeColor.Instance.color_mar[nearCube.color].GetColor("_Color"));
+    }
+    public void RevertColor(Cube nearCube)
+    {
+        Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
+        deltaCube = new Vector3(Mathf.Round(deltaCube.x), Mathf.Round(deltaCube.y), Mathf.Round(deltaCube.z));
+        if (!CubeColor.Instance.deltavector_to_CanChange.ContainsKey(deltaCube))
+        {
+            return;
+        }
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 0);
     }
     public void OnMouseDown()
     {
