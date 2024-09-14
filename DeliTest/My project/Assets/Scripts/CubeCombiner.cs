@@ -56,6 +56,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 CenterPoint p2 = centerPoints[j];
                 if (IsCubeSameColor(p1, p2) &&
                     IsCenterSameAxis(p1, p2) &&
+                    !IsCubeSameAxis(p1.cube, p2.cube) &&
                     centerPoints[i].IsNotVisible &&
                     centerPoints[j].IsVisible &&
                     centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.2f &&
@@ -63,11 +64,15 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     IsNearInCamera(p1.gameObject, p2.gameObject)
                     )
                 {
+                    IsCubeSameAxis(p1.cube, p2.cube);
                     if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
                         centerPointPairs.Add(new(p1, p2));
                     p1.AddOverlapPoint(p2);
                 }
-                else if (IsCubeNear(p1, p2) && IsNearInCamera(p1.gameObject, p2.gameObject))
+                else if (
+                    IsCubeNear(p1, p2) &&
+                    !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject) &&
+                    IsNearInCamera(p1.gameObject, p2.gameObject))
                 {
                     p1.cube.ChangeColor(p2.cube);
                     p2.cube.ChangeColor(p1.cube);
@@ -97,6 +102,10 @@ public class CubeCombiner : Singleton<CubeCombiner>
         return Vector3.Magnitude(p1.cube.transform.localPosition - p2.cube.transform.localPosition) == 1;
     }
 
+    bool IsCubeSameAxis(Cube c1, Cube c2)
+    {
+        return Vector3.Dot(c1.transform.localPosition,c2.transform.localPosition) != 0;
+    }
     bool IsCenterSameAxis(CenterPoint p1, CenterPoint p2)
     {
         return Vector3.Dot(p1.delta, p2.delta) != 0;

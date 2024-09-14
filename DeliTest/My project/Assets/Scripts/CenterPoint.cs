@@ -40,9 +40,11 @@ public class CenterPoint : MonoBehaviour
             overlapPoints.Add(thatPoint);
             thatPoint.AddOverlapPoint(this);
         }
+        
         //Debug.Log(info + " is near to " + thatPoint.info);
         foreach(var centerPoint in cube.centerPoints)
         {
+            
             if (Vector3.Dot(delta, centerPoint.delta) != 0)
                 continue;
             centerPoint.AddNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
@@ -62,6 +64,11 @@ public class CenterPoint : MonoBehaviour
     }
     public void AddNextPoint(CenterPoint thatPoint)
     {
+
+        if (cube.name == "GREEN1" && delta == new Vector3Int(0, 0, -1) && thatPoint.delta == new Vector3Int(0, 0, -1))
+        {
+            int c = 1;
+        }
         if (Obstacled(this) || Obstacled(thatPoint))
             return;
         if (!nextPoints.Contains(thatPoint))
