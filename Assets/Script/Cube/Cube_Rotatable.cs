@@ -41,7 +41,7 @@ public class Cube_Rotatable : BaseCube
         Debug.Log("Error current angle: " + currentAngle);
         return Vector3Int.zero;
     }
-    public void Init(CubeManager cubeManager , Vector3Int pos , int[] len , int axisIndex , int possibleAngle)
+    public bool Init(CubeManager cubeManager , Vector3Int pos , int[] len , int axisIndex , int possibleAngle)
     {
         this.cubeManager = cubeManager;
 
@@ -52,12 +52,15 @@ public class Cube_Rotatable : BaseCube
         this.possibleAngle = possibleAngle;
         if(possibleAngle % 2 != 1)
         {
-            Debug.Log("init cubeRotatable failed , possibleAngle = " + possibleAngle);
-            return;
+            this.name = this.name + "_Error";
+            Debug.Log("init cubeRotatable failed , cubeName = " + this.name + " possibleAngle = " + possibleAngle);
+
+            return false;
         }
         currentAngle = 0;
         SetPosition();
         SetCubeMatrix(this);
+        return true;
     }
     // public void Init(CubeManager cubeManager , Vector3Int pos , int[] len , int[] towards)
     // {

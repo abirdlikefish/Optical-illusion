@@ -51,13 +51,21 @@ public class CubeManager
         if (Cube_Rotatable.IsPlacable(this , pos , len , axisIndex , possibleAngle))
         {
             Cube_Rotatable midCube= GameObject.Instantiate(prefab_cubeRotatable).GetComponent<Cube_Rotatable>();
-            midCube.Init(this , pos , len , axisIndex , possibleAngle);
-            this.cube_Rotatables.Add(midCube);
-            return true;
+            if(midCube.Init(this , pos , len , axisIndex , possibleAngle))
+            {
+                this.cube_Rotatables.Add(midCube);
+                return true;
+            }
+            else
+            {
+
+                GameObject.Destroy(midCube.gameObject);
+                return false;
+            }
         }
         else
         {
-            Debug.Log("Can not placy cubeRotatable");
+            Debug.Log("Can not place cubeRotatable");
             return false;
         }
     }

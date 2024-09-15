@@ -221,7 +221,7 @@ public class Command_normal : Command
                 }
                 else if(baseCube is Cube_Movable)
                 {
-                    Debug.Log("begin move");
+                    // Debug.Log("begin move");
                     (baseCube as Cube_Movable).Move();
                     RefreshCameraGrid();
                 }
@@ -239,11 +239,11 @@ public class Command_normal : Command
 
     public static void RefreshCameraGrid()
     {
-        Debug.Log("Refreshing camera grid beg");
+        // Debug.Log("Refreshing camera grid beg");
         cameraGridManager.CleanCameraGrid();
         cubeManager.DrawCameraGrid();
         FindPath();
-        Debug.Log("Refreshing camera grid end");
+        // Debug.Log("Refreshing camera grid end");
     }
 
     // used in edit mode
