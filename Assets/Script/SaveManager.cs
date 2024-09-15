@@ -8,7 +8,7 @@ using System.Threading;
 public class SaveManager
 {
     LevelData[] levelDataList;
-    static string filePath = "./LevelData/levelData_";
+    static string filePath = "./Assets/LevelData/levelData_";
     public void Init()
     {
         levelDataList = new LevelData[100];
