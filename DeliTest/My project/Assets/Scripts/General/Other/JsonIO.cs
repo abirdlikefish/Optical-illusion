@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class JsonIO
 {
+    static bool encrypt = false;
     public static void WriteCurSheet<T>(string f_pathPre,string f_name,T curEntity)
     {
         //Debug.Log("write");
@@ -45,12 +46,16 @@ public class JsonIO
     //加密
     public static string StringToByteString(string str)
     {
+        if (!encrypt)
+            return str;
         return EncryptDES(Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(str)));
     }
 
     //解密
     public static string ByteStringToString(string str)
     {
+        if (!encrypt)
+            return str;
         return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(DecryptDES(str)));
     }
 

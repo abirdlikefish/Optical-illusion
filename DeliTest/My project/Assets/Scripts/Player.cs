@@ -8,7 +8,8 @@ public class Player : Singleton<Player> , IAttached
     //public CenterPoint nextTarCenter;
     public CenterPoint curCenter;
     public CenterPoint lastCenter;
-    public CenterPoint initCenter;
+    public GameObject endSphere;
+    //public CenterPoint initCenter;
     
     enum STATE
     {
@@ -29,6 +30,8 @@ public class Player : Singleton<Player> , IAttached
 
     void Update()
     {
+        if (UIManager.Instance.IsUIBusy)
+            return;
         MoveToDes();
     }
     public CenterPoint GetCurCenter()
@@ -37,8 +40,10 @@ public class Player : Singleton<Player> , IAttached
     }
     void Init()
     {
-        SetCenter(initCenter);
-        transform.position = CenterToWorldPos(initCenter);
+        SetCenter(LevelManager.Instance.curLevel.initCenter);
+        transform.position = CenterToWorldPos(LevelManager.Instance.curLevel.initCenter);
+        endSphere.transform.position = CenterToWorldPos(LevelManager.Instance.curLevel.endCenter);
+        endSphere.transform.parent = LevelManager.Instance.curLevel.endCenter.cube.transform.Find("Attached");
     }
     public void SetCenter(CenterPoint center)
     {
@@ -53,7 +58,7 @@ public class Player : Singleton<Player> , IAttached
         curCenter = center;
         transform.parent = curCenter.transform;
         transform.parent = curCenter.cube.transform.Find("Attached");
-        center.OnPlayerEnter();
+        
     }
     Vector3 CenterToWorldPos(CenterPoint center)
     {
@@ -63,6 +68,10 @@ public class Player : Singleton<Player> , IAttached
     {
         if (IsNearCurCenter())
         {
+            if (lastCenter != curCenter)
+                curCenter.OnPlayerEnter();
+            if (!curCenter.nextPoints.Contains(curCenter.nextPointInPath))
+                curCenter.nextPointInPath = null;
             SetCenter(curCenter.nextPointInPath);
             return;
         }
@@ -70,7 +79,7 @@ public class Player : Singleton<Player> , IAttached
         transform.position = Vector3.MoveTowards
             (
             transform.position, CenterToWorldPos(curCenter),
-            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed
+            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed * Time.deltaTime
             );
         transform.Rotate(Vector3.Cross(transform.localPosition, CenterToWorldPos(curCenter)) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue

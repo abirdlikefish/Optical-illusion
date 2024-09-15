@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Config : Singleton<Config>
 {
-    
+    [Header("EditorMode")]
+    public bool isEditorMode = false;
 
     [Header("Near Judge")]
     //面中心点靠近时的屏幕坐标距离

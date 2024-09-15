@@ -7,8 +7,6 @@ public class CenterPoint : MonoBehaviour
 {
     [HideInInspector]
     public Cube cube;
-    [HideInInspector]
-    public string info;
     [SerializeField]
     List<CenterPoint> overlapPoints = new();
     public List<CenterPoint> nextPoints = new();
@@ -24,16 +22,17 @@ public class CenterPoint : MonoBehaviour
         {
             myTrigger.DoTrigger();
         }
+        if (LevelManager.Instance.curLevel.endCenter == this)
+            LevelManager.Instance.PassCurLevel();
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
     public bool IsObstacled => obstacledPoints.Count != 0;
     public bool NoNext => nextPoints.Count == 0;
-    private void Awake()
+    public void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
         name = cube.name + "::" + name;
-        info = name;
         if (myTriggers.Count != 0)
             GetComponent<MeshRenderer>().enabled = true;
     }

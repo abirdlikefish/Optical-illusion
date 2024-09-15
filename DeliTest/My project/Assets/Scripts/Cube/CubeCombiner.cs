@@ -49,9 +49,14 @@ public class CubeCombiner : Singleton<CubeCombiner>
             {
                 if (i == j)
                     continue;
+               
                 CenterPoint p1 = centerPoints[i];
                 CenterPoint p2 = centerPoints[j];
-                if(!IsCubeSame(p1, p2) && IsCubeNear(p1, p2))
+                if (p1.name == "BLUE4::+y")
+                {
+                    int c = 1;
+                }
+                if (!IsCubeSame(p1, p2) && IsCubeNear(p1, p2))
                 {
                     p1.cube.ChangeColor(p2.cube);
                     p2.cube.ChangeColor(p1.cube);
@@ -101,7 +106,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
     }
     bool CenterIsAtTwoCubeNaka(CenterPoint p1,CenterPoint p2)
     {
-        return (p1.cube.transform.localPosition + p1.transform.localPosition == p2.cube.transform.localPosition + p2.transform.localPosition);
+        return Vector3.Magnitude(p1.cube.transform.localPosition + p1.transform.localPosition - p2.cube.transform.localPosition - p2.transform.localPosition) <= 0.01f;
     }
     bool IsCubeSameColor(CenterPoint p1,CenterPoint p2)
     {
@@ -126,7 +131,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
         int zeroCount = 0;
         for (int i = 0; i < 3; i++)
         {
-            if (deltaCube[i] == 0)
+            if (Mathf.Abs(deltaCube[i]) <= 0.01f)
                 zeroCount++;
         }
         return zeroCount == 2;

@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Cube : MonoBehaviour
 {
-    public bool RefreshCube = false;
-
+    public bool refreshColorAndName = false;
+    public bool magnetPos = false;
     public List<Material> sharedMaterials = new(); // 指向共享的材质
     List<Material> instanceMaterials = new(); // 实例材质
     public enum COLOR
@@ -55,13 +57,21 @@ public class Cube : MonoBehaviour
     }
     public void OnMouseDown()
     {
+        if (UIManager.Instance.IsUIBusy)
+            return;
         PathFinder.Instance.SetDestinations(centerPoints); 
     }
     private void OnValidate()
     {
-        if (!RefreshCube)
+        if(magnetPos)
+        {
+            //将localpos坐标四舍五入
+            transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
+            magnetPos = false;
+        }
+        if (!refreshColorAndName)
             return;
-        RefreshCube = false;
+        refreshColorAndName = false;
         Config.Instance.OnValidate();
     }
     public void MyOnValidate()

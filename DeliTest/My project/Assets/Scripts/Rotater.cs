@@ -11,6 +11,8 @@ public class Rotater : Singleton<Rotater>
     public bool magneting;
     void Update()
     {
+        if (UIManager.Instance.IsUIBusy)
+            return;
         HandleMouseInput();
         if(!Input.GetMouseButton(1))
             Magnet();

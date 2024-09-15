@@ -144,7 +144,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,7 +244,7 @@ MonoBehaviour:
   sharedMaterials:
   - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
   - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
-  color: 0
+  color: 1
   trueMesh: {fileID: 2474975946933134453}
   editMesh: {fileID: 2280882139220525624}
   centerPoints:
@@ -343,6 +344,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.x
       value: -1
       objectReference: {fileID: 0}
@@ -420,6 +425,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.z
       value: 1
       objectReference: {fileID: 0}
@@ -455,6 +464,10 @@ PrefabInstance:
     - target: {fileID: 543698019130233842, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: m_Name
       value: +x
+      objectReference: {fileID: 0}
+    - target: {fileID: 916130142848987791, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7205977756599654502, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: m_LocalPosition.x
@@ -497,7 +510,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: myTriggers.Array.size
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -573,6 +594,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.z
       value: -1
@@ -655,6 +680,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.y
       value: 1
       objectReference: {fileID: 0}
@@ -735,6 +764,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 3107357423197970208}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.y
       value: -1

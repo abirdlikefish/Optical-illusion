@@ -27,6 +27,8 @@ public class MyTriggerMoveFromTo : MyTrigger
     // Update is called once per frame
     void Update()
     {
+        if (UIManager.Instance.IsUIBusy)
+            return;
         bool busy = false;
         for(int i = 0; i < effectCubes.Count; i++)
         {
