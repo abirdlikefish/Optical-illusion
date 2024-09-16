@@ -1,0 +1,28 @@
+{
+    "levelId": 0,
+    "levelName": "Test",
+    "levelDescription": "666",
+    "initCenter": {
+        "instanceID": -136372
+    },
+    "endCenter": {
+        "instanceID": -12266
+    },
+    "cubes": [
+        {
+            "instanceID": -136440
+        },
+        {
+            "instanceID": -1356
+        },
+        {
+            "instanceID": -1250
+        },
+        {
+            "instanceID": -2308
+        },
+        {
+            "instanceID": -12334
+        }
+    ]
+}
