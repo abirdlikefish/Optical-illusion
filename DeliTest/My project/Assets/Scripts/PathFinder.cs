@@ -21,7 +21,7 @@ public class PathFinder : Singleton<PathFinder>
     }
     bool SearchPath()
     {
-        sta = Player.Instance.lastCenter;
+        sta = Player.Instance.curCenter;
         if (des == null)
             return false;
         if (sta.IsNotVisible || sta.IsObstacled)

@@ -40,7 +40,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
             }
         }
     }
-
     void FindNearCenter()
     {
         for (int i = 0; i < centerPoints.Count; i++)
@@ -52,10 +51,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
                
                 CenterPoint p1 = centerPoints[i];
                 CenterPoint p2 = centerPoints[j];
-                if (p1.name == "BLUE4::+y")
-                {
-                    int c = 1;
-                }
                 if (!IsCubeSame(p1, p2) && IsCubeNear(p1, p2))
                 {
                     p1.cube.ChangeColor(p2.cube);

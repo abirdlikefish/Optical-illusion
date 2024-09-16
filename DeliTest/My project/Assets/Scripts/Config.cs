@@ -29,7 +29,7 @@ public class Config : Singleton<Config>
 
     public void OnValidate()
     {
-        for(int i=0;i<CubeCombiner.Instance.transform.childCount; i++)
+        for(int i=0;i<CubeCombiner.Instance?.transform.childCount; i++)
         {
             CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();
         }
