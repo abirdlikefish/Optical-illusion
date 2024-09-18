@@ -8,16 +8,19 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint sta;
     [SerializeField]
     CenterPoint des;
-    public GameObject obstacledInfo;
+    
     public void SetDestinations(CenterPoint[] cps)
     {
         foreach (var cp in cps)
         {
             des = cp;
             if (SearchPath())
+            {
+        //        UIManager.Instance.ShowSth("pathSucceedCircle", Camera.main.WorldToScreenPoint(Input.mousePosition));
                 return;
+            }    
         }
-        //ShowObInfo();
+        UIManager.Instance.ShowSth("pathFailCross",Input.mousePosition);
     }
     bool SearchPath()
     {

@@ -11,6 +11,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject buttonLoad;
     public Text levelName;
     public Text levelDescription;
+    public GameObject pathFailCross;
+    public GameObject pathSucceedCircle;
     public bool IsUIBusy => panelMenu.transform.GetChild(0).gameObject.activeSelf;
     private void Awake()
     {
@@ -32,5 +34,23 @@ public class UIManager : Singleton<UIManager>
     {
         panelMenu.StartFade(true);
         panelPass.SetActive(true);
+    }
+
+    public void ShowSth(string sth, Vector3 screenPos)
+    {
+        GameObject g2 = null;
+        switch (sth)
+        {
+            case "pathFailCross":
+                g2 = pathFailCross;
+                break;
+            case "pathSucceedCircle":
+                g2 = pathSucceedCircle;
+                break;
+            default:
+                break;
+        }
+        GameObject g = Instantiate(g2, screenPos, g2.transform.rotation, transform);
+        g.SetActive(true);
     }
 }
