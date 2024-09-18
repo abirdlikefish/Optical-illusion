@@ -99,7 +99,14 @@ public class CenterPoint : MonoBehaviour
             g.SetCenter(this);
             return;
         }
-        
+        if (createRotateButton)
+        {
+            createRotateButton = false;
+
+            MyTriggerRotateCube g = Instantiate(MyTriggerManager.Instance.prefabRotate, MyTriggerManager.Instance.transform);
+            g.SetCenter(this);
+            return;
+        }
     }
     public void ClearInvalidTrigger()
     {

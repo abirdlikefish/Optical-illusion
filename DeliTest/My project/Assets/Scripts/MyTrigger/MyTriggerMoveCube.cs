@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MyTriggerMoveCube : MyTrigger
 {
-    
-    
     List<Vector3> froms = new();
     [SerializeField]
     Vector3 delta;
@@ -17,11 +15,6 @@ public class MyTriggerMoveCube : MyTrigger
     {
         foreach (var effectCube in effectCubes)
             froms.Add(effectCube.transform.position);
-    }
-    public override void DoTrigger()
-    {
-        base.DoTrigger();
-
     }
     // Update is called once per frame
     void Update()

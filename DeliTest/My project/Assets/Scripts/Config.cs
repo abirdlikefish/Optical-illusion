@@ -30,3 +30,5 @@ public class Config : Singleton<Config>
     //玩家移动时是否可以通过鼠标旋转
     public bool canRotateWhilePlayerMove = true;
 }
+
+

@@ -5,5 +5,5 @@ using UnityEngine;
 public class MyTriggerManager : Singleton<MyTriggerManager>
 {
     public MyTriggerMoveCube prefabMove;
-    //MyTriggerRotateCube prefabRotate;
+    public MyTriggerRotateCube prefabRotate;
 }

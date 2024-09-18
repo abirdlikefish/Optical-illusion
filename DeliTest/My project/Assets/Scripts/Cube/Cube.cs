@@ -86,7 +86,6 @@ public class Cube : MonoBehaviour
     }
     public void MyOnValidate()
     {
-        
         instanceMaterials.Clear();
         foreach (var sharedMaterial in sharedMaterials)
         {
@@ -97,7 +96,16 @@ public class Cube : MonoBehaviour
         name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
 
+    void Update()
+    {
+        // 计算反向旋转矩阵
+        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(Quaternion.Inverse(trueMesh.transform.localRotation));
+        //转换为float array
 
+
+        if (trueMesh.GetComponent<MeshRenderer>().materials.Length > 2)
+            trueMesh.GetComponent<MeshRenderer>().materials[2].SetMatrix("_RotationMatrix", rotationMatrix);
+    }
     //void HideAllCenterPoints()
     //{
     //    foreach (var centerPoint in centerPoints)
