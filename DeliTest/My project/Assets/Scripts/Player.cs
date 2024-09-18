@@ -35,8 +35,8 @@ public class Player : Singleton<Player> , IAttached
     }
     void Init()
     {
-        SetCenter(LevelManager.Instance.curLevel.initCenter);
-        transform.position = CenterToWorldPos(LevelManager.Instance.curLevel.initCenter);
+        SetCenter(LevelManager.Instance.curLevel.staCenter);
+        transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
     }
     public void SetCenter(CenterPoint center)
     {
@@ -53,10 +53,7 @@ public class Player : Singleton<Player> , IAttached
         transform.parent = curCenter.cube.transform.Find("Attached");
         
     }
-    public Vector3 CenterToWorldPos(CenterPoint center)
-    {
-        return center.transform.position + (center.transform.position - center.cube.transform.position) * transform.lossyScale.x;
-    }
+    
     void MoveToDes()
     {
         if (IsNearCurCenter())
@@ -72,10 +69,10 @@ public class Player : Singleton<Player> , IAttached
         state = STATE.MOVING;
         transform.position = Vector3.MoveTowards
             (
-            transform.position, CenterToWorldPos(curCenter),
+            transform.position, curCenter.CenterToWorldPos(gameObject),
             Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed * Time.deltaTime
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, CenterToWorldPos(curCenter)) * Config.Instance.ballRotateSpeed);
+        transform.Rotate(Vector3.Cross(transform.localPosition, curCenter.CenterToWorldPos(gameObject)) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue
         GetComponent<MeshRenderer>().material.renderQueue = 3100;
 
@@ -83,6 +80,6 @@ public class Player : Singleton<Player> , IAttached
 
     bool IsNearCurCenter()
     {
-        return Vector3.Distance(transform.position, CenterToWorldPos(curCenter)) < 0.001f;
+        return Vector3.Distance(transform.position, curCenter.CenterToWorldPos(gameObject)) < 0.001f;
     }
 }

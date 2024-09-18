@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyTriggerMoveFromTo : MyTrigger
+public class MyTriggerMoveCube : MyTrigger
 {
-    [SerializeField]
+    
+    
     List<Vector3> froms = new();
     [SerializeField]
     Vector3 delta;
-    
-
     [SerializeField]
     float moveSpeed = 0.2f;
 
@@ -48,4 +47,6 @@ public class MyTriggerMoveFromTo : MyTrigger
             RemoveBusy(this);
         }
     }
+
+    
 }

@@ -10,7 +10,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
 
     public List<CenterPoint>[] centerPoints = new List<CenterPoint>[3];
     public List<CenterPointPair> centerPointPairs = new();
-    private void Awake()
+    private void OnValidate()
     {
         CollectCubeAndCenter();
     }

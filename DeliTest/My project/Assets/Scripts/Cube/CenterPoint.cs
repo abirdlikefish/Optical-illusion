@@ -1,17 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 [Serializable]
 
 public class CenterPoint : MonoBehaviour
 {
     [Header("显示所有中心点")]
     public bool showAllCenterPoints = false;
+    [Header("隐藏所有中心点")]
+    public bool hideAllCenterPoints = false;
     [Header("设为起点")]
-    public bool isStart = false;
+    public bool setSta = false;
     [Header("设为终点")]
-    public bool isEnd = false;
+    public bool setDes = false;
+    [Header("创建平移按钮")]
+    public bool createMoveButton = false;
+    [Header("创建旋转按钮")]
+    public bool createRotateButton = false;
+
+    #region HideInSpector
     [HideInInspector]
     public Cube cube;
     [HideInInspector]
@@ -24,26 +34,88 @@ public class CenterPoint : MonoBehaviour
     public CenterPoint lastPointInPath;
     [HideInInspector]
     public CenterPoint nextPointInPath;
-
+    [HideInInspector]
     public List<MyTrigger> myTriggers = new();
+    #endregion
     public void OnPlayerEnter()
     {
         foreach (var myTrigger in myTriggers)
         {
             myTrigger.DoTrigger();
         }
-        if (LevelManager.Instance.curLevel.endCenter == this)
+        if (LevelManager.Instance.curLevel.desCenter == this)
             LevelManager.Instance.PassCurLevel();
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
+
+
+    private void OnValidate()
+    {
+        
+        if (showAllCenterPoints)
+        {
+            showAllCenterPoints = false;
+            foreach (var cube in CubeCombiner.Instance.cubes)
+            {
+                foreach (var centerPoint in cube.centerPoints)
+                {
+                    centerPoint.GetComponent<MeshRenderer>().enabled = true;
+                }
+            }
+            return;
+        }
+        if (hideAllCenterPoints)
+        {
+            hideAllCenterPoints = false;
+            foreach (var cube in CubeCombiner.Instance.cubes)
+            {
+                foreach (var centerPoint in cube.centerPoints)
+                {
+                    centerPoint.GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+            return;
+        }
+        if (setSta)
+        {
+            setSta = false;
+            LevelManager.Instance.curLevel.staCenter = this;
+            EditorUtility.SetDirty(LevelManager.Instance);
+            return;
+        }
+        if(setDes)
+        {
+            setDes = false;
+            LevelManager.Instance.curLevel.desCenter = this;
+            EditorUtility.SetDirty(LevelManager.Instance);
+            return;
+        }
+        if(createMoveButton)
+        {
+            createMoveButton = false;
+            
+            MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
+            g.SetCenter(this);
+            return;
+        }
+        
+    }
+    public void ClearInvalidTrigger()
+    {
+        for (int i = 0; i < myTriggers.Count; i++)
+        {
+            MyTrigger myTrigger = myTriggers[i];
+            if (myTrigger == null)
+            {
+                myTriggers.Remove(myTrigger);
+            }
+        }
+    }
     public void Awake()
     {
-
         cube = transform.parent.GetComponent<Cube>();
         name = cube.name + "::" + name;
-        if (myTriggers.Count != 0)
-            GetComponent<MeshRenderer>().enabled = true;
     }
     private void Update()
     {
@@ -133,6 +205,10 @@ public class CenterPoint : MonoBehaviour
             }
         }
         return false;
+    }
+    public Vector3 CenterToWorldPos(GameObject go)
+    {
+        return transform.position + (transform.position - cube.transform.position) * go.transform.lossyScale.x;
     }
     Vector3[] GetFaceVertices(Vector3 cubeCenter, float size, Vector3 faceCenter)
     {

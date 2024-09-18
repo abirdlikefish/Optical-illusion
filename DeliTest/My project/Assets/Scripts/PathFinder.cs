@@ -12,8 +12,8 @@ public class PathFinder : Singleton<PathFinder>
     GameObject endSphere;
     private void Awake()
     {
-        endSphere.transform.position = Player.Instance.CenterToWorldPos(LevelManager.Instance.curLevel.endCenter);
-        endSphere.transform.parent = LevelManager.Instance.curLevel.endCenter.cube.transform.Find("Attached");
+        endSphere.transform.position = LevelManager.Instance.curLevel.desCenter.CenterToWorldPos(Player.Instance.gameObject);
+        endSphere.transform.parent = LevelManager.Instance.curLevel.desCenter.cube.transform.Find("Attached");
     }
     public void SetDestinations(CenterPoint[] cps)
     {
