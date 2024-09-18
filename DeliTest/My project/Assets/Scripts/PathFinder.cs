@@ -24,8 +24,6 @@ public class PathFinder : Singleton<PathFinder>
         sta = Player.Instance.curCenter;
         if (des == null)
             return false;
-        if (sta.IsNotVisible || sta.IsObstacled)
-            return false;
         foreach (var cp in CubeCombiner.Instance.centerPoints)
         {
             cp.visited = false;
@@ -48,7 +46,7 @@ public class PathFinder : Singleton<PathFinder>
             }
             foreach (var next in current.nextPoints)
             {
-                if (next.visited || next.IsObstacled)
+                if (next.visited)
                     continue;
                 next.lastPointInPath = current;
                 visiting.Add(next);
@@ -57,18 +55,6 @@ public class PathFinder : Singleton<PathFinder>
         }
         return false;
     }
-    //void ShowObInfo()
-    //{
-    //    foreach (var ob in temp_obstaclePoints)
-    //    {
-    //        GameObject g = Instantiate(obstacledInfo);
-    //        g.transform.parent = lastInQueue.transform.parent;
-    //        g.transform.position = ob;
-    //        g.transform.localScale = new Vector3(1, 1, 1) * Config.Instance.CenterObstacleScale;
-    //        g.SetActive(true);
-    //    }
-    //    Debug.Log("NPF from " + lastInQueue.name);
-    //}
     void DrawPath()
     {
         CenterPoint currentInPath = des;

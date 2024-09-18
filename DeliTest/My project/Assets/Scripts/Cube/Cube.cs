@@ -22,6 +22,7 @@ public class Cube : MonoBehaviour
     GameObject trueMesh;
     [SerializeField]
     GameObject editMesh;
+    [HideInInspector]
     public CenterPoint[] centerPoints = new CenterPoint[6];
     public CenterPoint GetSameDeltaCenterPoint(CenterPoint thatPoint)
     {

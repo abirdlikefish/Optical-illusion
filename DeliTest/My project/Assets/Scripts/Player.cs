@@ -72,6 +72,7 @@ public class Player : Singleton<Player> , IAttached
                 curCenter.OnPlayerEnter();
             if (!curCenter.nextPoints.Contains(curCenter.nextPointInPath))
                 curCenter.nextPointInPath = null;
+            
             SetCenter(curCenter.nextPointInPath);
             return;
         }

@@ -286,10 +286,11 @@ MonoBehaviour:
   isEditorMode: 0
   centerNearDistance: 15
   cubeNearDistance: 0.01
-  CenterObstacleMultiplier: 0.88
+  CenterObstacleMultiplier: 0.9
   ObInfoTime: 1
   CenterObstacleScale: 0.1
   moveSpeed: 2
   ballRotateSpeed: 8
   mouseRotateSpeed: 4
   magnetRotateSpeed: 0.08
+  canRotateWhilePlayerMove: 1

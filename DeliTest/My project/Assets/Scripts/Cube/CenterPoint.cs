@@ -13,7 +13,7 @@ public class CenterPoint : MonoBehaviour
     public bool visited;
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
-    public List<Vector3> obstacledPoints = new();
+    //public List<Vector3> obstacledPoints = new();
 
     public List<MyTrigger> myTriggers = new();
     public void OnPlayerEnter()
@@ -27,7 +27,7 @@ public class CenterPoint : MonoBehaviour
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
-    public bool IsObstacled => obstacledPoints.Count != 0;
+    //public bool IsObstacled => obstacledPoints.Count != 0;
     public bool NoNext => nextPoints.Count == 0;
     public void Awake()
     {
@@ -66,19 +66,19 @@ public class CenterPoint : MonoBehaviour
         overlapPoints.Remove(thatPoint);
         foreach (var centerPoint in cube.centerPoints)
         {
-            if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
-                continue;
+            //if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
+            //    continue;
             centerPoint.ClearNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
         }
     }
     public void AddNextPoint(CenterPoint thatPoint)
     {
-        obstacledPoints.Clear();
-        if (IsNotVisible)
+        if (IsNotVisible || Obstacled(this) || thatPoint.IsNotVisible || Obstacled(thatPoint))
         {
-            obstacledPoints.Add(this.transform.position);
+            ClearNextPoint(thatPoint);
+            return;
         }
-        Obstacled(this);
+        
         if (!nextPoints.Contains(thatPoint))
         {
             nextPoints.Add(thatPoint);
@@ -89,7 +89,6 @@ public class CenterPoint : MonoBehaviour
     {
         if (!nextPoints.Contains(thatPoint))
             return;
-        obstacledPoints.Clear();
         nextPoints.Remove(thatPoint);
         thatPoint.ClearNextPoint(this);
     }
@@ -98,6 +97,7 @@ public class CenterPoint : MonoBehaviour
     {
         //已知正方体的中心坐标和某个面的中心点坐标，求这个面的四个顶点坐标
         //正方体的局部坐标转换为世界坐标
+        bool ret = false;
         Vector3[] vertices = GetFaceVertices(centerPoint.cube.transform.localPosition,1,centerPoint.transform.localPosition);
         Vector3[] init_vertices = new Vector3[4];
         for (int i=0;i< 4; i++)
@@ -109,22 +109,30 @@ public class CenterPoint : MonoBehaviour
         }
         for (int i = 0; i < 4; i++)
         {
-            RaycastHit[] raycastHits = Physics.RaycastAll(vertices[i] + new Vector3(0,0,0.05f), -Vector3.forward);
+            RaycastHit[] raycastHits = Physics.RaycastAll(vertices[i] + Vector3.forward * 0.05f, -Vector3.forward,1000f);
+            
             foreach (var raycastHit in raycastHits)
             {
                 if (raycastHit.collider.transform == centerPoint.cube.transform)
                     continue;
-                obstacledPoints.Add(init_vertices[i]);
+                ret = true;
+                //return true;
+            }
+            if (centerPoint.name == "BLUE3::-y")
+            {
+                //将未遮挡顶点的位置画出来
+                Debug.DrawLine(init_vertices[i], vertices[i], Color.red);
+                Debug.Log(i + " th :" + raycastHits.Length);
+                
             }
         }
-        return obstacledPoints.Count != 0;
+        return ret;
     }
     Vector3[] GetFaceVertices(Vector3 cubeCenter, float size, Vector3 faceCenter)
     {
         faceCenter = faceCenter + cubeCenter;
         Vector3[] vertices = new Vector3[4];
         float halfSize = size / 2;
-
         // 根据面中心点确定面
         if (Mathf.Abs(faceCenter.y - (cubeCenter.y + halfSize)) < 0.01f) // 上面
         {

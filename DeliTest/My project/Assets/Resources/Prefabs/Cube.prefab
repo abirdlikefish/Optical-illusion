@@ -176,8 +176,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6443202027641712064}
-  - component: {fileID: 4467485714898529768}
   - component: {fileID: 3107357423197970208}
+  - component: {fileID: 7876774071843071603}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Obstacle
@@ -207,7 +207,34 @@ Transform:
   - {fileID: 3373413716223027093}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4467485714898529768
+--- !u!114 &3107357423197970208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5640281351019957298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2613ff2732badf84a84af66fe3a234f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refreshColorAndName: 0
+  magnetPos: 0
+  sharedMaterials:
+  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
+  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
+  color: 1
+  trueMesh: {fileID: 2474975946933134453}
+  editMesh: {fileID: 2280882139220525624}
+  centerPoints:
+  - {fileID: 8089279705729871182}
+  - {fileID: 7444808213829021029}
+  - {fileID: 6407988337784991078}
+  - {fileID: 4300033665143120025}
+  - {fileID: 8191166288892948120}
+  - {fileID: 5343181755088876603}
+--- !u!65 &7876774071843071603
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,38 +249,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3107357423197970208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5640281351019957298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2613ff2732badf84a84af66fe3a234f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RefreshCube: 0
-  sharedMaterials:
-  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
-  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
-  color: 1
-  trueMesh: {fileID: 2474975946933134453}
-  editMesh: {fileID: 2280882139220525624}
-  centerPoints:
-  - {fileID: 8089279705729871182}
-  - {fileID: 7444808213829021029}
-  - {fileID: 6407988337784991078}
-  - {fileID: 4300033665143120025}
-  - {fileID: 8191166288892948120}
-  - {fileID: 5343181755088876603}
 --- !u!1 &6450991913816372728
 GameObject:
   m_ObjectHideFlags: 0
