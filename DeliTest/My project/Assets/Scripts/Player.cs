@@ -6,7 +6,6 @@ public class Player : Singleton<Player> , IAttached
 {
     public CenterPoint curCenter;
     public CenterPoint lastCenter;
-    public GameObject endSphere;
     enum STATE
     {
         IDLE,
@@ -38,8 +37,6 @@ public class Player : Singleton<Player> , IAttached
     {
         SetCenter(LevelManager.Instance.curLevel.initCenter);
         transform.position = CenterToWorldPos(LevelManager.Instance.curLevel.initCenter);
-        endSphere.transform.position = CenterToWorldPos(LevelManager.Instance.curLevel.endCenter);
-        endSphere.transform.parent = LevelManager.Instance.curLevel.endCenter.cube.transform.Find("Attached");
     }
     public void SetCenter(CenterPoint center)
     {
@@ -56,7 +53,7 @@ public class Player : Singleton<Player> , IAttached
         transform.parent = curCenter.cube.transform.Find("Attached");
         
     }
-    Vector3 CenterToWorldPos(CenterPoint center)
+    public Vector3 CenterToWorldPos(CenterPoint center)
     {
         return center.transform.position + (center.transform.position - center.cube.transform.position) * transform.lossyScale.x;
     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6671966975561173253}
   - component: {fileID: 2060796842853885252}
   - component: {fileID: 4345466998950149019}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,4 +121,3 @@ MonoBehaviour:
   global: 0
   curCenter: {fileID: 0}
   lastCenter: {fileID: 0}
-  endSphere: {fileID: 0}

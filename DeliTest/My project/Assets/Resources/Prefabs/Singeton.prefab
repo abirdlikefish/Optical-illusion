@@ -94,6 +94,7 @@ MonoBehaviour:
   global: 0
   sta: {fileID: 0}
   des: {fileID: 0}
+  endSphere: {fileID: 6150204152178612935}
 --- !u!1 &3848181630120271630
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,5 +354,10 @@ PrefabInstance:
 --- !u!4 &1219365513375970069 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7097231527532309467, guid: 9c54def69df87624e8ad18adbf54bbd8, type: 3}
+  m_PrefabInstance: {fileID: 8255766628149942478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6150204152178612935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2867537417963553289, guid: 9c54def69df87624e8ad18adbf54bbd8, type: 3}
   m_PrefabInstance: {fileID: 8255766628149942478}
   m_PrefabAsset: {fileID: 0}

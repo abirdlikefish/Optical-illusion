@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
     [Header("刷新所有方块颜色和名字")]
     public bool refreshColorAndName = false;
     [Header("将localPos四舍五入")]
@@ -69,16 +70,19 @@ public class Cube : MonoBehaviour
     }
     private void OnValidate()
     {
-        Debug.Log(color + " " +(int) color);
         if(magnetPos)
         {
-            transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
             magnetPos = false;
+            transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
         }
-        if (!refreshColorAndName)
-            return;
-        refreshColorAndName = false;
-        Config.Instance.OnValidate();
+        if (refreshColorAndName)
+        {
+            refreshColorAndName = false;
+            for (int i = 0; i < CubeCombiner.Instance.transform.childCount; i++)
+            {
+                CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();
+            }
+        }
     }
     public void MyOnValidate()
     {

@@ -29,12 +29,4 @@ public class Config : Singleton<Config>
     public float magnetRotateSpeed = 1.0f;
     //玩家移动时是否可以通过鼠标旋转
     public bool canRotateWhilePlayerMove = true;
-
-    public void OnValidate()
-    {
-        for(int i=0;i<CubeCombiner.Instance?.transform.childCount; i++)
-        {
-            CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();
-        }
-    }
 }

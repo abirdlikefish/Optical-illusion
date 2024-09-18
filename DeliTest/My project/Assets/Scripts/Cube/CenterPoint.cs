@@ -15,7 +15,7 @@ public class CenterPoint : MonoBehaviour
     [HideInInspector]
     public Cube cube;
     [HideInInspector]
-    public int axisId;
+    public int axisId => transform.localPosition.x != 0 ? 0 : transform.localPosition.y != 0 ? 1 : 2;
     HashSet<CenterPoint> overlapPoints = new();
     public HashSet<CenterPoint> nextPoints = new();
     [HideInInspector]
@@ -39,7 +39,7 @@ public class CenterPoint : MonoBehaviour
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
     public void Awake()
     {
-        axisId = transform.localPosition.x != 0 ? 0 : transform.localPosition.y != 0 ? 1 : 2;
+
         cube = transform.parent.GetComponent<Cube>();
         name = cube.name + "::" + name;
         if (myTriggers.Count != 0)
