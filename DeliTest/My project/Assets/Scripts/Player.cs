@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class Player : Singleton<Player> , IAttached
 {
-    //public CenterPoint tarCenter;
-    //public CenterPoint nextTarCenter;
     public CenterPoint curCenter;
     public CenterPoint lastCenter;
     public GameObject endSphere;
-    //public CenterPoint initCenter;
-    
     enum STATE
     {
         IDLE,

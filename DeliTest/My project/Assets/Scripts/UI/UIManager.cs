@@ -16,8 +16,8 @@ public class UIManager : Singleton<UIManager>
     public bool IsUIBusy => panelMenu.transform.GetChild(0).gameObject.activeSelf;
     private void Awake()
     {
-        buttonSave.SetActive(Config.Instance.isEditorMode);
-        buttonLoad.SetActive(Config.Instance.isEditorMode);
+        //buttonSave.SetActive(Config.Instance.isEditorMode);
+        //buttonLoad.SetActive(Config.Instance.isEditorMode);
         levelName.text = LevelManager.Instance.curLevel.levelName;
         levelDescription.text = LevelManager.Instance.curLevel.levelDescription;
     }

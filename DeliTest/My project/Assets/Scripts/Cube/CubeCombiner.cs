@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 public class CubeCombiner : Singleton<CubeCombiner>
 {
-
     [SerializeField]
     Transform cubeP;
     public List<Cube> cubes = new();
@@ -53,8 +52,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
         {
             for (int j = i + 1; j < centerPoints[axisId].Count; j++)
             {
-                if (i == j)
-                    continue;
                 CenterPoint p1 = centerPoints[axisId][i];
                 CenterPoint p2 = centerPoints[axisId][j];
                 if (p1.transform.position.z >= p2.transform.position.z + 0.2f)
@@ -116,7 +113,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
     public bool IsCubeNear(CenterPoint p1, CenterPoint p2)
     {
         return MathF.Abs(Vector3.Distance(p1.cube.transform.localPosition,p2.cube.transform.localPosition) - 1) <= Config.Instance.cubeNearDistance;
-        //return Vector3.Magnitude(p1.cube.transform.localPosition - p2.cube.transform.localPosition) == 1;
     }
 
     bool IsCubeSameAxis(Cube c1, Cube c2)
@@ -130,7 +126,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
         }
         return zeroCount == 2;
     }
-
     public bool IsCenterSameAxis(CenterPoint p1, CenterPoint p2)
     {
         return Vector3.Dot(p1.transform.localPosition, p2.transform.localPosition) != 0;

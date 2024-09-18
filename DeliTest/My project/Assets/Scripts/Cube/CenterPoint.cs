@@ -6,20 +6,24 @@ using UnityEngine;
 
 public class CenterPoint : MonoBehaviour
 {
+    [Header("显示所有中心点")]
+    public bool showAllCenterPoints = false;
+    [Header("设为起点")]
+    public bool isStart = false;
+    [Header("设为终点")]
+    public bool isEnd = false;
     [HideInInspector]
     public Cube cube;
+    [HideInInspector]
     public int axisId;
-    [SerializeField]
     HashSet<CenterPoint> overlapPoints = new();
     public HashSet<CenterPoint> nextPoints = new();
-    public override int GetHashCode()
-    {
-        return name.GetHashCode();
-    }
+    [HideInInspector]
     public bool visited;
+    [HideInInspector]
     public CenterPoint lastPointInPath;
+    [HideInInspector]
     public CenterPoint nextPointInPath;
-    //public List<Vector3> obstacledPoints = new();
 
     public List<MyTrigger> myTriggers = new();
     public void OnPlayerEnter()
@@ -33,8 +37,6 @@ public class CenterPoint : MonoBehaviour
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
-    //public bool IsObstacled => obstacledPoints.Count != 0;
-    public bool NoNext => nextPoints.Count == 0;
     public void Awake()
     {
         axisId = transform.localPosition.x != 0 ? 0 : transform.localPosition.y != 0 ? 1 : 2;
@@ -45,13 +47,16 @@ public class CenterPoint : MonoBehaviour
     }
     private void Update()
     {
-        foreach(var np in nextPoints)
+        ShowPossiblePath();
+    }
+    void ShowPossiblePath()
+    {
+        foreach (var np in nextPoints)
         {
-            if(Input.GetKey(KeyCode.Alpha3))
+            if (Config.Instance.showPossiblePath)
                 Debug.DrawLine(transform.position, np.transform.position, Color.red);
         }
     }
-
     public void AddOverlapPoint(CenterPoint thatPoint)
     {
         if (!overlapPoints.Contains(thatPoint))
@@ -110,14 +115,14 @@ public class CenterPoint : MonoBehaviour
         for (int i=0;i< 4; i++)
         {
             vertices[i] -= centerPoint.cube.transform.localPosition;
-            vertices[i] = Vector3.Lerp(centerPoint.transform.localPosition, vertices[i], Config.Instance.CenterObstacleMultiplier);
+            vertices[i] = Vector3.Lerp(centerPoint.transform.localPosition, vertices[i], Config.Instance.obSampleScale);
             vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
         }
-        for (int i = 0; i < Config.Instance.ObstacleSampleCount; i++)
+        for (int i = 0; i < Config.Instance.obSampleCount; i++)
         {
-            for (int j = 0; j < Config.Instance.ObstacleSampleCount; j++)
+            for (int j = 0; j < Config.Instance.obSampleCount; j++)
             {
-                Vector3 samplePoint = Vector3.Lerp(Vector3.Lerp(vertices[0], vertices[1], i / (float)(Config.Instance.ObstacleSampleCount - 1)), Vector3.Lerp(vertices[3], vertices[2], i / (float)(Config.Instance.ObstacleSampleCount - 1)), j / (float)(Config.Instance.ObstacleSampleCount - 1));
+                Vector3 samplePoint = Vector3.Lerp(Vector3.Lerp(vertices[0], vertices[1], i / (float)(Config.Instance.obSampleCount - 1)), Vector3.Lerp(vertices[3], vertices[2], i / (float)(Config.Instance.obSampleCount - 1)), j / (float)(Config.Instance.obSampleCount - 1));
                 RaycastHit[] raycastHits = Physics.RaycastAll(samplePoint + Vector3.forward * 0.05f, -Vector3.forward, 1000f);
                 foreach (var raycastHit in raycastHits)
                 {

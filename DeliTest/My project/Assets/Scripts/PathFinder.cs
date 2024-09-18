@@ -16,7 +16,6 @@ public class PathFinder : Singleton<PathFinder>
             des = cp;
             if (SearchPath())
             {
-        //        UIManager.Instance.ShowSth("pathSucceedCircle", Camera.main.WorldToScreenPoint(Input.mousePosition));
                 return;
             }    
         }

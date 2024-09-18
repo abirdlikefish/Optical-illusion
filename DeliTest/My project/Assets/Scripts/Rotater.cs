@@ -47,7 +47,6 @@ public class Rotater : Singleton<Rotater>
             transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, Config.Instance.magnetRotateSpeed);
             if(Quaternion.Angle(transform.rotation,newRotation) <= 0.01)
             {
-                //Debug.Log("MagnetEnd" + " transform.rotation = " + transform.rotation + " newRotation = " + newRotation);
                 magneting = false;
             }
             return;
@@ -73,14 +72,12 @@ public class Rotater : Singleton<Rotater>
         if(nearestPairs.Count != 0)
         {
             Vector3 delta = nearestPairs[0].second.transform.position - nearestPairs[0].first.transform.position;
-            if (delta.z <= 0)
-                Debug.LogError("???");
             Quaternion currentRotation = transform.rotation;
             Quaternion addedRotation = Quaternion.FromToRotation(delta, Vector3.forward);
             newRotation = addedRotation * currentRotation;
             if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
                 return;
-            Debug.Log("Magnet BECAUSE:" + nearestPairs[0].first.name + nearestPairs[0].second.name);
+            Debug.Log("Magnet BECAUSE:" + nearestPairs[0].first.name + " & " + nearestPairs[0].second.name + " are near!");
             magneting = !BusyCollector.Instance.IsBusy();
         }
     }

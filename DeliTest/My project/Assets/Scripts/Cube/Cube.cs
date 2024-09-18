@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
+    [Header("刷新所有方块颜色和名字")]
     public bool refreshColorAndName = false;
+    [Header("将localPos四舍五入")]
     public bool magnetPos = false;
-    public List<Material> sharedMaterials = new(); // 指向共享的材质
-    List<Material> instanceMaterials = new(); // 实例材质
     public enum COLOR
     {
         BLACK,
@@ -18,6 +18,11 @@ public class Cube : MonoBehaviour
         RED
     };
     public COLOR color;
+    [Header(" ")]
+    [HelpBox("↓下面的不用改↓",HelpBoxType.Warning)]
+    public List<Material> sharedMaterials = new(); // 指向共享的材质
+    List<Material> instanceMaterials = new(); // 实例材质
+    
     [SerializeField]
     GameObject trueMesh;
     [SerializeField]
@@ -64,9 +69,9 @@ public class Cube : MonoBehaviour
     }
     private void OnValidate()
     {
+        Debug.Log(color + " " +(int) color);
         if(magnetPos)
         {
-            //将localpos坐标四舍五入
             transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
             magnetPos = false;
         }
