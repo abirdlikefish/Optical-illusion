@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class Rotater : Singleton<Rotater>
 {
-    
-    //public CenterPoint c1;
-    //public CenterPoint c2;
     [SerializeField]
     List<CenterPointPair> nearestPairs = new();
     public bool magneting;
@@ -19,8 +16,7 @@ public class Rotater : Singleton<Rotater>
     }
     void HandleMouseInput()
     {
-        //rotate the object based on the mouse input
-        if (Player.Instance.IsBusy())
+        if (Player.Instance.IsBusy() && !Config.Instance.canRotateWhilePlayerMove)
             return;
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -82,7 +78,7 @@ public class Rotater : Singleton<Rotater>
             newRotation = addedRotation * currentRotation;
             if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
                 return;
-            magneting = !MyTriggerCollector.Instance.IsBusy();
+            magneting = !BusyCollector.Instance.IsBusy();
         }
     }
 

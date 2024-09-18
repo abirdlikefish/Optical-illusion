@@ -13,7 +13,5 @@ public class EndSphere : MonoBehaviour
         //随时间的三角函数改变scale
         float scale = minScale + (maxScale - minScale) * (1 + Mathf.Sin(Time.time * 2)) / 2;
         transform.localScale = new Vector3(scale, scale, scale);
-
-
     }
 }

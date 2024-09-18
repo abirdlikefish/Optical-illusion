@@ -26,6 +26,7 @@ public class Config : Singleton<Config>
     [Header("Rotater")]
     public float mouseRotateSpeed = 1.0f;
     public float magnetRotateSpeed = 1.0f;
+    public bool canRotateWhilePlayerMove = true;
 
     public void OnValidate()
     {

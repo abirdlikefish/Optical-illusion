@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyTrigger : MonoBehaviour
+public class MyTrigger : Busy
 {
     public List<Cube> effectCubes = new();
 

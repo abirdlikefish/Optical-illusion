@@ -41,11 +41,11 @@ public class MyTriggerMoveFromTo : MyTrigger
         }
         if(busy)
         {
-            MyTriggerCollector.Instance.AddBusy(this);
+            AddBusy(this);
         }
         else
         {
-            MyTriggerCollector.Instance.RemoveBusy(this);
+            RemoveBusy(this);
         }
     }
 }
