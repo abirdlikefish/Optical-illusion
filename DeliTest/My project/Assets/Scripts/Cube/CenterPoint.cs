@@ -97,36 +97,29 @@ public class CenterPoint : MonoBehaviour
     {
         //已知正方体的中心坐标和某个面的中心点坐标，求这个面的四个顶点坐标
         //正方体的局部坐标转换为世界坐标
-        bool ret = false;
         Vector3[] vertices = GetFaceVertices(centerPoint.cube.transform.localPosition,1,centerPoint.transform.localPosition);
-        Vector3[] init_vertices = new Vector3[4];
+
         for (int i=0;i< 4; i++)
         {
             vertices[i] -= centerPoint.cube.transform.localPosition;
-            init_vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
             vertices[i] = Vector3.Lerp(centerPoint.transform.localPosition, vertices[i], Config.Instance.CenterObstacleMultiplier);
             vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
         }
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < Config.Instance.ObstacleSampleCount; i++)
         {
-            RaycastHit[] raycastHits = Physics.RaycastAll(vertices[i] + Vector3.forward * 0.05f, -Vector3.forward,1000f);
-            
-            foreach (var raycastHit in raycastHits)
+            for (int j = 0; j < Config.Instance.ObstacleSampleCount; j++)
             {
-                if (raycastHit.collider.transform == centerPoint.cube.transform)
-                    continue;
-                ret = true;
-                //return true;
-            }
-            if (centerPoint.name == "BLUE3::-y")
-            {
-                //将未遮挡顶点的位置画出来
-                Debug.DrawLine(init_vertices[i], vertices[i], Color.red);
-                Debug.Log(i + " th :" + raycastHits.Length);
-                
+                Vector3 samplePoint = Vector3.Lerp(Vector3.Lerp(vertices[0], vertices[1], i / (float)(Config.Instance.ObstacleSampleCount - 1)), Vector3.Lerp(vertices[3], vertices[2], i / (float)(Config.Instance.ObstacleSampleCount - 1)), j / (float)(Config.Instance.ObstacleSampleCount - 1));
+                RaycastHit[] raycastHits = Physics.RaycastAll(samplePoint + Vector3.forward * 0.05f, -Vector3.forward, 1000f);
+                foreach (var raycastHit in raycastHits)
+                {
+                    if (raycastHit.collider.transform == centerPoint.cube.transform)
+                        continue;
+                    return true;
+                }
             }
         }
-        return ret;
+        return false;
     }
     Vector3[] GetFaceVertices(Vector3 cubeCenter, float size, Vector3 faceCenter)
     {

@@ -18,6 +18,7 @@ public class Config : Singleton<Config>
     [Header("Obstacle Info")]
     public float ObInfoTime = 1f;
     public float CenterObstacleScale = 0.1f;
+    public int ObstacleSampleCount = 5;
 
     [Header("Player")]
     public float moveSpeed = 0.08f;
