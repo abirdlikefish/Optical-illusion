@@ -2,14 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[Serializable]
 
 public class CenterPoint : MonoBehaviour
 {
     [HideInInspector]
     public Cube cube;
+    public int axisId;
     [SerializeField]
-    List<CenterPoint> overlapPoints = new();
-    public List<CenterPoint> nextPoints = new();
+    HashSet<CenterPoint> overlapPoints = new();
+    public HashSet<CenterPoint> nextPoints = new();
+    public override int GetHashCode()
+    {
+        return name.GetHashCode();
+    }
     public bool visited;
     public CenterPoint lastPointInPath;
     public CenterPoint nextPointInPath;
@@ -31,6 +37,7 @@ public class CenterPoint : MonoBehaviour
     public bool NoNext => nextPoints.Count == 0;
     public void Awake()
     {
+        axisId = transform.localPosition.x != 0 ? 0 : transform.localPosition.y != 0 ? 1 : 2;
         cube = transform.parent.GetComponent<Cube>();
         name = cube.name + "::" + name;
         if (myTriggers.Count != 0)
@@ -44,7 +51,7 @@ public class CenterPoint : MonoBehaviour
                 Debug.DrawLine(transform.position, np.transform.position, Color.red);
         }
     }
-    
+
     public void AddOverlapPoint(CenterPoint thatPoint)
     {
         if (!overlapPoints.Contains(thatPoint))
@@ -52,9 +59,9 @@ public class CenterPoint : MonoBehaviour
             overlapPoints.Add(thatPoint);
             thatPoint.AddOverlapPoint(this);
         }
-        foreach(var centerPoint in cube.centerPoints)
+        foreach (var centerPoint in cube.centerPoints)
         {
-            if(CubeCombiner.Instance.IsCenterSameAxis(this,centerPoint))
+            if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
                 continue;
             centerPoint.AddNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
         }
@@ -66,8 +73,8 @@ public class CenterPoint : MonoBehaviour
         overlapPoints.Remove(thatPoint);
         foreach (var centerPoint in cube.centerPoints)
         {
-            //if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
-            //    continue;
+            if (CubeCombiner.Instance.IsCenterSameAxis(this, centerPoint))
+                continue;
             centerPoint.ClearNextPoint(thatPoint.cube.GetSameDeltaCenterPoint(centerPoint));
         }
     }
@@ -76,9 +83,10 @@ public class CenterPoint : MonoBehaviour
         if (IsNotVisible || Obstacled(this) || thatPoint.IsNotVisible || Obstacled(thatPoint))
         {
             ClearNextPoint(thatPoint);
+
             return;
         }
-        
+
         if (!nextPoints.Contains(thatPoint))
         {
             nextPoints.Add(thatPoint);

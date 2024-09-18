@@ -27,7 +27,7 @@ public class PathFinder : Singleton<PathFinder>
         sta = Player.Instance.curCenter;
         if (des == null)
             return false;
-        foreach (var cp in CubeCombiner.Instance.centerPoints)
+        foreach (var cp in CubeCombiner.Instance.centerPoints[sta.axisId])
         {
             cp.visited = false;
             cp.lastPointInPath = null; 

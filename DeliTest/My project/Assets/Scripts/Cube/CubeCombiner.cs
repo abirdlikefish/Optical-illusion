@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 public class CubeCombiner : Singleton<CubeCombiner>
 {
-    
+
     [SerializeField]
     Transform cubeP;
     public List<Cube> cubes = new();
 
-    public List<CenterPoint> centerPoints = new();
+    public List<CenterPoint>[] centerPoints = new List<CenterPoint>[3];
     public List<CenterPointPair> centerPointPairs = new();
     private void Awake()
     {
@@ -17,7 +17,11 @@ public class CubeCombiner : Singleton<CubeCombiner>
     }
     void Update()
     {
-        FindNearCenter();
+        centerPointPairs.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            FindNearCenterOnAxisI(i);
+        }
     }
     private void OnTransformChildrenChanged()
     {
@@ -31,67 +35,62 @@ public class CubeCombiner : Singleton<CubeCombiner>
             if (cubeP.GetChild(i).gameObject.activeSelf)
                 cubes.Add(cubeP.GetChild(i).GetComponent<Cube>());
         }
-        centerPoints.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            centerPoints[i] = new List<CenterPoint>();
+        }
         foreach (var cube in cubes)
         {
             foreach (var centerPoint in cube.centerPoints)
             {
-                centerPoints.Add(centerPoint);
+                centerPoints[centerPoint.axisId].Add(centerPoint);
             }
         }
     }
-    void FindNearCenter()
+    void FindNearCenterOnAxisI(int axisId)
     {
-        for (int i = 0; i < centerPoints.Count; i++)
+        for (int i = 0; i < centerPoints[axisId].Count; i++)
         {
-            for (int j = 0; j < centerPoints.Count; j++)
+            for (int j = i + 1; j < centerPoints[axisId].Count; j++)
             {
                 if (i == j)
                     continue;
-               
-                CenterPoint p1 = centerPoints[i];
-                CenterPoint p2 = centerPoints[j];
-                if (!IsCubeSame(p1, p2) && IsCubeNear(p1, p2))
+                CenterPoint p1 = centerPoints[axisId][i];
+                CenterPoint p2 = centerPoints[axisId][j];
+                if (p1.transform.position.z >= p2.transform.position.z + 0.2f)
+                    (p1,p2) = (p2, p1);
+                if (IsCubeSame(p1, p2))
+                    continue;
+                if (!IsCenterSameAxis(p1, p2))
+                    continue;
+                if (IsCubeNear(p1, p2))
                 {
                     p1.cube.ChangeColor(p2.cube);
                     p2.cube.ChangeColor(p1.cube);
-                    if (IsCenterSameAxis(p1, p2) && CenterIsAtTwoCubeNaka(p1,p2))
+                    if (CenterIsAtTwoCubeNaka(p1,p2))
                     {
-                        if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
-                            centerPointPairs.Add(new(p1, p2));
+                        centerPointPairs.Add(new(p1, p2));
                         p1.AddOverlapPoint(p2);
                     }
+                    continue;
                 }
-                else
-                {
-                    if(!IsCubeSame(p1,p2))
-                    {
-                        p1.cube.RevertColor(p2.cube);
-                        p2.cube.RevertColor(p1.cube);
-                        //p1.ClearOverlapPoint(p2);
-                    }
+                p1.cube.RevertColor(p2.cube);
+                p2.cube.RevertColor(p1.cube);
                     
-                    if (IsCubeSameColor(p1, p2) &&
-                    IsCenterSameAxis(p1, p2) &&
-                    !IsCubeSameAxis(p1.cube, p2.cube) &&
-                    centerPoints[i].IsNotVisible &&
-                    centerPoints[j].IsVisible &&
-                    centerPoints[i].transform.position.z < centerPoints[j].transform.position.z + 0.2f &&
-                    IsNearInCamera(p1.gameObject, p2.gameObject) &&
-                    !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject)
-                    )
-                    {
-                        if (!centerPointPairs.Exists(x => x.first == p1 && x.second == p2))
-                            centerPointPairs.Add(new(p1, p2));
-                        p1.AddOverlapPoint(p2);
-                    }
-                    else
-                    {
-                        centerPointPairs.RemoveAll(x => x.first == p1 && x.second == p2);
-                        p1.ClearOverlapPoint(p2);
-                    }
+                if (IsCubeSameColor(p1, p2) &&
+                !IsCubeSameAxis(p1.cube, p2.cube) &&
+                p1.IsNotVisible &&
+                p2.IsVisible &&
+                p1.transform.position.z < p2.transform.position.z + 0.2f &&
+                IsNearInCamera(p1.gameObject, p2.gameObject) &&
+                !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject)
+                )
+                {
+                    centerPointPairs.Add(new(p1, p2));
+                    p1.AddOverlapPoint(p2);
+                    continue;
                 }
-                
+                p1.ClearOverlapPoint(p2);
             }
         }
     }

@@ -73,6 +73,8 @@ public class Rotater : Singleton<Rotater>
         if(nearestPairs.Count != 0)
         {
             Vector3 delta = nearestPairs[0].second.transform.position - nearestPairs[0].first.transform.position;
+            if (delta.z <= 0)
+                Debug.LogError("???");
             Quaternion currentRotation = transform.rotation;
             Quaternion addedRotation = Quaternion.FromToRotation(delta, Vector3.forward);
             newRotation = addedRotation * currentRotation;
