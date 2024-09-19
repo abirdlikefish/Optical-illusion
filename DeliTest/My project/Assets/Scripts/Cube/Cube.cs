@@ -42,39 +42,45 @@ public class Cube : MonoBehaviour
     }
 
     #region Debug
+    ComputeBuffer computeBuffer;
+    ComputeBuffer computeBuffer2;
+    ComputeBuffer lst1;
+    ComputeBuffer lst2;
 
     #endregion
 
     public void Change6SideColor()
     {
-        //return;
         List<Vector3> deltas = new();
         List<Color> colors = new();
         foreach (var nearCube in nearCubes)
         {
             deltas.Add(nearCube.transform.position - transform.position);
             colors.Add(nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase"));
-            //Debug.Log(name + nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase").b);
         }
         if(nearCubes.Count != 0)
         {
-            using (ComputeBuffer computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3))
+            if (lst2 != null && lst1 != null)
             {
-                computeBuffer.SetData(deltas.ToArray());
-                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
-                //Debug.Log(name + trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
-                if (Config.Instance.bufferTest)
-                    computeBuffer.Release();
+                lst1.Release();
+                lst2.Release();
             }
 
-            using (ComputeBuffer computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4))
-            {
-                computeBuffer2.SetData(colors.ToArray());
-                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
-                //Debug.Log(name + trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("colorBuffer").value);
-                if (Config.Instance.bufferTest)
-                    computeBuffer2.Release();
-            }
+            computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
+            computeBuffer.SetData(deltas.ToArray());
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
+            if (Config.Instance.bufferTest)
+                computeBuffer.Release();
+
+
+            computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4);
+            computeBuffer2.SetData(colors.ToArray());
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
+            if (Config.Instance.bufferTest)
+                computeBuffer2.Release();
+
+            lst1 = computeBuffer;
+            lst2 = computeBuffer2;
         }
         else
         {
