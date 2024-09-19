@@ -7,7 +7,7 @@ public class Config : Singleton<Config>
     
     [Header("EditorMode")]
     //显示可能路线
-    public static bool isFirstInScene = true;
+    public bool isFirstInScene = true;
     public bool showPossiblePath = true;
     [Header("Near Judge")]
     //面中心点靠近时的屏幕坐标距离

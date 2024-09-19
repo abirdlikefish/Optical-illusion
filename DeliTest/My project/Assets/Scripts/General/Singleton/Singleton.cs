@@ -39,7 +39,6 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
             }
             DontDestroyOnLoad(gameObject);
         }
-        Debug.Log(gameObject.name + "Inited");
     }
 
 }

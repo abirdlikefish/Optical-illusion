@@ -40,7 +40,6 @@ public class Cube : MonoBehaviour
         }
         return null;
     }
-
     #region Debug
     ComputeBuffer computeBuffer1;
     ComputeBuffer computeBuffer2;
@@ -67,27 +66,25 @@ public class Cube : MonoBehaviour
         {
             computeBuffer1 = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
             computeBuffer1.SetData(deltas.ToArray());
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
-            //Debug.Log(trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
-
-
             computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4);
             computeBuffer2.SetData(colors.ToArray());
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
-
         }
         else
         {
             computeBuffer1 = new ComputeBuffer(1, sizeof(float) * 3);
             computeBuffer1.SetData(new Vector3[1]);
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
-
-            ComputeBuffer computeBuffer2 = new ComputeBuffer(1, sizeof(float) * 4);
+            computeBuffer2 = new ComputeBuffer(1, sizeof(float) * 4);
             computeBuffer2.SetData(new Color[1]);
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
         }
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
         l1 = computeBuffer1;
         l2 = computeBuffer2;
+    }
+    private void OnDisable()
+    {
+        l1.Dispose();
+        l2.Dispose();
     }
     public void OnMouseDown()
     {
@@ -97,9 +94,9 @@ public class Cube : MonoBehaviour
     }
     private void OnValidate()
     {
-        if(Config.isFirstInScene)
+        if(Config.Instance.isFirstInScene)
         {
-            Config.isFirstInScene = false;
+            Config.Instance.isFirstInScene = false;
             refreshColorAndName = true;
         }
         if(magnetPos)
