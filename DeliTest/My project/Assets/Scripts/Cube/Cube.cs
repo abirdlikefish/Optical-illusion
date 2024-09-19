@@ -60,15 +60,15 @@ public class Cube : MonoBehaviour
         }
         if (l1 != null && l2 != null)
         {
-            l1.Release();
-            l2.Release();
+            l1.Dispose();
+            l2.Dispose();
         }
         if (nearCubes.Count != 0)
         {
             computeBuffer1 = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
             computeBuffer1.SetData(deltas.ToArray());
             trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
-            Debug.Log(trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
+            //Debug.Log(trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
 
 
             computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4);
