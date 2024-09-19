@@ -16,11 +16,15 @@ public class CubeCombiner : Singleton<CubeCombiner>
     }
     void Update()
     {
+        foreach(var cube in cubes)
+            cube.nearCubes.Clear();
         centerPointPairs.Clear();
         for (int i = 0; i < 3; i++)
         {
             FindNearCenterOnAxisI(i);
         }
+        foreach (var cube in cubes)
+            cube.Change6SideColor();
     }
     private void OnTransformChildrenChanged()
     {
@@ -62,17 +66,19 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     continue;
                 if (IsCubeNear(p1, p2))
                 {
-                    p1.cube.ChangeColor(p2.cube);
-                    p2.cube.ChangeColor(p1.cube);
                     if (CenterIsAtTwoCubeNaka(p1,p2))
                     {
                         centerPointPairs.Add(new(p1, p2));
                         p1.AddOverlapPoint(p2);
+                        if(!IsCubeSameColor(p1, p2))
+                        {
+                            p1.cube.nearCubes.Add(p2.cube);
+                            p2.cube.nearCubes.Add(p1.cube);
+                        }
                     }
                     continue;
                 }
-                p1.cube.RevertColor(p2.cube);
-                p2.cube.RevertColor(p1.cube);
+
                     
                 if (IsCubeSameColor(p1, p2) &&
                 !IsCubeSameAxis(p1.cube, p2.cube) &&

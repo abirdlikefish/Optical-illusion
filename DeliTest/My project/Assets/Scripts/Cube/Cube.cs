@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
-
 public class Cube : MonoBehaviour
 {
     [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
@@ -30,6 +29,8 @@ public class Cube : MonoBehaviour
     GameObject editMesh;
     [HideInInspector]
     public CenterPoint[] centerPoints = new CenterPoint[6];
+    public List<Cube> nearCubes = new();
+    
     public CenterPoint GetSameDeltaCenterPoint(CenterPoint thatPoint)
     {
         foreach(var centerPoint in centerPoints)
@@ -39,20 +40,32 @@ public class Cube : MonoBehaviour
         }
         return null;
     }
-    
 
-    public void ChangeColor(Cube nearCube)
+    public void Change6SideColor()
     {
-        Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
-        deltaCube = new Vector3(Mathf.Round(deltaCube.x), Mathf.Round(deltaCube.y), Mathf.Round(deltaCube.z));
-        if(!CubeColor.Instance.deltavector_to_CanChange.ContainsKey(deltaCube))
+        if(name == "RED3")
         {
-            return;
+            int c = 1;
         }
-        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
-        trueMesh.GetComponent<MeshRenderer>().materials[0].SetColor(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Value, CubeColor.Instance.color_mar[nearCube.color].GetColor("_Color"));
+        List<Vector3> deltas = new();
+        List<Color> colors = new();
+        foreach (var nearCube in nearCubes)
+        {
+            deltas.Add(nearCube.transform.position - transform.position);
+            colors.Add(nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase"));
+        }
+        if(nearCubes.Count != 0)
+        {
+            ComputeBuffer computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
+            computeBuffer.SetData(deltas.ToArray());
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
+            computeBuffer = new ComputeBuffer(colors.Count, sizeof(float) * 4);
+            computeBuffer.SetData(colors.ToArray());
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer);
+        }
+
     }
-    public void RevertColor(Cube nearCube)
+    public void ChangeColor(Cube nearCube)
     {
         Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
         deltaCube = new Vector3(Mathf.Round(deltaCube.x), Mathf.Round(deltaCube.y), Mathf.Round(deltaCube.z));
@@ -60,7 +73,7 @@ public class Cube : MonoBehaviour
         {
             return;
         }
-        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 0);
+        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
     }
     public void OnMouseDown()
     {
@@ -96,16 +109,6 @@ public class Cube : MonoBehaviour
         name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
 
-    void Update()
-    {
-        // 计算反向旋转矩阵
-        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(Quaternion.Inverse(trueMesh.transform.localRotation));
-        //转换为float array
-
-
-        if (trueMesh.GetComponent<MeshRenderer>().materials.Length > 2)
-            trueMesh.GetComponent<MeshRenderer>().materials[2].SetMatrix("_RotationMatrix", rotationMatrix);
-    }
     //void HideAllCenterPoints()
     //{
     //    foreach (var centerPoint in centerPoints)

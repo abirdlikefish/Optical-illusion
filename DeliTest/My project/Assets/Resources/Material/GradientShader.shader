@@ -36,6 +36,7 @@
         Pass
         {  
             CGPROGRAM
+            #pragma target 5.0
             #pragma vertex vert
             #pragma fragment frag
             
@@ -49,76 +50,44 @@
             struct v2f
             {
                 float4 pos : SV_POSITION; // 裁剪空间位置
-                float3 localPos : TEXCOORD0; // 局部位置
+                float3 worldPos : TEXCOORD0; // 
+                float3 centerWorldPos : TEXCOORD1;
             };
 
             fixed4 _ColorBase;
             
-            fixed4 _ColorUp;
-            fixed4 _ColorDown;
-            fixed4 _ColorLeft;
-            fixed4 _ColorRight;
-            fixed4 _ColorFront;
-            fixed4 _ColorBehind;
-
-            float _CanChangeUp;
-            float _CanChangeDown;
-            float _CanChangeLeft;
-            float _CanChangeRight;
-            float _CanChangeFront;
-            float _CanChangeBehind;
-
-            Vector _DirectionUp;
-            Vector _DirectionDown;
-            Vector _DirectionLeft;
-            Vector _DirectionRight;
-            Vector _DirectionFront;
-            Vector _DirectionBehind;
+            StructuredBuffer<float3> positionBuffer;
+            StructuredBuffer<float4> colorBuffer;
             float _Thickness; // 渐变厚度
             v2f vert (appdata_t v)
             {
                 v2f o;
+
+                // 对象空间到世界空间的转换
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+                float4 objectCenter = float4(0, 0, 0, 1);  // 中心点在对象空间是 (0,0,0)
+                o.centerWorldPos = mul(unity_ObjectToWorld, objectCenter).xyz;  // 将中心点转换到世界空间
+
+                // 将对象坐标转换为裁剪坐标
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.localPos = v.vertex.xyz;
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            float4 frag (v2f i) : SV_Target
             {
                 float t;
-                fixed4 curColor = _ColorBase;
-                //6个方向上的渐变
-                if(i.localPos.x >= 0 && _CanChangeRight != 0)
-                {
-                    t = saturate((i.localPos.x - 0.5 + _Thickness)/_Thickness) / 2;
-                    curColor = lerp(curColor, _ColorRight, t); // 线性插值
+                float4 curColor = _ColorBase;
+                for (int idx = 0; idx < positionBuffer.Length; idx++) 
+                { 
+                    //计算顶点世界坐标在positionBuffer上的投影长度
+                    if(dot(i.worldPos - i.centerWorldPos, positionBuffer[idx].xyz) > 0)
+                    {
+                        float len = dot(i.worldPos - i.centerWorldPos, positionBuffer[idx].xyz) / length(positionBuffer[idx].xyz);
+                        curColor = lerp(_ColorBase, colorBuffer[idx],len);
+                    }
+                    
                 }
-                if(i.localPos.x <= 0 && _CanChangeLeft != 0)
-                {
-                    t = saturate((-i.localPos.x - 0.5 + _Thickness)/_Thickness) / 2;
-                    curColor = lerp(curColor, _ColorLeft, t); // 线性插值
-                }
-                if(i.localPos.y >= 0 && _CanChangeUp != 0)
-				{
-					t = saturate((i.localPos.y - 0.5 + _Thickness)/_Thickness) / 2;
-					curColor = lerp(curColor, _ColorUp, t); // 线性插值
-				}
-                if(i.localPos.y <= 0 && _CanChangeDown != 0)
-                {
-                    t = saturate((-i.localPos.y - 0.5 + _Thickness)/_Thickness) / 2;
-					curColor = lerp(curColor, _ColorDown, t); // 线性插值
-				}
-                if(i.localPos.z >= 0 && _CanChangeBehind != 0)
-				{
-					t = saturate((i.localPos.z - 0.5 + _Thickness)/_Thickness) / 2;
-                    curColor = lerp(curColor, _ColorBehind, t); // 线性插值
-                }
-                if(i.localPos.z <= 0 && _CanChangeFront != 0)
-                {
-					t = saturate((-i.localPos.z - 0.5 + _Thickness)/_Thickness) / 2;
-					curColor = lerp(curColor, _ColorFront, t); // 线性插值
-				}
-                
                 return curColor;
             }
             ENDCG
