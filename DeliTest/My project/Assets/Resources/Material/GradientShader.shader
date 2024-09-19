@@ -2,7 +2,7 @@
 {
     Properties
     {
-        _ColorBase ("_ColorBase", Color) = (1,0,0,1)
+        _Color ("_Color", Color) = (1,0,0,1)
     }
     SubShader
     {
@@ -30,7 +30,7 @@
                 float3 centerWorldPos : TEXCOORD1;
             };
 
-            fixed4 _ColorBase;
+            fixed4 _Color;
             
             StructuredBuffer<float3> positionBuffer;
             StructuredBuffer<float4> colorBuffer;
@@ -52,7 +52,7 @@
             float4 frag (v2f i) : SV_Target
             {
                 float t;
-                float4 curColor = _ColorBase;
+                float4 curColor = _Color;
                 for (int idx = 0; idx < positionBuffer.Length; idx++) 
                 { 
                     //计算顶点世界坐标在positionBuffer上的投影长度

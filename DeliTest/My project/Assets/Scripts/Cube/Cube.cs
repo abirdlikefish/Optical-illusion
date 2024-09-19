@@ -7,7 +7,7 @@ public class Cube : MonoBehaviour
 {
     [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
     [Header("刷新所有方块颜色和名字")]
-    public bool refreshColorAndName = false;
+    bool refreshColorAndName = true;
     [Header("将localPos四舍五入")]
     public bool magnetPos = false;
     public enum COLOR
@@ -42,10 +42,10 @@ public class Cube : MonoBehaviour
     }
 
     #region Debug
-    ComputeBuffer computeBuffer;
+    ComputeBuffer computeBuffer1;
     ComputeBuffer computeBuffer2;
-    ComputeBuffer lst1;
-    ComputeBuffer lst2;
+    ComputeBuffer l1;
+    ComputeBuffer l2;
 
     #endregion
 
@@ -56,52 +56,38 @@ public class Cube : MonoBehaviour
         foreach (var nearCube in nearCubes)
         {
             deltas.Add(nearCube.transform.position - transform.position);
-            colors.Add(nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase"));
+            colors.Add(nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].color);
         }
-        if(nearCubes.Count != 0)
+        if (l1 != null && l2 != null)
         {
-            if (lst2 != null && lst1 != null)
-            {
-                lst1.Release();
-                lst2.Release();
-            }
-
-            computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
-            computeBuffer.SetData(deltas.ToArray());
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
-            if (Config.Instance.bufferTest)
-                computeBuffer.Release();
+            l1.Release();
+            l2.Release();
+        }
+        if (nearCubes.Count != 0)
+        {
+            computeBuffer1 = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
+            computeBuffer1.SetData(deltas.ToArray());
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
+            Debug.Log(trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
 
 
             computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4);
             computeBuffer2.SetData(colors.ToArray());
             trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
-            if (Config.Instance.bufferTest)
-                computeBuffer2.Release();
 
-            lst1 = computeBuffer;
-            lst2 = computeBuffer2;
         }
         else
         {
-            // 如果 nearCubes 为空，创建一个大小为 0 的空 ComputeBuffer
-            using (ComputeBuffer emptyPositionBuffer = new ComputeBuffer(1, sizeof(float) * 3))
-            {
-                emptyPositionBuffer.SetData(new Vector3[1]);
-                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", emptyPositionBuffer);
-                if (Config.Instance.bufferTest)
-                    emptyPositionBuffer.Release();
-            }
+            computeBuffer1 = new ComputeBuffer(1, sizeof(float) * 3);
+            computeBuffer1.SetData(new Vector3[1]);
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer1);
 
-            using (ComputeBuffer emptyColorBuffer = new ComputeBuffer(1, sizeof(float) * 4))
-            {
-                emptyColorBuffer.SetData(new Color[1]);
-                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", emptyColorBuffer);
-                if (Config.Instance.bufferTest)
-                    emptyColorBuffer.Release();
-            }
+            ComputeBuffer computeBuffer2 = new ComputeBuffer(1, sizeof(float) * 4);
+            computeBuffer2.SetData(new Color[1]);
+            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
         }
-
+        l1 = computeBuffer1;
+        l2 = computeBuffer2;
     }
     public void OnMouseDown()
     {
@@ -111,6 +97,11 @@ public class Cube : MonoBehaviour
     }
     private void OnValidate()
     {
+        if(Config.isFirstInScene)
+        {
+            Config.isFirstInScene = false;
+            refreshColorAndName = true;
+        }
         if(magnetPos)
         {
             magnetPos = false;
@@ -133,7 +124,7 @@ public class Cube : MonoBehaviour
             instanceMaterials.Add(new Material(sharedMaterial));
         }
         trueMesh.GetComponent<MeshRenderer>().materials = instanceMaterials.ToArray();
-        instanceMaterials[0].SetColor("_ColorBase" , CubeColor.Instance.color_mar[color].GetColor("_Color")); 
+        instanceMaterials[0].color = CubeColor.Instance.color_mar[color].color;
         name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
 
