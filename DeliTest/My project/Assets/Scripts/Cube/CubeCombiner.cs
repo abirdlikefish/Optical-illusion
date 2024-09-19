@@ -8,16 +8,18 @@ public class CubeCombiner : Singleton<CubeCombiner>
     Transform cubeP;
     public List<Cube> cubes = new();
 
-    public List<CenterPoint>[] centerPoints = new List<CenterPoint>[3];
+    public List<CenterPoint>[] centerPoints;
     public List<CenterPointPair> centerPointPairs = new();
-    private void OnValidate()
+    //private void OnValidate()
+    //{
+    //    CollectCubeAndCenter();
+    //}
+    private void Start()
     {
         CollectCubeAndCenter();
     }
     void Update()
     {
-        foreach(var cube in cubes)
-            cube.nearCubes.Clear();
         centerPointPairs.Clear();
         for (int i = 0; i < 3; i++)
         {
@@ -38,6 +40,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
             if (cubeP.GetChild(i).gameObject.activeSelf)
                 cubes.Add(cubeP.GetChild(i).GetComponent<Cube>());
         }
+        centerPoints = new List<CenterPoint>[3];
         for (int i = 0; i < 3; i++)
         {
             centerPoints[i] = new List<CenterPoint>();
@@ -78,8 +81,9 @@ public class CubeCombiner : Singleton<CubeCombiner>
                     }
                     continue;
                 }
+                p1.cube.nearCubes.Remove(p2.cube);
+                p2.cube.nearCubes.Remove(p1.cube);
 
-                    
                 if (IsCubeSameColor(p1, p2) &&
                 !IsCubeSameAxis(p1.cube, p2.cube) &&
                 p1.IsNotVisible &&

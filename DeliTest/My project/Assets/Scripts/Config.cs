@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Config : Singleton<Config>
 {
+    public bool bufferTest = false;
     [Header("EditorMode")]
     //显示可能路线
     public bool showPossiblePath = true;

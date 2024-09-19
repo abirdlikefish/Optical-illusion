@@ -52,7 +52,7 @@ public class CenterPoint : MonoBehaviour
 
     private void OnValidate()
     {
-        
+#if UNITY_EDITOR
         if (showAllCenterPoints)
         {
             showAllCenterPoints = false;
@@ -107,6 +107,7 @@ public class CenterPoint : MonoBehaviour
             g.SetCenter(this);
             return;
         }
+#endif
     }
     public void ClearInvalidTrigger()
     {

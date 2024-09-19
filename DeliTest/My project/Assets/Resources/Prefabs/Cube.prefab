@@ -331,8 +331,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
+  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -595,6 +595,10 @@ PrefabInstance:
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.x
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: hideAllCenterPoints
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: myTriggers.Array.size

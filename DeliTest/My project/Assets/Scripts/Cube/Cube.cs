@@ -29,7 +29,7 @@ public class Cube : MonoBehaviour
     GameObject editMesh;
     [HideInInspector]
     public CenterPoint[] centerPoints = new CenterPoint[6];
-    public List<Cube> nearCubes = new();
+    public HashSet<Cube> nearCubes = new();
     
     public CenterPoint GetSameDeltaCenterPoint(CenterPoint thatPoint)
     {
@@ -41,39 +41,61 @@ public class Cube : MonoBehaviour
         return null;
     }
 
+    #region Debug
+
+    #endregion
+
     public void Change6SideColor()
     {
-        if(name == "RED3")
-        {
-            int c = 1;
-        }
+        //return;
         List<Vector3> deltas = new();
         List<Color> colors = new();
         foreach (var nearCube in nearCubes)
         {
             deltas.Add(nearCube.transform.position - transform.position);
             colors.Add(nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase"));
+            //Debug.Log(name + nearCube.trueMesh.GetComponent<MeshRenderer>().materials[0].GetColor("_ColorBase").b);
         }
         if(nearCubes.Count != 0)
         {
-            ComputeBuffer computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
-            computeBuffer.SetData(deltas.ToArray());
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
-            computeBuffer = new ComputeBuffer(colors.Count, sizeof(float) * 4);
-            computeBuffer.SetData(colors.ToArray());
-            trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer);
+            using (ComputeBuffer computeBuffer = new ComputeBuffer(deltas.Count, sizeof(float) * 3))
+            {
+                computeBuffer.SetData(deltas.ToArray());
+                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", computeBuffer);
+                //Debug.Log(name + trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("positionBuffer").value);
+                if (Config.Instance.bufferTest)
+                    computeBuffer.Release();
+            }
+
+            using (ComputeBuffer computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4))
+            {
+                computeBuffer2.SetData(colors.ToArray());
+                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", computeBuffer2);
+                //Debug.Log(name + trueMesh.GetComponent<MeshRenderer>().materials[0].GetBuffer("colorBuffer").value);
+                if (Config.Instance.bufferTest)
+                    computeBuffer2.Release();
+            }
+        }
+        else
+        {
+            // 如果 nearCubes 为空，创建一个大小为 0 的空 ComputeBuffer
+            using (ComputeBuffer emptyPositionBuffer = new ComputeBuffer(1, sizeof(float) * 3))
+            {
+                emptyPositionBuffer.SetData(new Vector3[1]);
+                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("positionBuffer", emptyPositionBuffer);
+                if (Config.Instance.bufferTest)
+                    emptyPositionBuffer.Release();
+            }
+
+            using (ComputeBuffer emptyColorBuffer = new ComputeBuffer(1, sizeof(float) * 4))
+            {
+                emptyColorBuffer.SetData(new Color[1]);
+                trueMesh.GetComponent<MeshRenderer>().materials[0].SetBuffer("colorBuffer", emptyColorBuffer);
+                if (Config.Instance.bufferTest)
+                    emptyColorBuffer.Release();
+            }
         }
 
-    }
-    public void ChangeColor(Cube nearCube)
-    {
-        Vector3 deltaCube = nearCube.transform.localPosition - transform.localPosition;
-        deltaCube = new Vector3(Mathf.Round(deltaCube.x), Mathf.Round(deltaCube.y), Mathf.Round(deltaCube.z));
-        if (!CubeColor.Instance.deltavector_to_CanChange.ContainsKey(deltaCube))
-        {
-            return;
-        }
-        trueMesh.GetComponent<MeshRenderer>().materials[0].SetFloat(CubeColor.Instance.deltavector_to_CanChange[deltaCube].Key, 1);
     }
     public void OnMouseDown()
     {

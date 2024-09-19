@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MyTrigger : Busy, IAttached
 {
-    private void Awake()
-    {
-        if (!curCenter.myTriggers.Contains(this))
-        {
-            Debug.Log("发现多余触发器！请销毁");
-        }
-    }
+    //private void Awake()
+    //{
+    //    if (!curCenter.myTriggers.Contains(this))
+    //    {
+    //        Debug.Log("发现多余触发器！请销毁");
+    //    }
+    //}
 
     private void OnDisable()
     {
