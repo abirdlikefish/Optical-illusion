@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -40,20 +41,20 @@ public class MyTriggerRotateCube : MyTrigger
         for (int i = 0; i < effectCubes.Count; i++)
         {
             //将localRotation每一帧逐渐线性改变
-            effectCubes[i].transform.Find("Attached").transform.localRotation = Quaternion.RotateTowards(effectCubes[i].transform.Find("Attached").transform.localRotation, targets[i], rotationSpeed * Time.deltaTime);
+            effectCubes[i].attached.localRotation = Quaternion.RotateTowards(effectCubes[i].transform.Find("Attached").transform.localRotation, targets[i], rotationSpeed * Time.deltaTime);
 
-            if (effectCubes[i].transform.Find("Attached").transform.localRotation != targets[i])
+            if (effectCubes[i].attached.localRotation != targets[i])
             {
                 busy = true;
             }
         }
         if (busy)
         {
-            AddBusy(this);
+            MyTriggerManager.Instance.busyRotates.Add(this);
         }
         else
         {
-            RemoveBusy(this);
+            MyTriggerManager.Instance.busyRotates.Remove(this);
         }
     }
 }

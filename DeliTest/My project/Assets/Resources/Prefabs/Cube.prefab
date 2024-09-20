@@ -219,12 +219,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2613ff2732badf84a84af66fe3a234f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refreshColorAndName: 0
   magnetPos: 0
   color: 1
   sharedMaterials:
   - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
   - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
+  attached: {fileID: 3373413716223027093}
   trueMesh: {fileID: 6450991913816372728}
   editMesh: {fileID: 2280882139220525624}
   centerPoints:

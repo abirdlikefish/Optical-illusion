@@ -78,7 +78,7 @@ public class Rotater : Singleton<Rotater>
             if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
                 return;
             //Debug.Log("Magnet BECAUSE:" + nearestPairs[0].first.name + " & " + nearestPairs[0].second.name + " are near!");
-            magneting = !BusyCollector.Instance.IsBusy();
+            magneting = MyTriggerManager.Instance.busyMoves.Count == 0;
         }
     }
 

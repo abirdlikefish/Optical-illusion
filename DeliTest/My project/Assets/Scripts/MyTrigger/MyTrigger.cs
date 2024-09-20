@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyTrigger : Busy, IAttached
+public class MyTrigger : MonoBehaviour, IAttached
 {
     //private void Awake()
     //{
@@ -47,7 +47,7 @@ public class MyTrigger : Busy, IAttached
             curCenter = center;
             curCenter.myTriggers.Add(this);
             gameObject.SetActive(true);
-            transform.parent = center.cube.transform.Find("Attached");
+            transform.parent = center.cube.attached;
             transform.localPosition = center.transform.localPosition * 0.85f;
         }
 

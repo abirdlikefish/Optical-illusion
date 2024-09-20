@@ -50,7 +50,7 @@ public class Player : Singleton<Player> , IAttached
         lastCenter = curCenter;
         curCenter = center;
         transform.parent = curCenter.transform;
-        transform.parent = curCenter.cube.transform.Find("Attached");
+        transform.parent = curCenter.cube.attached;
         
     }
     

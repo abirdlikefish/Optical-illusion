@@ -22,7 +22,8 @@ public class Cube : MonoBehaviour
     [HelpBox("↓下面的不用改↓",HelpBoxType.Warning)]
     public List<Material> sharedMaterials = new(); // 指向共享的材质
     List<Material> instanceMaterials = new(); // 实例材质
-    
+
+    public Transform attached;
     [SerializeField]
     GameObject trueMesh;
     [SerializeField]

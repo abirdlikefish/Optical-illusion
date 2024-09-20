@@ -33,11 +33,11 @@ public class MyTriggerMoveCube : MyTrigger
         }
         if(busy)
         {
-            AddBusy(this);
+            MyTriggerManager.Instance.busyMoves.Add(this);
         }
         else
         {
-            RemoveBusy(this);
+            MyTriggerManager.Instance.busyMoves.Remove(this);
         }
     }
 
