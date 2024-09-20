@@ -96,7 +96,7 @@ public class CenterPoint : MonoBehaviour
             createMoveButton = false;
             
             MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
-            g.SetCenter(this);
+            g.ArriveTarCenter(this);
             return;
         }
         if (createRotateButton)
@@ -104,7 +104,7 @@ public class CenterPoint : MonoBehaviour
             createRotateButton = false;
 
             MyTriggerRotateCube g = Instantiate(MyTriggerManager.Instance.prefabRotate, MyTriggerManager.Instance.transform);
-            g.SetCenter(this);
+            g.ArriveTarCenter(this);
             return;
         }
 #endif

@@ -4,82 +4,121 @@ using UnityEngine;
 
 public class Player : Singleton<Player> , IAttached
 {
+    public CenterPoint tarCenter;
     public CenterPoint curCenter;
-    public CenterPoint lastCenter;
+    public bool hasStoppedWhenTrigger = false;
+    #region state
     enum STATE
     {
         IDLE,
-        MOVING
+        MOVING,
+        STOPPEDWHENTRIGGER,
     }
+    [SerializeField]
     STATE state;
     public bool IsBusy()
     {
-        return state == STATE.MOVING;
+        return state != STATE.IDLE;
     }
+    void ChangeState(STATE newState)
+    {
+        state = newState;
+    }
+    #endregion
     void Start()
     {
-        state = STATE.IDLE;
         Init();
-        
     }
 
     void Update()
     {
         if (UIManager.Instance.IsUIBusy)
             return;
-        MoveToDes();
+        switch (state)
+        {
+            case STATE.IDLE:
+                TryMoveToDes();
+                break;
+            case STATE.MOVING:
+                MoveToDes();
+                break;
+            default:break;
+        }
+        
+        
     }
+    
     public CenterPoint GetCurCenter()
     {
         return curCenter;
     }
     void Init()
     {
-        SetCenter(LevelManager.Instance.curLevel.staCenter);
         transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
+        ArriveTarCenter(LevelManager.Instance.curLevel.staCenter);
+        ChangeState(STATE.MOVING);
     }
-    public void SetCenter(CenterPoint center)
+    public void ArriveTarCenter(CenterPoint center)
     {
+        
         if (center == null)
         {
-            state = STATE.IDLE;
-            lastCenter = curCenter;
+            tarCenter.OnPlayerEnter();
+            curCenter = tarCenter;
             GetComponent<MeshRenderer>().material.renderQueue = 3000;
+            ChangeState(STATE.IDLE);
             return;
         }
-        lastCenter = curCenter;
-        curCenter = center;
-        transform.parent = curCenter.transform;
-        transform.parent = curCenter.cube.attached;
+        
+        
+        
+        if (tarCenter != null && tarCenter != curCenter)
+        {
+            if (tarCenter.myTriggers.Count != 0 && !hasStoppedWhenTrigger)
+            {
+                hasStoppedWhenTrigger = true;
+                tarCenter.OnPlayerEnter();
+                return;
+            }
+            hasStoppedWhenTrigger = false;
+            
+        }
+        curCenter = tarCenter;
+        tarCenter = center;
+        transform.parent = tarCenter.cube.attached;
         
     }
     
+    void TryMoveToDes()
+    {
+        if (tarCenter.nextPointInPath != null)
+        {
+            ChangeState(STATE.MOVING);
+        }
+        
+    }
     void MoveToDes()
     {
-        if (IsNearCurCenter())
+        if (MyTriggerManager.Instance.busyRotates.Count != 0)
+            return;
+        if (IsNearTarCenter())
         {
-            if (lastCenter != curCenter)
-                curCenter.OnPlayerEnter();
-            if (!curCenter.nextPoints.Contains(curCenter.nextPointInPath))
-                curCenter.nextPointInPath = null;
-            
-            SetCenter(curCenter.nextPointInPath);
+            if (!tarCenter.nextPoints.Contains(tarCenter.nextPointInPath))
+                tarCenter.nextPointInPath = null;
+            ArriveTarCenter(tarCenter.nextPointInPath);
             return;
         }
-        state = STATE.MOVING;
         transform.position = Vector3.MoveTowards
             (
-            transform.position, curCenter.CenterToWorldPos(gameObject),
-            Vector3.Magnitude(curCenter.transform.position - lastCenter.transform.position) * Config.Instance.moveSpeed * Time.deltaTime
+            transform.position, tarCenter.CenterToWorldPos(gameObject),
+            Vector3.Magnitude(tarCenter.transform.position - curCenter.transform.position) * Config.Instance.moveSpeed * Time.deltaTime
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, curCenter.CenterToWorldPos(gameObject)) * Config.Instance.ballRotateSpeed);
+        transform.Rotate(Vector3.Cross(transform.localPosition, tarCenter.CenterToWorldPos(gameObject)) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue
         GetComponent<MeshRenderer>().material.renderQueue = 3100;
-
     }
-
-    bool IsNearCurCenter()
+    bool IsNearTarCenter()
     {
-        return Vector3.Distance(transform.position, curCenter.CenterToWorldPos(gameObject)) < 0.001f;
+        return Vector3.Distance(transform.position, tarCenter.CenterToWorldPos(gameObject)) < 0.001f;
     }
 }

@@ -29,7 +29,7 @@ public class PathFinder : Singleton<PathFinder>
     }
     bool SearchPath()
     {
-        sta = Player.Instance.curCenter;
+        sta = Player.Instance.tarCenter;
         if (des == null)
             return false;
         foreach (var cp in CubeCombiner.Instance.centerPoints[sta.axisId])

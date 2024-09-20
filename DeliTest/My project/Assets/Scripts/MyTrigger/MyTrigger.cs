@@ -34,7 +34,7 @@ public class MyTrigger : MonoBehaviour, IAttached
         return curCenter;
     }
 
-    public void SetCenter(CenterPoint center)
+    public void ArriveTarCenter(CenterPoint center)
     {
         if (curCenter != null)
         {

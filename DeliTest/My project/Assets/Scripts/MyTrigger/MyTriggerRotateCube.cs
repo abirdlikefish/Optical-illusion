@@ -37,24 +37,24 @@ public class MyTriggerRotateCube : MyTrigger
             }
             triggered = false;
         }
+        MyTriggerManager.Instance.busyRotates.Add(this);
         bool busy = false;
         for (int i = 0; i < effectCubes.Count; i++)
         {
+            
             //将localRotation每一帧逐渐线性改变
             effectCubes[i].attached.localRotation = Quaternion.RotateTowards(effectCubes[i].transform.Find("Attached").transform.localRotation, targets[i], rotationSpeed * Time.deltaTime);
 
-            if (effectCubes[i].attached.localRotation != targets[i])
+            //判断已经与目标角度小于10度
+            if (Quaternion.Angle(effectCubes[i].attached.localRotation, targets[i]) > 10)
             {
                 busy = true;
             }
         }
-        if (busy)
-        {
-            MyTriggerManager.Instance.busyRotates.Add(this);
-        }
-        else
+        if (!busy)
         {
             MyTriggerManager.Instance.busyRotates.Remove(this);
+            return;
         }
     }
 }
