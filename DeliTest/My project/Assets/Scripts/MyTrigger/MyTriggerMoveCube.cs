@@ -9,8 +9,6 @@ public class MyTriggerMoveCube : MyTrigger
     Vector3 delta;
     [SerializeField]
     float moveSpeed = 0.2f;
-
-    
     void Start()
     {
         foreach (var effectCube in effectCubes)

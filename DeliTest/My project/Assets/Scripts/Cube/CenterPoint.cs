@@ -34,7 +34,6 @@ public class CenterPoint : MonoBehaviour
     public CenterPoint lastPointInPath;
     [HideInInspector]
     public CenterPoint nextPointInPath;
-    [HideInInspector]
     public List<MyTrigger> myTriggers = new();
     #endregion
     public void OnPlayerEnter()
@@ -63,7 +62,6 @@ public class CenterPoint : MonoBehaviour
                     centerPoint.GetComponent<MeshRenderer>().enabled = true;
                 }
             }
-            return;
         }
         if (hideAllCenterPoints)
         {
@@ -75,21 +73,18 @@ public class CenterPoint : MonoBehaviour
                     centerPoint.GetComponent<MeshRenderer>().enabled = false;
                 }
             }
-            return;
         }
         if (setSta)
         {
             setSta = false;
             LevelManager.Instance.curLevel.staCenter = this;
             EditorUtility.SetDirty(LevelManager.Instance);
-            return;
         }
         if(setDes)
         {
             setDes = false;
             LevelManager.Instance.curLevel.desCenter = this;
             EditorUtility.SetDirty(LevelManager.Instance);
-            return;
         }
         if(createMoveButton)
         {
@@ -97,7 +92,6 @@ public class CenterPoint : MonoBehaviour
             
             MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
             g.ArriveTarCenter(this);
-            return;
         }
         if (createRotateButton)
         {
@@ -105,8 +99,8 @@ public class CenterPoint : MonoBehaviour
 
             MyTriggerRotateCube g = Instantiate(MyTriggerManager.Instance.prefabRotate, MyTriggerManager.Instance.transform);
             g.ArriveTarCenter(this);
-            return;
         }
+        myTriggers.RemoveAll(it => it == null);
 #endif
     }
     public void ClearInvalidTrigger()

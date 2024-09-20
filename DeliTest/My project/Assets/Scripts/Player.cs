@@ -52,6 +52,10 @@ public class Player : Singleton<Player> , IAttached
     {
         return curCenter;
     }
+    public void SetCurCenter(CenterPoint centerPoint)
+    {
+        tarCenter = curCenter = centerPoint;
+    }
     void Init()
     {
         transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
@@ -60,18 +64,15 @@ public class Player : Singleton<Player> , IAttached
     }
     public void ArriveTarCenter(CenterPoint center)
     {
-        
         if (center == null)
         {
-            tarCenter.OnPlayerEnter();
+            if(tarCenter != curCenter)
+                tarCenter.OnPlayerEnter();
             curCenter = tarCenter;
             GetComponent<MeshRenderer>().material.renderQueue = 3000;
             ChangeState(STATE.IDLE);
             return;
         }
-        
-        
-        
         if (tarCenter != null && tarCenter != curCenter)
         {
             if (tarCenter.myTriggers.Count != 0 && !hasStoppedWhenTrigger)
@@ -81,12 +82,10 @@ public class Player : Singleton<Player> , IAttached
                 return;
             }
             hasStoppedWhenTrigger = false;
-            
         }
         curCenter = tarCenter;
         tarCenter = center;
         transform.parent = tarCenter.cube.attached;
-        
     }
     
     void TryMoveToDes()

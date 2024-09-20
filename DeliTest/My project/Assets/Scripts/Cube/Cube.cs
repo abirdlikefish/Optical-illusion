@@ -2,14 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 public class Cube : MonoBehaviour
 {
     [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
     [Header("刷新所有方块颜色和名字")]
-    bool refreshColorAndName = true;
+    public bool refreshColorAndName = true;
     [Header("将localPos四舍五入")]
     public bool magnetPos = false;
+    [Header("显示所有中心点")]
+    public bool showAllCenterPoints = false;
     public enum COLOR
     {
         BLACK,
@@ -40,6 +43,21 @@ public class Cube : MonoBehaviour
                 return centerPoint;
         }
         return null;
+    }
+    public CenterPoint GetNearestCenterByRotate(Transform tr)
+    {//找到旋转后的最近的中心点
+        CenterPoint ret = null;
+        float dis = float.MaxValue;
+        foreach (var centerPoint in centerPoints)
+        {
+            float temp = Vector3.Distance(centerPoint.transform.position, tr.position);
+            if (temp < dis)
+            {
+                dis = temp;
+                ret = centerPoint;
+            }
+        }
+        return ret;
     }
     #region Debug
     ComputeBuffer computeBuffer1;
@@ -95,9 +113,9 @@ public class Cube : MonoBehaviour
     }
     private void OnValidate()
     {
-        if(Config.Instance.isFirstInScene)
+#if UNITY_EDITOR
+        if(Selection.count == 1)
         {
-            Config.Instance.isFirstInScene = false;
             refreshColorAndName = true;
         }
         if(magnetPos)
@@ -113,6 +131,18 @@ public class Cube : MonoBehaviour
                 CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();
             }
         }
+        if (showAllCenterPoints)
+        {
+            showAllCenterPoints = false;
+            foreach (var cube in CubeCombiner.Instance.cubes)
+            {
+                foreach (var centerPoint in cube.centerPoints)
+                {
+                    centerPoint.GetComponent<MeshRenderer>().enabled = true;
+                }
+            }
+        }
+#endif
     }
     public void MyOnValidate()
     {

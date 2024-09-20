@@ -19,6 +19,8 @@ public class PathFinder : Singleton<PathFinder>
     {
         foreach (var cp in cps)
         {
+            if (MyTriggerManager.Instance.busyRotates.Count != 0)
+                break;
             des = cp;
             if (SearchPath())
             {

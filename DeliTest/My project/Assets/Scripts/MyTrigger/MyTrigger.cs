@@ -16,12 +16,14 @@ public class MyTrigger : MonoBehaviour, IAttached
     {
         curCenter.myTriggers.Remove(this);
     }
+
     #region Trigger
     public List<Cube> effectCubes = new();
     [Header("初始是否激活")][SerializeField]
     protected bool triggered = false;
-    public virtual void DoTrigger()
+    public void DoTrigger()
     {
+        Debug.Log(name + "触发");
         triggered = !triggered;
     }
     #endregion
@@ -32,6 +34,12 @@ public class MyTrigger : MonoBehaviour, IAttached
     public CenterPoint GetCurCenter()
     {
         return curCenter;
+    }
+    public void SetCurCenter(CenterPoint centerPoint)
+    {
+        curCenter.myTriggers.Remove(this);
+        curCenter = centerPoint;
+        curCenter.myTriggers.Add(this);
     }
 
     public void ArriveTarCenter(CenterPoint center)

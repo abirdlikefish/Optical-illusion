@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class MyTriggerRotateCube : MyTrigger
 {
@@ -12,28 +10,28 @@ public class MyTriggerRotateCube : MyTrigger
     [SerializeField]
     // 旋转速度，每秒旋转的角度
     float rotationSpeed = 90f;
-
-    List<Quaternion> targets = new();
+    bool hasResetCenter = false;
+    [SerializeField]
+    List<Vector3> targets = new();
     private void Start()
     {
         foreach (var effectCube in effectCubes)
-            targets.Add(effectCube.transform.localRotation);
+        {
+            targets.Add(effectCube.transform.eulerAngles);
+            targets[^1] = new Vector3(Mathf.Round(targets[^1].x), Mathf.Round(targets[^1].y), Mathf.Round(targets[^1].z));
+        }
     }
-    public override void DoTrigger()
-    {
-        triggered = true;
-    }
-
     void Update()
     {
         if (UIManager.Instance.IsUIBusy)
             return;
         if (triggered)
         {
+            hasResetCenter = false;
             for (int i = 0; i < targets.Count; i++)
             {
-                //根据delta算出目标角度
-                targets[i] *= Quaternion.Euler(delta);
+                targets[i] = targets[i] + delta;
+                targets[i] = new Vector3(Mathf.Round(targets[i].x), Mathf.Round(targets[i].y), Mathf.Round(targets[i].z));
             }
             triggered = false;
         }
@@ -41,12 +39,8 @@ public class MyTriggerRotateCube : MyTrigger
         bool busy = false;
         for (int i = 0; i < effectCubes.Count; i++)
         {
-            
-            //将localRotation每一帧逐渐线性改变
-            effectCubes[i].attached.localRotation = Quaternion.RotateTowards(effectCubes[i].transform.Find("Attached").transform.localRotation, targets[i], rotationSpeed * Time.deltaTime);
-
-            //判断已经与目标角度小于10度
-            if (Quaternion.Angle(effectCubes[i].attached.localRotation, targets[i]) > 10)
+            effectCubes[i].attached.localRotation = Quaternion.RotateTowards(effectCubes[i].attached.localRotation,Quaternion.Euler(targets[i]), rotationSpeed * Time.deltaTime);
+            if (Quaternion.Angle(effectCubes[i].attached.localRotation, Quaternion.Euler(targets[i])) > 1)
             {
                 busy = true;
             }
@@ -54,7 +48,22 @@ public class MyTriggerRotateCube : MyTrigger
         if (!busy)
         {
             MyTriggerManager.Instance.busyRotates.Remove(this);
-            return;
+            if (hasResetCenter)
+                return;
+            hasResetCenter = true;
+            for (int i = 0; i < effectCubes.Count; i++)
+            {
+                for (int j = 0; j < effectCubes[i].attached.childCount; j++)
+                {
+                    effectCubes[i].attached.localRotation = Quaternion.Euler(targets[i]);
+                    GameObject g = effectCubes[i].attached.GetChild(j).gameObject;
+                    if (!g.activeSelf || g.GetComponent<IAttached>() == null)
+                        continue;
+                    g.GetComponent<IAttached>().SetCurCenter(effectCubes[i].GetNearestCenterByRotate(g.transform));
+                }
+
+            }
         }
+        
     }
 }

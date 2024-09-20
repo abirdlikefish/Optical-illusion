@@ -23,12 +23,17 @@ public class UIManager : Singleton<UIManager>
     }
     private void Update()
     {
-        if (LevelManager.Instance.pass)
-            return;
+        
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            panelMenu.StartFade(!panelMenu.transform.GetChild(0).gameObject.activeSelf);
+            ClosePanelBase();
         }
+    }
+    public void ClosePanelBase()
+    {
+        //if (LevelManager.Instance.pass)
+        //    return;
+        panelMenu.StartFade(!panelMenu.transform.GetChild(0).gameObject.activeSelf);
     }
     public void PassCurLevel()
     {

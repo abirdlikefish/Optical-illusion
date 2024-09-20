@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IAttached
 {
-    abstract CenterPoint GetCurCenter();
-    abstract void ArriveTarCenter(CenterPoint center);
+    CenterPoint GetCurCenter();
+    void SetCurCenter(CenterPoint centerPoint);
 }
