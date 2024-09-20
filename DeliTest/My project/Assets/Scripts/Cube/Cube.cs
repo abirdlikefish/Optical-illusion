@@ -114,10 +114,11 @@ public class Cube : MonoBehaviour
     private void OnValidate()
     {
 #if UNITY_EDITOR
-        if(Selection.count == 1)
-        {
-            refreshColorAndName = true;
-        }
+        CubeCombiner.Instance.CollectCubeAndCenter();
+        //if(Selection.count == 1)
+        //{
+        //    refreshColorAndName = true;
+        //}
         if(magnetPos)
         {
             magnetPos = false;
@@ -126,10 +127,9 @@ public class Cube : MonoBehaviour
         if (refreshColorAndName)
         {
             refreshColorAndName = false;
-            for (int i = 0; i < CubeCombiner.Instance.transform.childCount; i++)
-            {
-                CubeCombiner.Instance.transform.GetChild(i).GetComponent<Cube>().MyOnValidate();
-            }
+            
+            foreach (var cube in CubeCombiner.Instance.cubes)
+                cube.OnValidate();
         }
         if (showAllCenterPoints)
         {

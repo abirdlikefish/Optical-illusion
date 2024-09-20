@@ -32,7 +32,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
     {
         CollectCubeAndCenter();
     }
-    void CollectCubeAndCenter()
+    public void CollectCubeAndCenter()
     {
         cubes.Clear();
         for (int i = 0; i < cubeP.childCount; i++)
