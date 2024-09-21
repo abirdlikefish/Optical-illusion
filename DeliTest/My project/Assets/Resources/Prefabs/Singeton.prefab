@@ -79,7 +79,7 @@ MonoBehaviour:
   global: 0
   sta: {fileID: 0}
   des: {fileID: 0}
-  endSphere: {fileID: 6150204152178612935}
+  endSphere: {fileID: 4790690075096188830}
 --- !u!1 &3848181630120271630
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 7944317720414890707}
   - component: {fileID: 5922445450878755065}
   m_Layer: 0
-  m_Name: CubeColor
+  m_Name: CubeConfig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -273,6 +273,9 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: 297d46073337e7a4a8d62afbab9526f9, type: 2}
     - Key: 3
       Value: {fileID: 2100000, guid: 0fabf1ac6eff9a54e9618832a3178256, type: 2}
+  sharedMaterials:
+  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
+  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
 --- !u!1 &7877226333826076400
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,11 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectCubes: []
-  triggered: 0
   curCenter: {fileID: 0}
-  delta: {x: 90, y: 0, z: 0}
-  rotationSpeed: 90
-  targets: []
 --- !u!1001 &8255766628149942478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -598,8 +597,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7097231527532309467, guid: 9c54def69df87624e8ad18adbf54bbd8, type: 3}
   m_PrefabInstance: {fileID: 8255766628149942478}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6150204152178612935 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2867537417963553289, guid: 9c54def69df87624e8ad18adbf54bbd8, type: 3}
+--- !u!114 &4790690075096188830 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3524510070786219856, guid: 9c54def69df87624e8ad18adbf54bbd8, type: 3}
   m_PrefabInstance: {fileID: 8255766628149942478}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6885e1bfd1d07014aabf1044d98ddac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

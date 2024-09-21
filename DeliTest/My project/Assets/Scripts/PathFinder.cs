@@ -9,11 +9,10 @@ public class PathFinder : Singleton<PathFinder>
     [SerializeField]
     CenterPoint des;
     [SerializeField]
-    GameObject endSphere;
+    public EndSphere endSphere;
     private void Awake()
     {
-        endSphere.transform.position = LevelManager.Instance.curLevel.desCenter.CenterToWorldPos(Player.Instance.gameObject);
-        endSphere.transform.parent = LevelManager.Instance.curLevel.desCenter.cube.attached;
+        endSphere.InitTransform(LevelManager.Instance.curLevel.desCenter);
     }
     public void SetDestinations(CenterPoint[] cps)
     {

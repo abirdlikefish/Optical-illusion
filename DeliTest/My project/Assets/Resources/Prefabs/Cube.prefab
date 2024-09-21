@@ -219,11 +219,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2613ff2732badf84a84af66fe3a234f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  refreshColorAndName: 0
   magnetPos: 0
+  showAllCenterPoints: 0
   color: 1
-  sharedMaterials:
-  - {fileID: 2100000, guid: e21edc967135f4b4c957deaeee897e69, type: 2}
-  - {fileID: 2100000, guid: bc544915f1ee53d48a251b63c933f207, type: 2}
+  moveDelta: {x: 0, y: 0, z: 0}
+  moveSpeed: 2
+  moveTriggered: 0
+  moveEnd: 0
+  rotateDelta: {x: 0, y: 0, z: 0}
+  rotateSpeed: 45
+  rotateTriggered: 0
+  rotateEnd: 0
   attached: {fileID: 3373413716223027093}
   trueMesh: {fileID: 6450991913816372728}
   editMesh: {fileID: 2280882139220525624}
@@ -602,7 +609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: myTriggers.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

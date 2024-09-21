@@ -42,7 +42,7 @@ public class CenterPoint : MonoBehaviour
         {
             myTrigger.DoTrigger();
         }
-        if (LevelManager.Instance.curLevel.desCenter == this)
+        if (PathFinder.Instance.endSphere.curCenter == this)
             LevelManager.Instance.PassCurLevel();
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
@@ -55,24 +55,12 @@ public class CenterPoint : MonoBehaviour
         if (showAllCenterPoints)
         {
             showAllCenterPoints = false;
-            foreach (var cube in CubeCombiner.Instance.cubes)
-            {
-                foreach (var centerPoint in cube.centerPoints)
-                {
-                    centerPoint.GetComponent<MeshRenderer>().enabled = true;
-                }
-            }
+            EditHelper.ShowAllCenterPoints();
         }
         if (hideAllCenterPoints)
         {
             hideAllCenterPoints = false;
-            foreach (var cube in CubeCombiner.Instance.cubes)
-            {
-                foreach (var centerPoint in cube.centerPoints)
-                {
-                    centerPoint.GetComponent<MeshRenderer>().enabled = false;
-                }
-            }
+            EditHelper.HideAllCenterPoints();
         }
         if (setSta)
         {
@@ -89,7 +77,6 @@ public class CenterPoint : MonoBehaviour
         if(createMoveButton)
         {
             createMoveButton = false;
-            
             MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
             g.ArriveTarCenter(this);
         }

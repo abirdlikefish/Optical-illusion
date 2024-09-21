@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeColor : Singleton<CubeColor>
+public class CubeConfig : Singleton<CubeConfig>
 {
     public SerializableDictionary<Cube.COLOR, Material> color_mar;
     public Dictionary<Vector3, KeyValuePair<string, string>> deltavector_to_CanChange;
+    public List<Material> sharedMaterials = new(); // 指向共享的材质
     private void Awake()
     {
         deltavector_to_CanChange = new Dictionary<Vector3, KeyValuePair<string,string>>()

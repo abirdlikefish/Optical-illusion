@@ -19,12 +19,9 @@ public class MyTrigger : MonoBehaviour, IAttached
 
     #region Trigger
     public List<Cube> effectCubes = new();
-    [Header("初始是否激活")][SerializeField]
-    protected bool triggered = false;
-    public void DoTrigger()
+    public virtual void DoTrigger()
     {
         Debug.Log(name + "触发");
-        triggered = !triggered;
     }
     #endregion
 

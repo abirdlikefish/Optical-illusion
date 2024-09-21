@@ -9,6 +9,12 @@ public class LevelManager : Singleton<LevelManager>, ISave
 {
     public LevelData curLevel;
     public bool pass = false;
+
+    private void Awake()
+    {
+        EditHelper.HideAllCenterPoints();
+        CubeCombiner.Instance.CollectCubeAndCenter();
+    }
     public void LoadData() { }
     //{
     //    if(JsonIO.ReadCurSheet<LevelData>("Mapdata","0") == null)

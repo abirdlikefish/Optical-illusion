@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndSphere : MonoBehaviour
+public class EndSphere : MonoBehaviour, IAttached
 {
+    public CenterPoint curCenter;
+    public CenterPoint GetCurCenter()
+    {
+        return curCenter;
+    }
+    public void InitTransform(CenterPoint desCenter)
+    {
+        transform.position = desCenter.CenterToWorldPos(Player.Instance.gameObject);
+        transform.parent = desCenter.cube.attached;
+        SetCurCenter(desCenter);
+    }
+    public void SetCurCenter(CenterPoint centerPoint)
+    {
+        curCenter = centerPoint;
+    }
     public float minScale = 0.2f;
     public float maxScale = 0.4f;
 
