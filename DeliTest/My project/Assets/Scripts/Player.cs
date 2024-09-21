@@ -81,8 +81,9 @@ public class Player : Singleton<Player> , IAttached
                 tarCenter.OnPlayerEnter();
                 return;
             }
-            hasStoppedWhenTrigger = false;
+           
         }
+        hasStoppedWhenTrigger = false;
         curCenter = tarCenter;
         tarCenter = center;
         transform.parent = tarCenter.cube.attached;

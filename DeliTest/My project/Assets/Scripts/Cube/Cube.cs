@@ -114,7 +114,8 @@ public class Cube : MonoBehaviour
     private void OnValidate()
     {
 #if UNITY_EDITOR
-        CubeCombiner.Instance.CollectCubeAndCenter();
+        if(CubeCombiner.Instance)
+            CubeCombiner.Instance.CollectCubeAndCenter();
         //if(Selection.count == 1)
         //{
         //    refreshColorAndName = true;
