@@ -6,13 +6,12 @@ public class Player : Singleton<Player> , IAttached
 {
     public CenterPoint tarCenter;
     public CenterPoint curCenter;
-    public bool hasStoppedWhenTrigger = false;
     #region state
     enum STATE
     {
         IDLE,
         MOVING,
-        STOPPEDWHENTRIGGER,
+        ARRIVED,
     }
     [SerializeField]
     STATE state;
@@ -37,15 +36,17 @@ public class Player : Singleton<Player> , IAttached
         switch (state)
         {
             case STATE.IDLE:
-                TryMoveToDes();
+                TryIdle();
                 break;
             case STATE.MOVING:
-                MoveToDes();
+                TryMoving();
                 break;
-            default:break;
+            case STATE.ARRIVED:
+                TryArrived();
+                break;
+            default:
+                break;
         }
-        
-        
     }
     
     public CenterPoint GetCurCenter()
@@ -58,46 +59,27 @@ public class Player : Singleton<Player> , IAttached
     }
     void Init()
     {
-        transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
         ArriveTarCenter(LevelManager.Instance.curLevel.staCenter);
-        ChangeState(STATE.MOVING);
     }
-    public void ArriveTarCenter(CenterPoint center)
+    public void ArriveTarCenter(CenterPoint nextTar)
     {
-        if (center == null)
+        if (curCenter == null && tarCenter == null)//关卡初始化时的null
         {
-            if(tarCenter != curCenter)
-                tarCenter.OnPlayerEnter();
-            curCenter = tarCenter;
-            GetComponent<MeshRenderer>().material.renderQueue = 3000;
-            ChangeState(STATE.IDLE);
-            return;
+            tarCenter = nextTar;
+            transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
+            //transform.parent = tarCenter.cube.attached;
         }
-        if (tarCenter != null && tarCenter != curCenter)
-        {
-            if (tarCenter.myTriggers.Count != 0 && !hasStoppedWhenTrigger)
-            {
-                hasStoppedWhenTrigger = true;
-                tarCenter.OnPlayerEnter();
-                return;
-            }
-           
-        }
-        hasStoppedWhenTrigger = false;
-        curCenter = tarCenter;
-        tarCenter = center;
-        transform.parent = tarCenter.cube.attached;
+        ChangeState(STATE.ARRIVED);
     }
     
-    void TryMoveToDes()
+    void TryIdle()
     {
         if (tarCenter.nextPointInPath != null)
         {
             ChangeState(STATE.MOVING);
         }
-        
     }
-    void MoveToDes()
+    void TryMoving()
     {
         if (MyTriggerManager.Instance.busyRotates.Count != 0)
             return;
@@ -116,6 +98,24 @@ public class Player : Singleton<Player> , IAttached
         transform.Rotate(Vector3.Cross(transform.localPosition, tarCenter.CenterToWorldPos(gameObject)) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue
         GetComponent<MeshRenderer>().material.renderQueue = 3100;
+    }
+
+    void TryArrived()
+    {
+        transform.parent = tarCenter.cube.attached;
+        if (curCenter != tarCenter)
+            tarCenter.OnPlayerEnter();
+        curCenter = tarCenter;
+        if(tarCenter.nextPointInPath == null)
+        {
+            GetComponent<MeshRenderer>().material.renderQueue = 3000;
+            ChangeState(STATE.IDLE);
+            return;
+        }
+        tarCenter = tarCenter.nextPointInPath;
+        
+        ChangeState(STATE.MOVING);
+        return;
     }
     bool IsNearTarCenter()
     {
