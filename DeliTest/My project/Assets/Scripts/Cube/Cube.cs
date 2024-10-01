@@ -175,7 +175,7 @@ public class Cube : MonoBehaviour
     private void OnValidate()
     {
 #if UNITY_EDITOR
-        //if (CubeCombiner.Instance)
+        if (CubeCombiner.Instance)
             CubeCombiner.Instance.CollectCubeAndCenter();
         if (magnetPos)
         {
