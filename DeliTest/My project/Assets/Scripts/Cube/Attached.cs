@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Attached : MonoBehaviour
 {
-    private void OnTransformChildrenChanged()
-    {
-        foreach(var center in transform.parent.GetComponent<Cube>().centerPoints)
-        {
-            center.ClearInvalidTrigger();
-        }
-    }
+    //private void OnTransformChildrenChanged()
+    //{
+    //    foreach(var center in transform.parent.GetComponent<Cube>().centerPoints)
+    //    {
+    //        center.ClearInvalidTrigger();
+    //    }
+    //}
 }

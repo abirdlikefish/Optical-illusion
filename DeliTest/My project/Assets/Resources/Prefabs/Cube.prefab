@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 9002122985058625803}
   - component: {fileID: 8781973335571898169}
   - component: {fileID: 6264775435151428596}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EditMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &9002122985058625803
 Transform:
@@ -94,12 +94,12 @@ GameObject:
   - component: {fileID: 4201670938388396913}
   - component: {fileID: 2229481605922052492}
   - component: {fileID: 3216361708087569275}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TrueMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &4201670938388396913
 Transform:
@@ -178,6 +178,8 @@ GameObject:
   - component: {fileID: 6443202027641712064}
   - component: {fileID: 3107357423197970208}
   - component: {fileID: 7876774071843071603}
+  - component: {fileID: 1578192432475111517}
+  - component: {fileID: 6396103138659493666}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Obstacle
@@ -222,6 +224,7 @@ MonoBehaviour:
   refreshColorAndName: 0
   magnetPos: 0
   showAllCenterPoints: 0
+  hideAllCenterPoints: 0
   color: 1
   moveDelta: {x: 0, y: 0, z: 0}
   moveSpeed: 2
@@ -262,6 +265,56 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1578192432475111517
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5640281351019957298}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 073e057a551e9264bb9b51048a16c150, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &6396103138659493666
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5640281351019957298}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6450991913816372728
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,15 +324,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3373413716223027093}
-  - component: {fileID: 1039800804296898728}
   - component: {fileID: 4879207570037559138}
   - component: {fileID: 8574514248850436767}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Attached
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3373413716223027093
 Transform:
@@ -298,18 +350,6 @@ Transform:
   - {fileID: 9002122985058625803}
   m_Father: {fileID: 6443202027641712064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1039800804296898728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6450991913816372728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d275894c63737943b40f2334d3e2761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &4879207570037559138
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -695,6 +735,10 @@ PrefabInstance:
     - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
       propertyPath: delta.z
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7571125856364155254, guid: 48c10efde136c2f4e9d7e75ebf819f77, type: 3}
+      propertyPath: hideAllCenterPoints
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

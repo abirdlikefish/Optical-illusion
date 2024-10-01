@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
-using static UnityEngine.GraphicsBuffer;
 public class Cube : MonoBehaviour
 {
     [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
@@ -181,7 +175,7 @@ public class Cube : MonoBehaviour
     private void OnValidate()
     {
 #if UNITY_EDITOR
-        if (CubeCombiner.Instance)
+        //if (CubeCombiner.Instance)
             CubeCombiner.Instance.CollectCubeAndCenter();
         if (magnetPos)
         {
