@@ -168,6 +168,7 @@ public class Cube : MonoBehaviour
     }
     public void OnMouseDown()
     {
+        Debug.Log(name + " OnMouseDown");
         if (UIManager.Instance.IsUIBusy)
             return;
         PathFinder.Instance.SetDestinations(centerPoints); 

@@ -14,6 +14,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject pathFailCross;
     public GameObject pathSucceedCircle;
     public bool IsUIBusy => panelMenu.transform.GetChild(0).gameObject.activeSelf;
+    public bool isHoldRotate;
     private void Awake()
     {
         //buttonSave.SetActive(Config.Instance.isEditorMode);
@@ -57,5 +58,9 @@ public class UIManager : Singleton<UIManager>
         }
         GameObject g = Instantiate(g2, screenPos, g2.transform.rotation, transform);
         g.SetActive(true);
+    }
+    public void SetIsHoldRotate(bool v)
+    {
+        isHoldRotate = v;
     }
 }

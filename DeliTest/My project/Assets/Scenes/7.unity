@@ -5764,8 +5764,13 @@ MonoBehaviour:
   global: 0
   nearestPairs: []
   magneting: 0
+  reverseGryoX: 0
+  reverseGryoY: 0
+  reverseGryoZ: 0
+  rotateSpeed: 1
+  isEditorMobileTest: 1
+  mouseMove: {x: 0, y: 0}
   newRotation: {x: 0, y: 0, z: 0, w: 0}
-  newRotationEuler: {x: 0, y: 0, z: 0}
 --- !u!21 &1639037121
 Material:
   serializedVersion: 8
@@ -6576,6 +6581,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3107357423197970208, guid: 55a9414e847576b45b6949436535f199, type: 3}
       propertyPath: RefreshCube
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3107357423197970208, guid: 55a9414e847576b45b6949436535f199, type: 3}
+      propertyPath: hideAllCenterPoints
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3107357423197970208, guid: 55a9414e847576b45b6949436535f199, type: 3}
