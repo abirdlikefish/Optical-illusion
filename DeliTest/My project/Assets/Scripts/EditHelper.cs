@@ -25,11 +25,11 @@ public class EditHelper : MonoBehaviour
         }
     }
 
-    public static void RefreshAllTriggerDelta()
-    {
-        foreach (var cube in CubeCombiner.Instance.cubes)
-        {
-            //cube.RefreshTriggerDelta();
-        }
-    }
+    //public static void RefreshAllTriggerDelta()
+    //{
+    //    foreach (var cube in CubeCombiner.Instance.cubes)
+    //    {
+    //        cube.RefreshTriggerDelta();
+    //    }
+    //}
 }

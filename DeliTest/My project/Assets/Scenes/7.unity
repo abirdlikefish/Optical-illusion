@@ -1861,52 +1861,6 @@ Material:
     - _UpperColor: {r: 1, g: 0, b: 0, a: 1}
     - delta: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!1 &515735169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 515735171}
-  - component: {fileID: 515735170}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &515735170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515735169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6cf93811c083da4db7bacb2d53e2989, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  i: 27
-  data: test
---- !u!4 &515735171
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515735169}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.8642945, y: -0.39768368, z: 1.7751288}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &550677619
 Material:
   serializedVersion: 8
@@ -5764,12 +5718,11 @@ MonoBehaviour:
   global: 0
   nearestPairs: []
   magneting: 0
-  reverseGryoX: 0
-  reverseGryoY: 0
-  reverseGryoZ: 0
-  rotateSpeed: 1
-  isEditorMobileTest: 1
-  mouseMove: {x: 0, y: 0}
+  userRotate: {x: 0, y: 0, z: 0}
+  gravity: {x: 0, y: 0, z: 0}
+  acceleration: {x: 0, y: 0, z: 0}
+  lastQuaternion: {x: 0, y: 0, z: 0, w: 0}
+  lastEuler: {x: 0, y: 0, z: 0}
   newRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!21 &1639037121
 Material:
@@ -9764,4 +9717,3 @@ SceneRoots:
   - {fileID: 4135263384945447453}
   - {fileID: 1633925177}
   - {fileID: 4606499917671246808}
-  - {fileID: 515735171}

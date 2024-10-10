@@ -559,10 +559,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8707574443972085127}
-  - {fileID: 4146530744160321270}
-  - {fileID: 3649712033162585691}
   - {fileID: 4631060537138722831}
+  - {fileID: 8707574443972085127}
+  - {fileID: 3649712033162585691}
+  - {fileID: 4146530744160321270}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -902,7 +902,7 @@ GameObject:
   - component: {fileID: 5670396452865982772}
   - component: {fileID: 5626556636666033934}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: BUTTON ESC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.7490196}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7137255}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

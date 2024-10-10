@@ -31,6 +31,14 @@ public class Config : Singleton<Config>
     public float magnetRotateSpeed = 1.0f;
     //玩家移动时是否可以通过鼠标旋转
     public bool canRotateWhilePlayerMove = true;
+
+    //手机陀螺仪三个轴上的反向
+    public Vector3Int reverseGyro;
+    //手机陀螺仪转速
+    public Vector3 gyroSpeed;
+    //是否在编辑器中模拟手机陀螺仪
+    public bool isEditorMobileTest = true;
+
 }
 
 

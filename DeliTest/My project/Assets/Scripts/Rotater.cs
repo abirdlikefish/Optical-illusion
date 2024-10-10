@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class Rotater : Singleton<Rotater>
@@ -7,11 +8,7 @@ public class Rotater : Singleton<Rotater>
     [SerializeField]
     List<CenterPointPair> nearestPairs = new();
     public bool magneting;
-    public bool reverseGryoX = false;
-    public bool reverseGryoY = false;
-    public bool reverseGryoZ = false;
-    public float rotateSpeed = 1.0f;
-    public bool isEditorMobileTest = true;
+
     private void Awake()
     {
         if (PlatformManager.IsMobile())
@@ -24,67 +21,65 @@ public class Rotater : Singleton<Rotater>
         if (UIManager.Instance.IsUIBusy)
             return;
 
-        if (PlatformManager.IsMobile() && isEditorMobileTest)
+        if (PlatformManager.IsMobile() && Config.Instance.isEditorMobileTest)
         {
             if (UIManager.Instance.isHoldRotate)
             {
+                magneting = false;
                 HandleGyroscopeInput();
-                return;
             }
-            lastEulerAngle = Input.gyro.attitude.eulerAngles;
-            Magnet();
-        }
-        if (PlatformManager.IsPC())
-        {
-            HandleMouseInput();
-            if (!Input.GetMouseButton(1))
+            else
+            {
                 Magnet();
+            }
+            lastQuaternion = Input.gyro.attitude;
+            lastEuler = lastQuaternion.eulerAngles;
+        }
+        else if (PlatformManager.IsPC())
+        {
+            if (Input.GetMouseButton(1))
+            {
+                magneting = false;
+                HandleMouseInput();
+            }
+            else
+            {
+                Magnet();
+            }
         }
     }
-    public Vector2 mouseMove;
+    Vector2 mouseMove;
     void HandleMouseInput()
     {
         if (Player.Instance.IsBusy() && !Config.Instance.canRotateWhilePlayerMove)
             return;
         mouseMove.x = Input.GetAxis("Mouse X");
         mouseMove.y = Input.GetAxis("Mouse Y");
-        //float mouseX = Input.GetAxis("Mouse X");
-        //float mouseY = Input.GetAxis("Mouse Y");
-        if(Input.GetMouseButton(1))
-        {
-            magneting = false;
-            transform.Rotate(Vector3.up, -mouseMove.x * Config.Instance.mouseRotateSpeed, Space.World);
-            transform.Rotate(Vector3.right, mouseMove.y * Config.Instance.mouseRotateSpeed, Space.World);
-        }
+        transform.Rotate(Vector3.up, -mouseMove.x * Config.Instance.mouseRotateSpeed, Space.World);
+        transform.Rotate(Vector3.right, mouseMove.y * Config.Instance.mouseRotateSpeed, Space.World);
     }
+    public Vector3 userRotate;
+    public Vector3 gravity;
+    public Vector3 acceleration;
+    public Quaternion lastQuaternion;
+    public Vector3 lastEuler;
 
-    Vector3 lastEulerAngle;
     void HandleGyroscopeInput()//Gyroscope ： 陀螺仪
     {
+        userRotate = Input.gyro.rotationRate;
+        gravity = Input.gyro.gravity;
+        acceleration = Input.acceleration;
         if (Player.Instance.IsBusy() && !Config.Instance.canRotateWhilePlayerMove)
             return;
-        //读取相邻两帧陀螺仪旋转角
-        if(lastEulerAngle == null)
+        if(lastEuler == null)
         {
-            lastEulerAngle = Input.gyro.attitude.eulerAngles;
+            lastEuler = Input.gyro.attitude.eulerAngles;
             return;
-        }    
-        Vector3 thisEulerAngle = Input.gyro.attitude.eulerAngles;
-        Vector3 deltaEulerAngle = thisEulerAngle - lastEulerAngle;
-        lastEulerAngle = thisEulerAngle;
-        //Debug.Log("thisEulerAngle:" + thisEulerAngle);
-        //Debug.Log("lastEulerAngle:" + lastEulerAngle);
-        //Debug.Log("deltaEulerAngle:" + deltaEulerAngle);
-        int reverseX = reverseGryoX ? -1 : 1;
-        int reverseY = reverseGryoY ? -1 : 1;
-
-
-        //transform.rotation = Quaternion.Euler(deltaEulerAngle) * transform.rotation;
-        transform.Rotate(Vector3.up, -deltaEulerAngle.x * reverseX * rotateSpeed, Space.World);
-        transform.Rotate(Vector3.right, deltaEulerAngle.y * reverseY * rotateSpeed, Space.World);
-        transform.Rotate(Vector3.forward, deltaEulerAngle.z * rotateSpeed, Space.World);
-        //transform.Rotate(-deltaEulerAngle * reverse * rotateSpeed, Space.World);
-
+        }
+        transform.Rotate(Vector3.right,     userRotate.x * Config.Instance.reverseGyro.x * Config.Instance.gyroSpeed.x * Time.deltaTime, Space.World);
+        transform.Rotate(Vector3.up,        userRotate.y * Config.Instance.reverseGyro.y * Config.Instance.gyroSpeed.y * Time.deltaTime, Space.World);
+        transform.Rotate(Vector3.forward,   userRotate.z * Config.Instance.reverseGyro.z * Config.Instance.gyroSpeed.z * Time.deltaTime, Space.World);
+        //transform.Rotate(new (userRotate.x*reverseGryoX,userRotate.y*reverseGryoY,userRotate.z*reverseGryoZ));
     }
     public Vector3 GetInitDelta(CenterPoint c1, CenterPoint c2)
     {
@@ -112,6 +107,8 @@ public class Rotater : Singleton<Rotater>
         nearestPairs.Clear();
         foreach(var pair in CubeCombiner.Instance.centerPointPairs)
         {
+            if (!pair.canMagnet)
+                continue;
             float curDis = DisSquare(Camera.main.WorldToScreenPoint(pair.first.transform.position), Camera.main.WorldToScreenPoint(pair.second.transform.position));
             if (curDis < nearestDis && !CubeCombiner.Instance.IsCubeNear(pair.first,pair.second))
             {

@@ -194,9 +194,9 @@ public class CenterPoint : MonoBehaviour
         }
         return false;
     }
-    public Vector3 CenterToWorldPos(GameObject go)
+    public Vector3 CenterToPlayerPos()
     {
-        return transform.position + (transform.position - cube.transform.position) * go.transform.lossyScale.x;
+        return transform.position + (transform.position - cube.transform.position) * Player.Instance.transform.lossyScale.x;
     }
     Vector3[] GetFaceVertices(Vector3 cubeCenter, float size, Vector3 faceCenter)
     {

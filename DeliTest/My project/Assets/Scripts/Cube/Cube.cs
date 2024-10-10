@@ -94,7 +94,7 @@ public class Cube : MonoBehaviour
         if (rotateTriggered)
         {
             hasResetCenter = false;
-            rotateTarget = rotateTarget + rotateDelta;
+            rotateTarget += rotateDelta;
             rotateTarget = new Vector3(Mathf.Round(rotateTarget.x), Mathf.Round(rotateTarget.y), Mathf.Round(rotateTarget.z));
             rotateTriggered = false;
         }

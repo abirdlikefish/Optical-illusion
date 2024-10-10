@@ -11,7 +11,7 @@ public class EndSphere : MonoBehaviour, IAttached
     }
     public void InitTransform(CenterPoint desCenter)
     {
-        transform.position = desCenter.CenterToWorldPos(Player.Instance.gameObject);
+        transform.position = desCenter.CenterToPlayerPos();
         transform.parent = desCenter.cube.attached;
         SetCurCenter(desCenter);
     }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3401,7 +3401,6 @@ MonoBehaviour:
   global: 0
   tarCenter: {fileID: 0}
   curCenter: {fileID: 0}
-  hasStoppedWhenTrigger: 0
   state: 0
 --- !u!21 &1265833757
 Material:
@@ -4452,8 +4451,12 @@ MonoBehaviour:
   global: 0
   nearestPairs: []
   magneting: 0
+  userRotate: {x: 0, y: 0, z: 0}
+  gravity: {x: 0, y: 0, z: 0}
+  acceleration: {x: 0, y: 0, z: 0}
+  lastQuaternion: {x: 0, y: 0, z: 0, w: 0}
+  lastEuler: {x: 0, y: 0, z: 0}
   newRotation: {x: 0, y: 0, z: 0, w: 0}
-  newRotationEuler: {x: 0, y: 0, z: 0}
 --- !u!21 &1671793732
 Material:
   serializedVersion: 8
@@ -5947,6 +5950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6885e1bfd1d07014aabf1044d98ddac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curCenter: {fileID: 0}
   minScale: 0.2
   maxScale: 0.4
 --- !u!1001 &4158758528741348829
@@ -5965,10 +5969,42 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -193
       objectReference: {fileID: 0}
+    - target: {fileID: 170196334669558811, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1633925178}
+    - target: {fileID: 170196334669558811, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RefreshQuaternion
+      objectReference: {fileID: 0}
+    - target: {fileID: 170196334669558811, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Rotater, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 170196334669558811, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 889867533128148083, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: levelDescription
       value: 
       objectReference: {fileID: 4158758528741348830}
+    - target: {fileID: 1024693068780091254, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 362.8616
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024693068780091254, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 111.1446
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024693068780091254, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -205
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024693068780091254, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -380
+      objectReference: {fileID: 0}
     - target: {fileID: 1281247513016033684, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: m_Color.b
       value: 0.9094761
@@ -6016,6 +6052,14 @@ PrefabInstance:
     - target: {fileID: 2903006172822841519, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: m_Color.r
       value: 0.6372731
+      objectReference: {fileID: 0}
+    - target: {fileID: 3975196170582300931, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_Text
+      value: Test Quaternion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3975196170582300931, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4053904125639437978, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: m_Color.b
@@ -6076,6 +6120,10 @@ PrefabInstance:
     - target: {fileID: 5404708494011891819, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404708494011891819, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7107547835755137901, guid: 54a641cdbbdfb6840b87485eea455251, type: 3}
       propertyPath: m_Pivot.x

@@ -333,6 +333,9 @@ MonoBehaviour:
   mouseRotateSpeed: 4
   magnetRotateSpeed: 0.08
   canRotateWhilePlayerMove: 1
+  reverseGyro: {x: -1, y: -1, z: 1}
+  gyroSpeed: {x: 100, y: 100, z: 100}
+  isEditorMobileTest: 1
 --- !u!1001 &3938428624961270682
 PrefabInstance:
   m_ObjectHideFlags: 0

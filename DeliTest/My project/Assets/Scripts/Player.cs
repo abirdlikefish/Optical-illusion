@@ -66,10 +66,11 @@ public class Player : Singleton<Player> , IAttached
         if (curCenter == null && tarCenter == null)//关卡初始化时的null
         {
             tarCenter = nextTar;
-            transform.position = LevelManager.Instance.curLevel.staCenter.CenterToWorldPos(gameObject);
+            transform.position = LevelManager.Instance.curLevel.staCenter.CenterToPlayerPos();
             //transform.parent = tarCenter.cube.attached;
         }
         ChangeState(STATE.ARRIVED);
+        TryArrived();
     }
     
     void TryIdle()
@@ -92,10 +93,10 @@ public class Player : Singleton<Player> , IAttached
         }
         transform.position = Vector3.MoveTowards
             (
-            transform.position, tarCenter.CenterToWorldPos(gameObject),
-            Vector3.Magnitude(tarCenter.transform.position - curCenter.transform.position) * Config.Instance.moveSpeed * Time.deltaTime
+            transform.position, tarCenter.CenterToPlayerPos(),
+            Vector3.Magnitude(tarCenter.CenterToPlayerPos() - curCenter.CenterToPlayerPos()) * Config.Instance.moveSpeed * Time.deltaTime
             );
-        transform.Rotate(Vector3.Cross(transform.localPosition, tarCenter.CenterToWorldPos(gameObject)) * Config.Instance.ballRotateSpeed);
+        transform.Rotate(Vector3.Cross(transform.localPosition, tarCenter.CenterToPlayerPos()) * Config.Instance.ballRotateSpeed);
         //移动时修改渲染顺序,render queue
         GetComponent<MeshRenderer>().material.renderQueue = 3100;
     }
@@ -119,6 +120,6 @@ public class Player : Singleton<Player> , IAttached
     }
     bool IsNearTarCenter()
     {
-        return Vector3.Distance(transform.position, tarCenter.CenterToWorldPos(gameObject)) < 0.001f;
+        return Vector3.Distance(transform.position, tarCenter.CenterToPlayerPos()) < 0.001f;
     }
 }

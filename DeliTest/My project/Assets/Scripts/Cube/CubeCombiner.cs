@@ -67,7 +67,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 {
                     if (CenterIsAtTwoCubeNaka(p1,p2))
                     {
-                        centerPointPairs.Add(new(p1, p2));
+                        centerPointPairs.Add(new(p1, p2,canMagnet:false));
                         p1.AddOverlapPoint(p2);
                         if(!IsCubeSameColor(p1, p2))
                         {
@@ -89,7 +89,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
                 !IsNearInCamera(p1.cube.gameObject, p2.cube.gameObject)
                 )
                 {
-                    centerPointPairs.Add(new(p1, p2));
+                    centerPointPairs.Add(new(p1, p2,canMagnet: true));
                     p1.AddOverlapPoint(p2);
                     continue;
                 }
@@ -143,10 +143,11 @@ public class CenterPointPair
 {
     public CenterPoint first;
     public CenterPoint second;
-
-    public CenterPointPair(CenterPoint first, CenterPoint second)
+    public bool canMagnet;
+    public CenterPointPair(CenterPoint first, CenterPoint second, bool canMagnet)
     {
         this.first = first;
         this.second = second;
+        this.canMagnet = canMagnet;
     }
 }
