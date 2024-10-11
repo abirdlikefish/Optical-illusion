@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using UnityEngine.tvOS;
+﻿using UnityEngine;
 
 public class MTest : MonoBehaviour
 {
     public float moveSpeed = 1e4f;
-    [HelpBox("Acceleration",HelpBoxType.Info)]
+    [HelpBox("Acceleration", HelpBoxType.Info)]
     public Vector3 acceleration;
     public AccelerationEvent[] accelerationEvents;
 
-    [HelpBox("Compass",HelpBoxType.Info)]
+    [HelpBox("Compass", HelpBoxType.Info)]
     public bool compassEnabled;
     public float compassHeadingAccuracy;
     public float compassMagneticHeading;
@@ -54,21 +49,19 @@ public class MTest : MonoBehaviour
     public bool touchEnabled;
     public bool touchPressureSupported;
 
+    public Quaternion lastSetQuaternion = Quaternion.identity;
+    Vector3 tarUpDirection = Vector3.up;
+    Vector3 tarRightDirection = Vector3.right;
+    Vector3 modelUpDirection = Vector3.back;
+    Vector3 modelRightDirection = Vector3.down;
+    public bool changeToLeftHand = true;
     private void Update()
     {
+        Quaternion currentGyroRotation = Input.gyro.attitude;
+        currentGyroRotation = new Quaternion(-currentGyroRotation.y, currentGyroRotation.x, currentGyroRotation.z, currentGyroRotation.w);
+        Quaternion deltaRotation = Quaternion.Inverse(lastSetQuaternion) * currentGyroRotation;
+        transform.localRotation = deltaRotation;
 
-        transform.localRotation = Input.gyro.attitude;
-        Vector3 bigAcc = new(
-           Mathf.Abs(Input.gyro.userAcceleration.y) >= 0.1f ? Input.gyro.userAcceleration.y:0,
-           Mathf.Abs(Input.gyro.userAcceleration.x) >= 0.1f ? -Input.gyro.userAcceleration.x:0,
-           Mathf.Abs(Input.gyro.userAcceleration.z) >= 0.1f ? Input.gyro.userAcceleration.z:0
-           );
-        GetComponent<Rigidbody>().velocity +=
-            new Vector3(Input.gyro.userAcceleration.y,
-                -Input.gyro.userAcceleration.x,
-                Input.gyro.userAcceleration.z)
-            * moveSpeed * Time.deltaTime;
-        Input.gyro.updateInterval = 1f;
         acceleration = Input.acceleration;
         accelerationEvents = Input.accelerationEvents;
         int accId = 0;
@@ -121,9 +114,11 @@ public class MTest : MonoBehaviour
         touches = Input.touches;
         touchEnabled = Input.touchSupported;
         touchPressureSupported = Input.touchPressureSupported;
-
-
-        Debug.Log("acc " + acceleration);
-        Debug.Log("g acc " + gyroUserAcceleration);
+    }
+    
+    public void ResetRotation()
+    {
+        lastSetQuaternion = Input.gyro.attitude;
+        transform.localRotation = Quaternion.identity;
     }
 }

@@ -24,11 +24,11 @@ public class UIManager : Singleton<UIManager>
     }
     private void Update()
     {
-        
-        //if(Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    ClosePanelBase();
-        //}
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ClosePanelBase();
+        }
     }
     public void ClosePanelBase()
     {
