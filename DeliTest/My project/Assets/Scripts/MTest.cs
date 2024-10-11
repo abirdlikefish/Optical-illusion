@@ -58,8 +58,11 @@ public class MTest : MonoBehaviour
     private void Update()
     {
         Quaternion currentGyroRotation = Input.gyro.attitude;
-        currentGyroRotation = new Quaternion(-currentGyroRotation.y, currentGyroRotation.x, currentGyroRotation.z, currentGyroRotation.w);
+        //currentGyroRotation = new Quaternion(-currentGyroRotation.y, currentGyroRotation.x, currentGyroRotation.z, currentGyroRotation.w);
         Quaternion deltaRotation = Quaternion.Inverse(lastSetQuaternion) * currentGyroRotation;
+        Vector3 dv = deltaRotation.eulerAngles;
+        dv = new(-dv.y, dv.x, dv.z);
+        deltaRotation = Quaternion.Euler(dv);
         transform.localRotation = deltaRotation;
 
         acceleration = Input.acceleration;
