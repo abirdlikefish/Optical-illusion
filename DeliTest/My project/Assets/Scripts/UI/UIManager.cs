@@ -42,6 +42,7 @@ public class UIManager : Singleton<UIManager>
         panelPass.SetActive(true);
     }
 
+    GameObject lastCircle;
     public void ShowSth(string sth, Vector3 screenPos)
     {
         GameObject g2 = null;
@@ -49,15 +50,19 @@ public class UIManager : Singleton<UIManager>
         {
             case "pathFailCross":
                 g2 = pathFailCross;
+                GameObject g = Instantiate(g2, screenPos, g2.transform.rotation, transform);
+                g.SetActive(true);
                 break;
             case "pathSucceedCircle":
                 g2 = pathSucceedCircle;
+                if (lastCircle != null)
+                    DestroyImmediate(lastCircle);
+                lastCircle = Instantiate(g2, screenPos, g2.transform.rotation, transform);
+                lastCircle.SetActive(true);
                 break;
             default:
                 break;
         }
-        GameObject g = Instantiate(g2, screenPos, g2.transform.rotation, transform);
-        g.SetActive(true);
     }
     public void SetIsHoldRotate(bool v)
     {

@@ -32,8 +32,6 @@ public class Rotater : Singleton<Rotater>
             {
                 Magnet();
             }
-            lastQuaternion = Input.gyro.attitude;
-            lastEuler = lastQuaternion.eulerAngles;
         }
         else if (PlatformManager.IsPC())
         {
@@ -48,38 +46,23 @@ public class Rotater : Singleton<Rotater>
             }
         }
     }
-    Vector2 mouseMove;
+    
     void HandleMouseInput()
     {
         if (Player.Instance.IsBusy() && !Config.Instance.canRotateWhilePlayerMove)
             return;
-        mouseMove.x = Input.GetAxis("Mouse X");
-        mouseMove.y = Input.GetAxis("Mouse Y");
-        transform.Rotate(Vector3.up, -mouseMove.x * Config.Instance.mouseRotateSpeed, Space.World);
-        transform.Rotate(Vector3.right, mouseMove.y * Config.Instance.mouseRotateSpeed, Space.World);
+        transform.Rotate(Vector3.up, -Input.GetAxis("Mouse X") * Config.Instance.mouseRotateSpeed, Space.World);
+        transform.Rotate(Vector3.right, Input.GetAxis("Mouse Y") * Config.Instance.mouseRotateSpeed, Space.World);
     }
     public Vector3 userRotate;
-    public Vector3 gravity;
-    public Vector3 acceleration;
-    public Quaternion lastQuaternion;
-    public Vector3 lastEuler;
-
     void HandleGyroscopeInput()//Gyroscope ： 陀螺仪
     {
-        userRotate = Input.gyro.rotationRate;
-        gravity = Input.gyro.gravity;
-        acceleration = Input.acceleration;
         if (Player.Instance.IsBusy() && !Config.Instance.canRotateWhilePlayerMove)
             return;
-        if(lastEuler == null)
-        {
-            lastEuler = Input.gyro.attitude.eulerAngles;
-            return;
-        }
+        userRotate = Input.gyro.rotationRate;
         transform.Rotate(Vector3.right,     userRotate.x * Config.Instance.reverseGyro.x * Config.Instance.gyroSpeed.x * Time.deltaTime, Space.World);
         transform.Rotate(Vector3.up,        userRotate.y * Config.Instance.reverseGyro.y * Config.Instance.gyroSpeed.y * Time.deltaTime, Space.World);
         transform.Rotate(Vector3.forward,   userRotate.z * Config.Instance.reverseGyro.z * Config.Instance.gyroSpeed.z * Time.deltaTime, Space.World);
-        //transform.Rotate(new (userRotate.x*reverseGryoX,userRotate.y*reverseGryoY,userRotate.z*reverseGryoZ));
     }
     public Vector3 GetInitDelta(CenterPoint c1, CenterPoint c2)
     {

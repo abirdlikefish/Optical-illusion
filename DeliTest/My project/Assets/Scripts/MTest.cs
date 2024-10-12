@@ -2,7 +2,8 @@
 
 public class MTest : MonoBehaviour
 {
-    public float moveSpeed = 1e4f;
+    public bool test = true;
+
     [HelpBox("Acceleration", HelpBoxType.Info)]
     public Vector3 acceleration;
     public AccelerationEvent[] accelerationEvents;
@@ -50,24 +51,28 @@ public class MTest : MonoBehaviour
     public bool touchPressureSupported;
 
     public Quaternion lastSetQuaternion = Quaternion.identity;
-    Vector3 tarUpDirection = Vector3.up;
-    Vector3 tarRightDirection = Vector3.right;
-    Vector3 modelUpDirection = Vector3.back;
-    Vector3 modelRightDirection = Vector3.down;
-    public bool changeToLeftHand = true;
+    Quaternion GryoToUnityAxis(Quaternion g)
+    {
+        Quaternion q = new(0, 0, Mathf.Sqrt(1 / 2f), Mathf.Sqrt(1 / 2f));
+        return q * g * Quaternion.Inverse(q);
+    }
     private void Update()
     {
-        Quaternion currentGyroRotation = Input.gyro.attitude;
-        //currentGyroRotation = new Quaternion(-currentGyroRotation.y, currentGyroRotation.x, currentGyroRotation.z, currentGyroRotation.w);
-        Quaternion deltaRotation = Quaternion.Inverse(lastSetQuaternion) * currentGyroRotation;
-        Vector3 dv = deltaRotation.eulerAngles;
-        dv = new(-dv.y, dv.x, dv.z);
-        deltaRotation = Quaternion.Euler(dv);
-        transform.localRotation = deltaRotation;
+        if(test)
+        {
+            transform.localRotation = GryoToUnityAxis(Input.gyro.attitude);
+        }
+        else
+        {
+            Quaternion currentGyroRotation = Input.gyro.attitude;
+            Quaternion deltaRotation = Quaternion.Inverse(lastSetQuaternion) * currentGyroRotation;
+            transform.localRotation = GryoToUnityAxis(deltaRotation);
+        }
 
         acceleration = Input.acceleration;
+        //Debug.Log("acc " + acceleration);
         accelerationEvents = Input.accelerationEvents;
-        int accId = 0;
+        //int accId = 0;
         //if (accelerationEvents.Length == 0)
         //{
         //    Debug.Log("No acceleration events");
@@ -117,6 +122,11 @@ public class MTest : MonoBehaviour
         touches = Input.touches;
         touchEnabled = Input.touchSupported;
         touchPressureSupported = Input.touchPressureSupported;
+
+        foreach (var touch in touches)
+        {
+            Debug.Log("tID " + touch.fingerId + " , deltaTime" + touch.deltaTime + " , pos" + touch.position + " , rawPos" + touch.rawPosition + " , tapCount " + touch.tapCount);
+        }
     }
     
     public void ResetRotation()

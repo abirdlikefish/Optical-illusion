@@ -18,11 +18,11 @@ public class PathFinder : Singleton<PathFinder>
     {
         foreach (var cp in cps)
         {
-            if (MyTriggerManager.Instance.busyRotates.Count != 0)
-                break;
             des = cp;
             if (SearchPath())
             {
+                //if(sta != des)
+                UIManager.Instance.ShowSth("pathSucceedCircle", Input.mousePosition);
                 return;
             }    
         }
@@ -39,8 +39,7 @@ public class PathFinder : Singleton<PathFinder>
             cp.lastPointInPath = null; 
             cp.nextPointInPath = null;
         }
-        List<CenterPoint> visiting = new();
-        visiting.Add(sta);
+        List<CenterPoint> visiting = new(){sta};
         sta.visited = true;
         sta.lastPointInPath = null;
         CenterPoint current = null;
