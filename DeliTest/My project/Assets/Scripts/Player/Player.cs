@@ -24,11 +24,6 @@ public class Player : Singleton<Player> , IAttached
         state = newState;
     }
     #endregion
-    void Start()
-    {
-        Init();
-    }
-
     void Update()
     {
         if (UIManager.Instance.IsUIBusy)
@@ -57,17 +52,16 @@ public class Player : Singleton<Player> , IAttached
     {
         tarCenter = curCenter = centerPoint;
     }
-    void Init()
+    public void Initialize()
     {
         ArriveTarCenter(LevelManager.Instance.curLevel.staCenter);
     }
     public void ArriveTarCenter(CenterPoint nextTar)
     {
-        if (curCenter == null && tarCenter == null)//关卡初始化时的null
+        if (curCenter == null || tarCenter == null)//关卡初始化时的null
         {
             tarCenter = nextTar;
             transform.position = LevelManager.Instance.curLevel.staCenter.CenterToPlayerPos();
-            //transform.parent = tarCenter.cube.attached;
         }
         ChangeState(STATE.ARRIVED);
         TryArrived();
@@ -103,6 +97,8 @@ public class Player : Singleton<Player> , IAttached
 
     void TryArrived()
     {
+        if (!Application.isPlaying)
+            return;
         transform.parent = tarCenter.cube.attached;
         if (curCenter != tarCenter)
             tarCenter.OnPlayerEnter();
@@ -116,7 +112,6 @@ public class Player : Singleton<Player> , IAttached
         tarCenter = tarCenter.nextPointInPath;
         
         ChangeState(STATE.MOVING);
-        return;
     }
     bool IsNearTarCenter()
     {

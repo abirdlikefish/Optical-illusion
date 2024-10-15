@@ -4,19 +4,6 @@ using UnityEngine;
 
 public class MyTrigger : MonoBehaviour, IAttached
 {
-    //private void Awake()
-    //{
-    //    if (!curCenter.myTriggers.Contains(this))
-    //    {
-    //        Debug.Log("发现多余触发器！请销毁");
-    //    }
-    //}
-
-    private void OnDisable()
-    {
-        curCenter.myTriggers.Remove(this);
-    }
-
     #region Trigger
     public List<Cube> effectCubes = new();
     public virtual void DoTrigger()
@@ -25,9 +12,9 @@ public class MyTrigger : MonoBehaviour, IAttached
     }
     #endregion
 
+    #region interface
     [SerializeField]
     CenterPoint curCenter;
-    #region interface
     public CenterPoint GetCurCenter()
     {
         return curCenter;
@@ -58,8 +45,4 @@ public class MyTrigger : MonoBehaviour, IAttached
 
     }
     #endregion
-    float If_0_Then_90(float x)
-    {
-        return x == 0 ? 90 : 0;
-    }
 }

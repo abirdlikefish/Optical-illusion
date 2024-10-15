@@ -5,38 +5,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class LevelManager : Singleton<LevelManager>, ISave
+public class LevelManager : Singleton<LevelManager>
 {
     public LevelData curLevel;
-    public bool pass = false;
-
-    private void Awake()
+    public bool pass;
+    public void Initialize()
     {
+        pass = false;
         EditHelper.HideAllCenterPoints();
-        CubeCombiner.Instance.CollectCubeAndCenter();
-    }
-    public void LoadData() { }
-    //{
-    //    if(JsonIO.ReadCurSheet<LevelData>("Mapdata","0") == null)
-    //    {
-    //        Debug.LogError("load failed");
-    //    }
-    //    curLevel = JsonIO.ReadCurSheet<LevelData>("Mapdata", "0");
-    //    for (int i=0;i<CubeCombiner.Instance.transform.childCount;i++)
-    //    {
-    //        CubeCombiner.Instance.transform.GetChild(i).gameObject.SetActive(false);
-    //    }
-    //    CubeCombiner.Instance.cubes = curLevel.cubes;
-    //    for (int i = 0; i < curLevel.cubes.Count; i++)
-    //    {
-    //        Instantiate(curLevel.cubes[i], CubeCombiner.Instance.transform);
-    //    }
-    //}
-
-    public void SaveData()
-    {
-        //curLevel.cubes = CubeCombiner.Instance.cubes;
-        //JsonIO.WriteCurSheet("Mapdata", "0", curLevel);
     }
     public void PassCurLevel()
     {

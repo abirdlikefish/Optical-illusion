@@ -9,7 +9,7 @@ public class ObjectPool : MonoBehaviour
     [SerializeField]
     Transform objectPoolParent;
     int initCount = 16;
-    int poolCount;
+    int poolCount = 0;
     List<GameObject> allObject;
     Stack<GameObject> availableObject;
     public void Initialize()

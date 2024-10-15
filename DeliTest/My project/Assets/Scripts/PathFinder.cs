@@ -10,7 +10,8 @@ public class PathFinder : Singleton<PathFinder>
     CenterPoint des;
     [SerializeField]
     public EndSphere endSphere;
-    private void Awake()
+
+    public void Initialize()
     {
         endSphere.InitTransform(LevelManager.Instance.curLevel.desCenter);
     }

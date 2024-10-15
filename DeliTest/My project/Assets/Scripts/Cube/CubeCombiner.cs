@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 public class CubeCombiner : Singleton<CubeCombiner>
 {
     [SerializeField]
@@ -10,10 +12,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
 
     public List<CenterPoint>[] centerPoints;
     public List<CenterPointPair> centerPointPairs = new();
-    private void Start()
-    {
-        CollectCubeAndCenter();
-    }
+
     void Update()
     {
         centerPointPairs.Clear();
@@ -23,10 +22,6 @@ public class CubeCombiner : Singleton<CubeCombiner>
         }
         foreach (var cube in cubes)
             cube.Change6SideColor();
-    }
-    private void OnTransformChildrenChanged()
-    {
-        CollectCubeAndCenter();
     }
     public void CollectCubeAndCenter()
     {
@@ -116,7 +111,7 @@ public class CubeCombiner : Singleton<CubeCombiner>
         float distance = Vector3.Distance(screenPos1, screenPos2);
         return distance <= Config.Instance.centerNearDistance;
     }
-    public bool IsCubeNear(CenterPoint p1, CenterPoint p2)
+    bool IsCubeNear(CenterPoint p1, CenterPoint p2)
     {
         return MathF.Abs(Vector3.Distance(p1.cube.transform.localPosition,p2.cube.transform.localPosition) - 1) <= Config.Instance.cubeNearDistance;
     }

@@ -15,10 +15,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject pathSucceedCircle;
     public bool IsUIBusy => panelMenu.transform.GetChild(0).gameObject.activeSelf;
     public bool isHoldRotate;
-    private void Awake()
+    public void Initialize()
     {
-        //buttonSave.SetActive(Config.Instance.isEditorMode);
-        //buttonLoad.SetActive(Config.Instance.isEditorMode);
         levelName.text = LevelManager.Instance.curLevel.levelName;
         levelDescription.text = LevelManager.Instance.curLevel.levelDescription;
     }
@@ -64,6 +62,7 @@ public class UIManager : Singleton<UIManager>
                 break;
         }
     }
+    //Button
     public void SetIsHoldRotate(bool v)
     {
         isHoldRotate = v;

@@ -8,23 +8,8 @@ using UnityEngine.UIElements;
 
 public class CenterPoint : MonoBehaviour
 {
-    [Header("显示所有中心点")]
-    public bool showAllCenterPoints = false;
-    [Header("隐藏所有中心点")]
-    public bool hideAllCenterPoints = false;
-    [Header("设为起点")]
-    public bool setSta = false;
-    [Header("设为终点")]
-    public bool setDes = false;
-    [Header("创建平移按钮")]
-    public bool createMoveButton = false;
-    [Header("创建旋转按钮")]
-    public bool createRotateButton = false;
-
-    #region HideInSpector
-    [HideInInspector]
     public Cube cube;
-    [HideInInspector]
+    #region HideInSpector
     public int axisId => transform.localPosition.x != 0 ? 0 : transform.localPosition.y != 0 ? 1 : 2;
     HashSet<CenterPoint> overlapPoints = new();
     public HashSet<CenterPoint> nextPoints = new();
@@ -34,8 +19,16 @@ public class CenterPoint : MonoBehaviour
     public CenterPoint lastPointInPath;
     [HideInInspector]
     public CenterPoint nextPointInPath;
-    public List<MyTrigger> myTriggers = new();
+    public List<MyTrigger> myTriggers;
     #endregion
+    public void ClearInValidTrigger()
+    {
+        for(int i = myTriggers.Count - 1; i >= 0; i--)
+        {
+            if (myTriggers[i] == null)
+                myTriggers.RemoveAt(i);
+        }
+    }
     public void OnPlayerEnter()
     {
         foreach (var myTrigger in myTriggers)
@@ -47,59 +40,6 @@ public class CenterPoint : MonoBehaviour
     }
     public bool IsVisible => transform.position.z <= cube.transform.position.z + 0.05f;
     public bool IsNotVisible => transform.position.z >= cube.transform.position.z - 0.05f;
-
-
-    private void OnValidate()
-    {
-#if UNITY_EDITOR
-        if (showAllCenterPoints)
-        {
-            showAllCenterPoints = false;
-            EditHelper.ShowAllCenterPoints();
-        }
-        if (hideAllCenterPoints)
-        {
-            hideAllCenterPoints = false;
-            EditHelper.HideAllCenterPoints();
-        }
-        if (setSta)
-        {
-            setSta = false;
-            LevelManager.Instance.curLevel.staCenter = this;
-            EditorUtility.SetDirty(LevelManager.Instance);
-        }
-        if(setDes)
-        {
-            setDes = false;
-            LevelManager.Instance.curLevel.desCenter = this;
-            EditorUtility.SetDirty(LevelManager.Instance);
-        }
-        if(createMoveButton)
-        {
-            createMoveButton = false;
-            MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
-            g.ArriveTarCenter(this);
-        }
-        if (createRotateButton)
-        {
-            createRotateButton = false;
-            MyTriggerRotateCube g = Instantiate(MyTriggerManager.Instance.prefabRotate, MyTriggerManager.Instance.transform);
-            g.ArriveTarCenter(this);
-        }
-        myTriggers.RemoveAll(it => it == null);
-#endif
-    }
-    public void ClearInvalidTrigger()
-    {
-        for (int i = 0; i < myTriggers.Count; i++)
-        {
-            MyTrigger myTrigger = myTriggers[i];
-            if (myTrigger == null)
-            {
-                myTriggers.Remove(myTrigger);
-            }
-        }
-    }
     public void Awake()
     {
         cube = transform.parent.GetComponent<Cube>();
@@ -178,6 +118,7 @@ public class CenterPoint : MonoBehaviour
             vertices[i] = Vector3.Lerp(centerPoint.transform.localPosition, vertices[i], Config.Instance.obSampleScale);
             vertices[i] = centerPoint.cube.transform.TransformPoint(vertices[i]);
         }
+        //n*n个采样点
         for (int i = 0; i < Config.Instance.obSampleCount; i++)
         {
             for (int j = 0; j < Config.Instance.obSampleCount; j++)
@@ -194,6 +135,7 @@ public class CenterPoint : MonoBehaviour
         }
         return false;
     }
+    //将面中心点转换为玩家坐标
     public Vector3 CenterToPlayerPos()
     {
         return transform.position + (transform.position - cube.transform.position) * Player.Instance.transform.lossyScale.x;

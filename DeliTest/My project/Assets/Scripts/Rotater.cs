@@ -6,7 +6,8 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 public class Rotater : Singleton<Rotater>
 {
     [SerializeField]
-    List<CenterPointPair> nearestPairs = new();
+    CenterPointPair nearestPair;
+    //List<CenterPointPair> nearestPairs = new();
     public bool magneting;
 
     private void Awake()
@@ -85,37 +86,28 @@ public class Rotater : Singleton<Rotater>
             }
             return;
         }
-
         float nearestDis = float.MaxValue;
-        nearestPairs.Clear();
+        nearestPair = null;
         foreach(var pair in CubeCombiner.Instance.centerPointPairs)
         {
             if (!pair.canMagnet)
                 continue;
             float curDis = DisSquare(Camera.main.WorldToScreenPoint(pair.first.transform.position), Camera.main.WorldToScreenPoint(pair.second.transform.position));
-            if (curDis < nearestDis && !CubeCombiner.Instance.IsCubeNear(pair.first,pair.second))
+            if (curDis < nearestDis)
             {
                 nearestDis = curDis;
-                nearestPairs.Clear();
-                nearestPairs.Add(pair);
+                nearestPair = pair;
             }
-            else if (DisSquare(Camera.main.WorldToScreenPoint(pair.first.transform.position), Camera.main.WorldToScreenPoint(pair.second.transform.position)) == nearestDis)
-            {
-                nearestPairs.Add(pair);
-            }
-
         }
-        if(nearestPairs.Count != 0)
-        {
-            Vector3 delta = nearestPairs[0].second.transform.position - nearestPairs[0].first.transform.position;
-            Quaternion currentRotation = transform.rotation;
-            Quaternion addedRotation = Quaternion.FromToRotation(delta, Vector3.forward);
-            newRotation = addedRotation * currentRotation;
-            if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
-                return;
-            //Debug.Log("Magnet BECAUSE:" + nearestPairs[0].first.name + " & " + nearestPairs[0].second.name + " are near!");
-            magneting = MyTriggerManager.Instance.busyMoves.Count == 0;
-        }
+        if (nearestPair == null)
+            return;
+        Vector3 delta = nearestPair.second.transform.position - nearestPair.first.transform.position;
+        Quaternion currentRotation = transform.rotation;
+        Quaternion addedRotation = Quaternion.FromToRotation(delta, Vector3.forward);
+        newRotation = addedRotation * currentRotation;
+        if (Quaternion.Angle(transform.rotation, newRotation) <= 0.05)
+            return;
+        //Debug.Log("Magnet BECAUSE:" + nearestPairs[0].first.name + " & " + nearestPairs[0].second.name + " are near!");
+        magneting = MyTriggerManager.Instance.busyMoves.Count == 0;
     }
-
 }

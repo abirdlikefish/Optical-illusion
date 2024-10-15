@@ -2,11 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Cube : MonoBehaviour
 {
-    [HelpBox("保证是CubeCombiner的子物体",HelpBoxType.Info)]
-    [Header("刷新所有方块颜色和名字")]public bool refreshColorAndName = true;
-    [Header("将localPos四舍五入")]public bool magnetPos = false;
-    [Header("显示所有中心点")]public bool showAllCenterPoints = false;
-    [Header("隐藏所有中心点")] public bool hideAllCenterPoints = false;
+    [HelpBox("保证是CubeCombiner的子物体", HelpBoxType.Warning)]
+    public int Index => transform.GetSiblingIndex();
     #region Color
     public enum COLOR
     {
@@ -56,21 +53,21 @@ public class Cube : MonoBehaviour
     #endregion
 
     #region move & rotate
-    [SerializeField]Vector3 moveDelta;
+    public Vector3 moveDelta;
     Vector3 moveFrom;
     Vector3 moveTarget;
-    [SerializeField]float moveSpeed = 2f;
-    [HideInInspector]public bool moveTriggered;
+    public float moveSpeed = 2f;
+    /*[HideInInspector]*/public bool moveTriggered;
     [HideInInspector] public bool moveEnd;
 
-    [SerializeField]Vector3 rotateDelta;
+    public Vector3 rotateDelta;
     Vector3 rotateFrom;
     Vector3 rotateTarget;
-    [SerializeField]float rotateSpeed = 45f;
-    [HideInInspector] public bool rotateTriggered;
+    public float rotateSpeed = 45f;
+    /*[HideInInspector] */public bool rotateTriggered;
     [HideInInspector] public bool rotateEnd;
     bool hasResetCenter = false;
-    void InitMoveAndRotate()
+    public void InitMoveAndRotate()
     {
         moveFrom = transform.localPosition;
 
@@ -112,12 +109,12 @@ public class Cube : MonoBehaviour
                 GameObject g = attached.GetChild(j).gameObject;
                 if (!g.activeSelf || g.GetComponent<IAttached>() == null)
                     continue;
-                g.GetComponent<IAttached>().SetCurCenter(GetNearestCenterByRotate(g.transform));
+                g.GetComponent<IAttached>().SetCurCenter(GetNearestCenterAfterRotate(g.transform));
             }
         }
 
     }
-    public CenterPoint GetNearestCenterByRotate(Transform tr)
+    public CenterPoint GetNearestCenterAfterRotate(Transform tr)
     {//找到旋转后的最近的中心点
         CenterPoint ret = null;
         float dis = float.MaxValue;
@@ -156,10 +153,7 @@ public class Cube : MonoBehaviour
         return null;
     }
     #endregion
-    private void OnEnable()
-    {
-        InitMoveAndRotate();
-    }
+
 
     private void OnDisable()
     {
@@ -173,36 +167,7 @@ public class Cube : MonoBehaviour
             return;
         PathFinder.Instance.SetDestinations(centerPoints); 
     }
-    private void OnValidate()
-    {
-#if UNITY_EDITOR
-        if (CubeCombiner.Instance)
-            CubeCombiner.Instance.CollectCubeAndCenter();
-        if (magnetPos)
-        {
-            magnetPos = false;
-            transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
-        }
-        if (refreshColorAndName)
-        {
-            refreshColorAndName = false;
-            
-            foreach (var cube in CubeCombiner.Instance.cubes)
-                cube.MyOnValidate();
-        }
-        if (showAllCenterPoints)
-        {
-            showAllCenterPoints = false;
-            EditHelper.ShowAllCenterPoints();
-        }
-        if(hideAllCenterPoints)
-        {
-            hideAllCenterPoints = false;
-            EditHelper.HideAllCenterPoints();
-        }
-#endif
-    }
-    public void MyOnValidate()
+    public void RefreshColorAndName()
     {
         instanceMaterials.Clear();
         foreach (var sharedMaterial in CubeConfig.Instance.sharedMaterials)
@@ -213,10 +178,10 @@ public class Cube : MonoBehaviour
         instanceMaterials[0].color = CubeConfig.Instance.color_mar[color].color;
         name = color.ToString() + transform.GetSiblingIndex().ToString();
     }
-    //private void Awake()
-    //{
-    //    InitMoveAndRotate();
-    //}
+    public void MagnetPos()
+    {
+        transform.localPosition = new Vector3(Mathf.Round(transform.localPosition.x), Mathf.Round(transform.localPosition.y), Mathf.Round(transform.localPosition.z));
+    }
     private void Update()
     {
         MoveAndRotate();

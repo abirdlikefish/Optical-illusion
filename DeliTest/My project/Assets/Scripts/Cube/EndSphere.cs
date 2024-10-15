@@ -12,6 +12,8 @@ public class EndSphere : MonoBehaviour, IAttached
     public void InitTransform(CenterPoint desCenter)
     {
         transform.position = desCenter.CenterToPlayerPos();
+        if (!Application.isPlaying)
+            return;
         transform.parent = desCenter.cube.attached;
         SetCurCenter(desCenter);
     }

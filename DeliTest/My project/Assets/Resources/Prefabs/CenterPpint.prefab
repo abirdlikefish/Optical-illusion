@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1690582922985782076}
   - component: {fileID: 916130142848987791}
   - component: {fileID: 7571125856364155254}
+  - component: {fileID: 1556546373848602499}
   m_Layer: 0
   m_Name: CenterPpint
   m_TagString: Untagged
@@ -97,14 +98,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3cc0fbc067f0e428b492932b3df202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delta: {x: 0, y: 0, z: 0}
+  createMoveButton: 0
+  createRotateButton: 0
   cube: {fileID: 0}
-  info: 
-  overlapPoints: []
-  nextPoints: []
   visited: 0
   lastPointInPath: {fileID: 0}
   nextPointInPath: {fileID: 0}
+  myTriggers: []
+--- !u!114 &1556546373848602499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543698019130233842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f5110d63c64984698ba78d06302460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockPosition: 1
+  lockRotation: 1
+  lockScale: 1
 --- !u!1 &2978964597862934456
 GameObject:
   m_ObjectHideFlags: 0
