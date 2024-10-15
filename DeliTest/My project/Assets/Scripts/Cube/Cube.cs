@@ -33,6 +33,7 @@ public class Cube : MonoBehaviour
         }
         if (nearCubes.Count != 0)
         {
+            Debug.Log(name + " " + colors[0]);
             computeBuffer1 = new ComputeBuffer(deltas.Count, sizeof(float) * 3);
             computeBuffer1.SetData(deltas.ToArray());
             computeBuffer2 = new ComputeBuffer(colors.Count, sizeof(float) * 4);

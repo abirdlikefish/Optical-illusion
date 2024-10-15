@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     private void Awake()
     {
+        EditHelper.HideAllCenterPoints();
         EditHelper.CollectAllCube_RefreshColorAndName_ClearInvalidTrigger();
         foreach (var cube in CubeCombiner.Instance.cubes)
         {

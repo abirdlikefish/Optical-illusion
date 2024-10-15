@@ -1,33 +1,8 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using System.Collections;
-using log4net.Util;
 using System;
-using UnityEngine.UIElements;
 using System.Linq;
-
-public class MyVector3Field : EditorWindow
-{
-    GameObject m_go;
-    public MyVector3Field(ref Vector3 value,GameObject go)
-    {
-        valueShown = value;
-        m_go = go;
-        vector3Field = new(value, OnVector3ValueChange);
-    }
-    public ObservableValue<Vector3> vector3Field;
-    public Vector3 valueShown;
-    public void OnGUI()
-    {
-        vector3Field.Value = EditorGUILayout.Vector3Field("这个方块的平移偏移值", valueShown);
-    }
-    public void OnVector3ValueChange(Vector3 oldV, Vector3 newV)
-    {
-        EditorUtility.SetDirty(m_go);
-    }
-}
-
 public class Observe<T>
 {
     List<Component> m_coms;
@@ -65,15 +40,12 @@ public class Observe<T>
 [ExecuteInEditMode]
 public class MyEditor : EditorWindow
 {
-
-
     public static bool showAllCubeName = true;
     bool showAllCenterPoints = false;
     List<Cube> selectedCubes = new();
     List<CenterPoint> selectedCenterPoints = new();
     List<MyTrigger> selectedTriggers = new();
-
-    Color lineColor = Color.blue;
+    Color lineColor = new(0x39 / 255f, 0xC5 / 255f, 0xBB / 255f);
     [MenuItem("Window/MyEditor")]
     public static void ShowWindow()
     {
@@ -81,8 +53,6 @@ public class MyEditor : EditorWindow
     }
     private void Update()
     {
-        //如果游戏启动
-
         if (Application.isPlaying)
             return;
         Repaint();
@@ -100,7 +70,6 @@ public class MyEditor : EditorWindow
                 selectedCenterPoints.Add(centerPoint);
             if (trigger != null)
                 selectedTriggers.Add(trigger);
-
         }
     }
     bool IsCubePureColor()
@@ -132,6 +101,11 @@ public class MyEditor : EditorWindow
     
     void OnGUI()
     {
+        if (Application.isPlaying)
+        {
+            GUILayout.Label($"游戏运行时不可编辑", GUILayout.Width(450));
+            return;
+        }
         EditHelper.CollectAllCube_RefreshColorAndName_ClearInvalidTrigger();
         EditHelper.AllCubeMagnetPos();
         selectedCubes.Clear();
@@ -237,14 +211,14 @@ public class MyEditor : EditorWindow
             {
                 LevelManager.Instance.curLevel.staCenter = selectedCenterPoints[0];
                 EditorUtility.SetDirty(LevelManager.Instance);
-                Player.Instance.Initialize();
             }
+            Player.Instance.Initialize();
             if (GUILayout.Button("设为终点", GUILayout.Width(150)))
             {
                 LevelManager.Instance.curLevel.desCenter = selectedCenterPoints[0];
                 EditorUtility.SetDirty(LevelManager.Instance);
-                PathFinder.Instance.Initialize();
             }
+            PathFinder.Instance.Initialize();
             GUI.enabled = true;
         }
         GUILayout.EndHorizontal();
