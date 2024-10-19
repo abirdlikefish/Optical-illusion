@@ -16,7 +16,7 @@ public class Fadable : MonoBehaviour
     bool isFading = false;
     public void StartFade(bool isIn, Action callbackBefore = null, Action callbackAfter = null)
     {
-        if (isFading && isIn)
+        if (isFading)
             return;
         StopFade();
         StartCoroutine(Fade(isIn, callbackBefore, callbackAfter));
