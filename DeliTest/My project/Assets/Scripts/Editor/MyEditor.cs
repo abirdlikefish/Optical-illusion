@@ -103,7 +103,7 @@ public class MyEditor : EditorWindow
     {
         if (Application.isPlaying)
         {
-            GUILayout.Label($"ÓÎÏ·ÔËĞĞÊ±²»¿É±à¼­", GUILayout.Width(450));
+            GUILayout.Label($"æ¸¸æˆè¿è¡Œæ—¶ä¸å¯ç¼–è¾‘", GUILayout.Width(450));
             return;
         }
         EditHelper.CollectAllCube_RefreshColorAndName_ClearInvalidTrigger();
@@ -132,7 +132,7 @@ public class MyEditor : EditorWindow
         }
 
         Texture2D texture = new Texture2D(1, 1);
-        lineColor = EditorGUILayout.ColorField("·Ö¸îÏßÑÕÉ«", lineColor);
+        lineColor = EditorGUILayout.ColorField("åˆ†å‰²çº¿é¢œè‰²", lineColor);
         texture.SetPixel(0, 0, lineColor);
         texture.Apply();
         GUIStyle lineStyle = new GUIStyle();
@@ -142,15 +142,15 @@ public class MyEditor : EditorWindow
         Tools.hidden |= SelectedPlayer() && Tools.current != Tool.Move;
 
         GUILayout.Box(GUIContent.none, lineStyle, GUILayout.ExpandWidth(true), GUILayout.Height(2));
-        GUILayout.Label($"µ±Ç°Ñ¡ÖĞ{selectedCubes.Count}¸ö·½¿é £º{selectedCubesName}", GUILayout.Width(450));
+        GUILayout.Label($"å½“å‰é€‰ä¸­{selectedCubes.Count}ä¸ªæ–¹å— ï¼š{selectedCubesName}", GUILayout.Width(450));
         Tools.hidden |= selectedCubes.Count != 0 && Tools.current != Tool.Move;
-        showAllCubeName = GUILayout.Toggle(showAllCubeName, "ÏÔÊ¾ËùÓĞ·½¿éÃû³Æ", GUILayout.Width(150));
+        showAllCubeName = GUILayout.Toggle(showAllCubeName, "æ˜¾ç¤ºæ‰€æœ‰æ–¹å—åç§°", GUILayout.Width(150));
 
         GUILayout.BeginHorizontal();
         {
             if (IsCubePureColor())
             {
-                GUILayout.Label($"·½¿éÑÕÉ«¶¼ÉèÎª£º");
+                GUILayout.Label($"æ–¹å—é¢œè‰²éƒ½è®¾ä¸ºï¼š");
                 var observer = new Observe<Cube.COLOR>
                     (
                         () => selectedCubes[0].color,
@@ -172,7 +172,7 @@ public class MyEditor : EditorWindow
                     (val) => selectedCubes[0].moveDelta = val,
                     new () { selectedCubes[0] }
                 );
-            observer.Value = EditorGUILayout.Vector3Field("Õâ¸ö·½¿éµÄÆ½ÒÆÆ«ÒÆÖµ(À´»Ø)", observer.Value);
+            observer.Value = EditorGUILayout.Vector3Field("è¿™ä¸ªæ–¹å—çš„å¹³ç§»åç§»å€¼(æ¥å›)", observer.Value);
 
             var observer2 = new Observe<float>
                 (
@@ -180,7 +180,7 @@ public class MyEditor : EditorWindow
                     (val) => selectedCubes[0].moveSpeed = val,
                     new() { selectedCubes[0] }
                 );
-            observer2.Value = EditorGUILayout.FloatField("Õâ¸ö·½¿éµÄÒÆ¶¯ËÙ¶È", observer2.Value);
+            observer2.Value = EditorGUILayout.FloatField("è¿™ä¸ªæ–¹å—çš„ç§»åŠ¨é€Ÿåº¦", observer2.Value);
 
             var observer3 = new Observe<Vector3>
                 (
@@ -188,7 +188,7 @@ public class MyEditor : EditorWindow
                     (val) => selectedCubes[0].rotateDelta = val,
                     new() { selectedCubes[0] }
                 );
-            observer3.Value = EditorGUILayout.Vector3Field("Õâ¸ö·½¿éµÄĞı×ªÆ«ÒÆÖµ(µ¥ÏòÀÛ»ı)", observer3.Value);
+            observer3.Value = EditorGUILayout.Vector3Field("è¿™ä¸ªæ–¹å—çš„æ—‹è½¬åç§»å€¼(å•å‘ç´¯ç§¯)", observer3.Value);
 
             var observer4 = new Observe<float>
                 (
@@ -196,24 +196,24 @@ public class MyEditor : EditorWindow
                     (val) => selectedCubes[0].rotateSpeed = val,
                     new() { selectedCubes[0] }
                 );
-            observer4.Value = EditorGUILayout.FloatField("Õâ¸ö·½¿éµÄĞı×ªËÙ¶È", observer4.Value);
+            observer4.Value = EditorGUILayout.FloatField("è¿™ä¸ªæ–¹å—çš„æ—‹è½¬é€Ÿåº¦", observer4.Value);
         }
 
         GUILayout.Box("", lineStyle, GUILayout.ExpandWidth(true), GUILayout.Height(2));
-        GUILayout.Label($"µ±Ç°Ñ¡ÖĞ{selectedCenterPoints.Count}¸öÖĞĞÄµã £º{selectedCenterPointsName}");
+        GUILayout.Label($"å½“å‰é€‰ä¸­{selectedCenterPoints.Count}ä¸ªä¸­å¿ƒç‚¹ ï¼š{selectedCenterPointsName}");
         Tools.hidden |= selectedCenterPoints.Count != 0;
-        showAllCenterPoints = GUILayout.Toggle(showAllCenterPoints, "ÏÔÊ¾ËùÓĞÖĞĞÄµã", GUILayout.Width(150));
+        showAllCenterPoints = GUILayout.Toggle(showAllCenterPoints, "æ˜¾ç¤ºæ‰€æœ‰ä¸­å¿ƒç‚¹", GUILayout.Width(150));
 
         GUILayout.BeginHorizontal();
         {
             GUI.enabled = selectedCenterPoints.Count == 1;
-            if (GUILayout.Button("ÉèÎªÆğµã", GUILayout.Width(150)))
+            if (GUILayout.Button("è®¾ä¸ºèµ·ç‚¹", GUILayout.Width(150)))
             {
                 LevelManager.Instance.curLevel.staCenter = selectedCenterPoints[0];
                 EditorUtility.SetDirty(LevelManager.Instance);
             }
             Player.Instance.Initialize();
-            if (GUILayout.Button("ÉèÎªÖÕµã", GUILayout.Width(150)))
+            if (GUILayout.Button("è®¾ä¸ºç»ˆç‚¹", GUILayout.Width(150)))
             {
                 LevelManager.Instance.curLevel.desCenter = selectedCenterPoints[0];
                 EditorUtility.SetDirty(LevelManager.Instance);
@@ -226,15 +226,15 @@ public class MyEditor : EditorWindow
         GUILayout.BeginHorizontal();
         {
             GUI.enabled = selectedCenterPoints.Count == 1;
-            if (GUILayout.Button("´´½¨Æ½ÒÆ°´Å¥", GUILayout.Width(150)))
+            if (GUILayout.Button("åˆ›å»ºå¹³ç§»æŒ‰é’®", GUILayout.Width(150)))
             {
                 MyTriggerMoveCube g = Instantiate(MyTriggerManager.Instance.prefabMove, MyTriggerManager.Instance.transform);
                 g.ArriveTarCenter(selectedCenterPoints[0]);
                 showAllCenterPoints = false;
-                //½«Ñ¡ÖĞÎïÌå±äÎªÉú³ÉµÄÎïÌå
+                //å°†é€‰ä¸­ç‰©ä½“å˜ä¸ºç”Ÿæˆçš„ç‰©ä½“
                 Selection.activeGameObject = g.gameObject;
             }
-            if (GUILayout.Button("´´½¨Ğı×ª°´Å¥", GUILayout.Width(150)))
+            if (GUILayout.Button("åˆ›å»ºæ—‹è½¬æŒ‰é’®", GUILayout.Width(150)))
             {
                 MyTriggerRotateCube g = Instantiate(MyTriggerManager.Instance.prefabRotate, MyTriggerManager.Instance.transform);
                 g.ArriveTarCenter(selectedCenterPoints[0]);
@@ -246,27 +246,27 @@ public class MyEditor : EditorWindow
         GUILayout.EndHorizontal();
 
         GUILayout.Box("", lineStyle, GUILayout.ExpandWidth(true), GUILayout.Height(2));
-        GUILayout.Label($"µ±Ç°Ñ¡ÖĞ{selectedTriggers.Count}¸ö°´Å¥ £º{selectedTriggersName}", GUILayout.Width(450));
+        GUILayout.Label($"å½“å‰é€‰ä¸­{selectedTriggers.Count}ä¸ªæŒ‰é’® ï¼š{selectedTriggersName}", GUILayout.Width(450));
 
         if (selectedTriggers.Count == 1)
         {
             Type type = selectedTriggers[0].GetType();
             string t1 = "";
             if (type == typeof(MyTriggerMoveCube))
-                t1 = " Æ½ÒÆ µÄ";
+                t1 = " å¹³ç§» çš„";
             else if(type == typeof(MyTriggerRotateCube))
-                t1 = " Ğı×ª µÄ";
-            //»ñÈ¡°´Å¥×÷ÓÃµÄÎïÌåµÄËùÓĞĞòºÅ
+                t1 = " æ—‹è½¬ çš„";
+            //è·å–æŒ‰é’®ä½œç”¨çš„ç‰©ä½“çš„æ‰€æœ‰åºå·
             List<int> allIndex = new();
             foreach (var effectCube in selectedTriggers[0].effectCubes)
             {
                 allIndex.Add(effectCube.Index);
             }
                 
-            GUILayout.Label($"Õâ¸ö°´Å¥{t1}·½¿éÓĞ");
+            GUILayout.Label($"è¿™ä¸ªæŒ‰é’®{t1}æ–¹å—æœ‰");
             if(allIndex.Count == 0)
             {
-                GUILayout.Label("ÎŞ");
+                GUILayout.Label("æ— ");
                 if (GUILayout.Button("+", GUILayout.Width(30)))
                 {
                     allIndex.Insert(0, 0);
@@ -278,7 +278,7 @@ public class MyEditor : EditorWindow
                 {
                     GUILayout.BeginHorizontal();
                     allIndex[i] = int.Parse(GUILayout.TextField(allIndex[i].ToString(), GUILayout.Width(60)));
-                    //Ôö¼Ó£¬É¾³ı°´Å¥
+                    //å¢åŠ ï¼Œåˆ é™¤æŒ‰é’®
                     if (GUILayout.Button("+", GUILayout.Width(30)))
                     {
                         allIndex.Insert(i + 1, allIndex[i]);
@@ -290,8 +290,8 @@ public class MyEditor : EditorWindow
                     GUILayout.EndHorizontal();
                 }
             }
-            GUILayout.Label($"ÇëÌîÈë·½¿éĞòºÅ : 0 - {CubeCombiner.Instance.cubes.Count - 1}");
-            if (GUILayout.Button("ÅÅĞò", GUILayout.Width(150)))
+            GUILayout.Label($"è¯·å¡«å…¥æ–¹å—åºå· : 0 - {CubeCombiner.Instance.cubes.Count - 1}");
+            if (GUILayout.Button("æ’åº", GUILayout.Width(150)))
             {
                 allIndex.Sort();
             }
@@ -303,7 +303,7 @@ public class MyEditor : EditorWindow
                     continue;
                 if (CubeCombiner.Instance.transform.childCount < index + 1)
                 {
-                    Debug.LogError($"·½¿é{index}²»´æÔÚ£¡");
+                    Debug.LogError($"æ–¹å—{index}ä¸å­˜åœ¨ï¼");
                     continue;
                 }
                 selectedTriggers[0].effectCubes.Add(CubeCombiner.Instance.transform.GetChild(index).GetComponent<Cube>());
